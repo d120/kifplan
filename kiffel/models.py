@@ -1,6 +1,8 @@
 from django.db import models
 
 class Kiffel(models.Model):
+    """ repräsentiert einen angemeldeten Kiffel """
+
     # Felder aus der Anmeldung (orga.fachschaften.org)
     nickname = models.CharField(max_length=100)
     vorname = models.CharField(max_length=100)
@@ -27,9 +29,9 @@ class Kiffel(models.Model):
     anmeldung_aktualisiert = models.DateTimeField()
 
     # zusätzliche Felder gemäß Spezifikation
-    datum_bezahlt = models.DateTimeField(null=True)
-    datum_tshirt_erhalten = models.DateTimeField(null=True)
-    datum_teilnahmebestaetigung_erhalten = models.DateTimeField(null=True)
+    datum_bezahlt = models.DateTimeField(null=True, blank=True)
+    datum_tshirt_erhalten = models.DateTimeField(null=True, blank=True)
+    datum_teilnahmebestaetigung_erhalten = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=100)
     kommentar = models.TextField()
     engel_handle = models.CharField(max_length=100)
