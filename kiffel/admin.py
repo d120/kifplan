@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from kiffel.models import Kiffel
+
+admin.site.register(Kiffel)

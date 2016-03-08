@@ -5,6 +5,7 @@
 
 # compiled python byte code
 *.pyc
+__pycache__
 
 # compiled gettext
 *.mo
