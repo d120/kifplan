@@ -2,3 +2,4 @@ django
 djangorestframework
 django-import-export
 odswriter
+django-filter

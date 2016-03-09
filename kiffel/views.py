@@ -1,6 +1,6 @@
 from django.views.generic import ListView, View
 from django.http import HttpResponse
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, filters
 
 import io, odswriter
 
@@ -11,6 +11,9 @@ from kiffel.serializers import KiffelSerializer
 class KiffelViewSet(viewsets.ModelViewSet):
     serializer_class = KiffelSerializer
     queryset = Kiffel.objects.all()
+    filter_fields = tuple(Kiffel._meta.get_all_field_names())
+    search_fields = tuple(Kiffel._meta.get_all_field_names())
+    ordering_fields = tuple(Kiffel._meta.get_all_field_names())
 
 
 class KiffelAttendingReport(ListView):
