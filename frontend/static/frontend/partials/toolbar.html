@@ -1,0 +1,13 @@
+<div class="md-toolbar-tools" ng-controller="toolbarCtrl">
+  <md-button class="md-icon-button" aria-label="Settings" hide-gt-sm ng-click="toggleNav()">
+    <ng-md-icon icon="menu"></ng-md-icon>
+  </md-button>
+  <h2>
+    <span>{{ title }}</span>
+  </h2>
+  <span flex></span>
+  <span class="hide-sm">
+    <span class="font-point9">Angemeldet als <b>{{ user.username }}</b></span>
+    <md-button ng-click="logout()"><ng-md-icon icon="logout"></ng-md-icon> Abmelden</md-button>
+  </span>
+</div>

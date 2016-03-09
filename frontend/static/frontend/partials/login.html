@@ -1,0 +1,22 @@
+<div layout-gt-sm="row" layout-align-gt-sm="center center" flex>
+  <div flex class="login-form md-whiteframe-z5">
+    <form layout-padding layout="column">
+      <h3 class="padding-0">Kiffel Verwaltung</h3>
+      <div ng-if="error" class="error-message">{{ error }}</div>
+      <md-input-container class="padding-0">
+        <label>Benutzername</label>
+        <input ng-model="creds.username" required type="text" ng-focus autofocus="">
+      </md-input-container>
+      <md-input-container class="padding-0">
+        <label>Passwort</label>
+        <input ng-model="creds.password" required type="password" >
+      </md-input-container>
+      <div layout="row" class="padding-0">
+        <md-button class="md-raised md-primary circular-progress-button" ng-disabled="working" ng-click="login()">
+          <span ng-show="!working"><md-icon>check</md-icon> Anmelden</span>
+          <md-progress-circular md-mode="indeterminate" md-diameter="20" ng-show="working"></md-progress-circular>
+        </md-button>
+      </div>
+    </form>
+  </div>
+</div>

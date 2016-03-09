@@ -1,0 +1,18 @@
+<div ng-controller="sidenavCtrl" flex class="padding-bottom-1">
+
+  <div class="sidenav-title md-padding">
+    <h2>{{ title }}</h2>
+  </div>
+
+  <div ng-repeat="section in navigation">
+    <div class="subheader md-padding">
+      {{ section.title }}
+    </div>
+    <nav class="sidenav-nav">
+      <a ng-repeat="link in section.items" href="#{{ link.url }}" ng-click="close()" ng-class="{ 'active': isActive(link.url) }">
+        {{ link.title }}
+        <span ng-if="link.badge" class="badge badge-accent">{{ link.badge }}</span>
+      </a>
+    </nav>
+  </div>
+</div>

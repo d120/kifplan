@@ -9,15 +9,16 @@
     <title>Kiffel Verwaltung</title>
 
     <link rel="stylesheet" href="{% static "frontend/vendor/angular-material/angular-material.css" %}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <link rel="stylesheet" href="{% static "frontend/style.css" %}" />
   </head>
 
   <body ng-app="kiffel" layout="row" ng-cloak>
 
-    <md-sidenav class="md-sidenav-left md-whiteframe-z2 bg-green" md-component-id="nav" md-is-locked-open="$mdMedia('gt-md')" ng-if="user.authenticated" ng-include src="'partials/sidenav.html'"></md-sidenav>
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2 bg-green" md-component-id="nav" md-is-locked-open="$mdMedia('gt-md')" ng-if="user.authenticated" ng-include src="'{% static "frontend/partials/sidenav.html" %}'"></md-sidenav>
 
     <div layout="column" flex>
-      <md-toolbar ng-if="user.authenticated" ng-include src="'partials/toolbar.html'" class="md-whiteframe-z1"></md-toolbar>
+      <md-toolbar ng-if="user.authenticated" ng-include src="'{% static "frontend/partials/toolbar.html" %}'" class="md-whiteframe-z1"></md-toolbar>
       <md-content layout="column" flex class="md-padding" ng-view></md-content>
     </div>
 
@@ -33,5 +34,12 @@
 
     <script src="{% static "frontend/app/app.js" %}"></script>
     <script src="{% static "frontend/app/routes.js" %}"></script>
+    <script src="{% static "frontend/app/services/auth.js" %}"></script>
+    <script src="{% static "frontend/app/services/apiInterceptor.js" %}"></script>
+    <script src="{% static "frontend/app/services/toolbar.js" %}"></script>
+    <script src="{% static "frontend/app/controllers/login.js" %}"></script>
+    <script src="{% static "frontend/app/controllers/sidenav.js" %}"></script>
+    <script src="{% static "frontend/app/controllers/toolbar.js" %}"></script>
+    <script src="{% static "frontend/app/controllers/kiffels.js" %}"></script>
   </body>
 </html>
