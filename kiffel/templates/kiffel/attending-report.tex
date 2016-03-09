@@ -1,0 +1,14 @@
+%% TODO: Dies ist das korrekt generierte LaTeX für Ophasenscheine.
+%% Für KIF-Teilnahmebestätigungen muss ein neues Style gebaut werden ;)
+
+\documentclass{article}
+
+\usepackage{scheine}
+
+\begin{document}
+
+{% for kiffel in kiffels %}
+\schein{ {{kiffel.vorname}} }{ {{kiffel.nachname}} }{}{}
+{% endfor %}
+
+\end{document}
