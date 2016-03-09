@@ -9,15 +9,14 @@
 
     $scope.navigation = [
       {
-        title: 'Kiffel',
-        items: [
-          { title: 'Alle Kiffel', url: '/kiffels' },
-        ]
-      },
-      {
         title: 'Anmeldung',
         items: [
           { title: 'Dashboard', url: '/anmeldung' },
+        ]
+      }, {
+        title: 'Kiffel',
+        items: [
+          { title: 'Alle Kiffel', url: '/kiffels' },
         ]
       }
     ];
