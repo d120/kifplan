@@ -43,3 +43,4 @@ class Kiffel(models.Model):
 
     class Meta:
         ordering = ('nickname',)
+        verbose_name = 'Kiffel'
