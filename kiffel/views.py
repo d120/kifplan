@@ -46,14 +46,17 @@ class NametagsOdsExport(View):
         empty = '~'
 
         for kiffel in Kiffel.objects.all():
-            row = [kiffel.nickname, '', 'K', 'KIFFEL', 'ORGA']
-            row.extend([empty]*4)
+            row = [kiffel.nickname, kiffel.hochschule, kiffel.kdv_id]
+            if kiffel.ist_orga:
+                row.append('ORGA')
+            else:
+                row.append(empty)
             table.append(row)
 
         out_stream = io.BytesIO()
         with odswriter.writer(out_stream) as out:
             # need to specify number of columns for jOpenDocument compatibility
-            sheet = out.new_sheet("Staff", cols=9)
+            sheet = out.new_sheet("Kiffel", cols=4)
             sheet.writerows(table)
 
         response = HttpResponse(out_stream.getvalue(), content_type="application/vnd.oasis.opendocument.spreadsheet")
