@@ -40,6 +40,7 @@ class Kiffel(models.Model):
     kommentar = models.TextField(null=True, blank=True)
     engel_handle = models.CharField(max_length=100, null=True, blank=True, verbose_name='Name im Engelsystem')
     twitter_handle = models.CharField(max_length=100, null=True, blank=True, verbose_name='Twitter-Handle')
+    kdv_id = models.CharField(max_length=32, null=True, blank=True, verbose_name='KDV-ID (Barcode-Nummer)')
 
     class Meta:
         ordering = ('nickname',)
