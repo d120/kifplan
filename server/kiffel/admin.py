@@ -14,6 +14,13 @@ class JaNeinBooleanWidget(Widget):
 
 
 class KiffelResource(resources.ModelResource):
+    """
+    importer mapping for Kiffel CSV
+    Important: make sure to convert the export file to **comma**-separated
+    CSV (,). Semicolons will not work.
+    """
+
+    hashtag = fields.Field(attribute='id', column_name='#')
     vorname = fields.Field(attribute='vorname', column_name='Vorname')
     nachname = fields.Field(attribute='nachname', column_name='Nachname')
     email = fields.Field(attribute='email', column_name='E-Mail')
@@ -58,6 +65,7 @@ class KiffelResource(resources.ModelResource):
         model = Kiffel
         exclude = ('datum_bezahlt', 'datum_tshirt_erhalten', 'datum_teilnahmebestaetigung_erhalten',
                    'kommentar', 'engel_handle', 'twitter_handle')
+        import_id_fields = ('hashtag',)
 
 
 @admin.register(Kiffel)
