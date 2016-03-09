@@ -8,5 +8,6 @@ router.register(r'kiffels', views.KiffelViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'reports/$', views.KiffelAttendingReport.as_view())
+    url(r'reports/$', views.KiffelAttendingReport.as_view()),
+    url(r'nametags/$', views.NametagsOdsExport.as_view()),
 ]
