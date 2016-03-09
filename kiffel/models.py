@@ -32,16 +32,16 @@ class Kiffel(models.Model):
     anmeldung_aktualisiert = models.DateTimeField()
 
     # zusätzliche Felder gemäß Spezifikation
-    datum_bezahlt = models.DateTimeField(null=True, blank=True, verbose_name='Teilnahmebeitrag bezahlt (Datum)')
-    datum_tshirt_erhalten = models.DateTimeField(null=True, blank=True, verbose_name='T-Shirt erhalten (Datum)')
+    datum_bezahlt = models.DateTimeField(null=True, blank=True, verbose_name='Teilnahmebeitrag bezahlt')
+    datum_tshirt_erhalten = models.DateTimeField(null=True, blank=True, verbose_name='T-Shirt erhalten')
     datum_teilnahmebestaetigung_erhalten = models.DateTimeField(null=True, blank=True,
-        verbose_name='Teilnahmebestätigung erhalten (Datum)')
+        verbose_name='Teilnahmebestätigung erhalten')
     status = models.CharField(max_length=100, null=True, blank=True)
     kommentar = models.TextField(null=True, blank=True)
     engel_handle = models.CharField(max_length=100, null=True, blank=True, verbose_name='Name im Engelsystem')
     twitter_handle = models.CharField(max_length=100, null=True, blank=True, verbose_name='Twitter-Handle')
-    kdv_id = models.CharField(max_length=32, null=True, blank=True, verbose_name='KDV-ID (Barcode-Nummer)')
-    ist_orga = models.BooleanField(default=False, verbose_name='Kiffel ist auch Orga')
+    kdv_id = models.CharField(max_length=32, null=True, blank=True, verbose_name='KDV-ID')
+    ist_orga = models.BooleanField(default=False, verbose_name='Kiffel ist Orga')
 
     class Meta:
         ordering = ('nickname',)

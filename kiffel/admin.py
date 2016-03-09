@@ -6,6 +6,7 @@ from import_export.widgets import DateWidget, BooleanWidget, Widget
 
 from kiffel.models import Kiffel
 from kiffel.helper import EAN8
+from kiffel.admin_actions import renew_kdv_barcode
 
 class JaNeinBooleanWidget(Widget):
     def clean(value):
@@ -76,9 +77,11 @@ class KiffelResource(resources.ModelResource):
 @admin.register(Kiffel)
 class KiffelAdmin(ImportExportMixin, admin.ModelAdmin):
     # admin list table view
-    list_display = ['nickname', 'vorname', 'nachname', 'email', 'student',
-                    'datum_bezahlt', 'datum_tshirt_erhalten', 'kdv_id']
+    list_display = ['nickname', 'vorname', 'nachname', 'student',
+                    'datum_bezahlt', 'datum_tshirt_erhalten', 'kdv_id', 'ist_orga']
     list_display_links = ['nickname']
+    list_filter = ['status', 'ist_orga', 'student', 'datum_bezahlt', 'datum_teilnahmebestaetigung_erhalten']
+    actions = [renew_kdv_barcode,]
 
     # import format options
     formats = (base_formats.CSV,)
