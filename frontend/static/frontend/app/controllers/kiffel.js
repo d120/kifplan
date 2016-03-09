@@ -3,7 +3,7 @@
   "use strict";
   var app = angular.module('kiffel');
 
-  app.controller('kiffelCtrl', ['$scope', '$routeParams', 'Restangular', function($scope, $routeParams, Restangular) {
+  app.controller('kiffelCtrl', ['$scope', '$routeParams', 'Restangular', 'toolbarService', function($scope, $routeParams, Restangular, toolbarService) {
 
     var kiffel = Restangular.one('kiffels', $routeParams.id);
 
@@ -11,6 +11,8 @@
     kiffel.get().then(function(data) {
       $scope.kiffel = data;
       $scope.loading = false;
+
+      toolbarService.title(data.nickname)
 
       $scope.json = JSON.stringify($scope.kiffel, null, 4);
     });
