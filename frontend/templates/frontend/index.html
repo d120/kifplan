@@ -1,5 +1,37 @@
 {% load staticfiles %}
 
-Hallo Welt
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<script src="{% static "angular.min.js" %}"></script>
+    <title>Kiffel Verwaltung</title>
+
+    <link rel="stylesheet" href="{% static "frontend/vendor/angular-material/angular-material.css" %}" />
+    <link rel="stylesheet" href="{% static "frontend/style.css" %}" />
+  </head>
+
+  <body ng-app="kiffel" layout="row" ng-cloak>
+
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2 bg-green" md-component-id="nav" md-is-locked-open="$mdMedia('gt-md')" ng-if="user.authenticated" ng-include src="'partials/sidenav.html'"></md-sidenav>
+
+    <div layout="column" flex>
+      <md-toolbar ng-if="user.authenticated" ng-include src="'partials/toolbar.html'" class="md-whiteframe-z1"></md-toolbar>
+      <md-content layout="column" flex class="md-padding" ng-view></md-content>
+    </div>
+
+    <script src="{% static "frontend/vendor/angular/angular.min.js" %}"></script>
+    <script src="{% static "frontend/vendor/angular-route/angular-route.min.js" %}"></script>
+    <script src="{% static "frontend/vendor/restangular/dist/restangular.min.js" %}"></script>
+    <script src="{% static "frontend/vendor/angular-aria/angular-aria.min.js" %}"></script>
+    <script src="{% static "frontend/vendor/angular-animate/angular-animate.min.js" %}"></script>
+    <script src="{% static "frontend/vendor/angular-material/angular-material.min.js" %}"></script>
+    <script src="{% static "frontend/vendor/angular-material-icons/angular-material-icons.min.js" %}"></script>
+    <script src="{% static "frontend/vendor/underscore/underscore-min.js" %}"></script>
+    <script src="{% static "frontend/vendor/angular-underscore/angular-underscore.min.js" %}"></script>
+
+    <script src="{% static "frontend/app/app.js" %}"></script>
+    <script src="{% static "frontend/app/routes.js" %}"></script>
+  </body>
+</html>

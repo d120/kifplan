@@ -19,6 +19,9 @@ settings_local.py
 # JetBrains IDE
 .idea/
 
+# bower managed components
+vendor/
+
 # pyDev IDE
 .project
 .pydevproject

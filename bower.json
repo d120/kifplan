@@ -1,0 +1,28 @@
+{
+  "name": "kiffel-verwaltung",
+  "authors": [
+    "Johannes Lauinger <johannes@lauinger-it.de>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.0",
+    "angular-route": "^1.5.0",
+    "restangular": "^1.5.2",
+    "angular-material": "^1.0.6",
+    "angular-material-icons": "^0.6.0",
+    "underscore": "^1.8.3",
+    "angular-underscore": "^0.5.0"
+  }
+}
