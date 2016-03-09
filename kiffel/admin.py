@@ -60,6 +60,7 @@ class KiffelResource(resources.ModelResource):
 
     def before_save_instance(self, instance, dry_run):
         instance.status = 'angemeldet'
+        instance.ist_orga = False
 
     class Meta:
         model = Kiffel

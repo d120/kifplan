@@ -41,6 +41,7 @@ class Kiffel(models.Model):
     engel_handle = models.CharField(max_length=100, null=True, blank=True, verbose_name='Name im Engelsystem')
     twitter_handle = models.CharField(max_length=100, null=True, blank=True, verbose_name='Twitter-Handle')
     kdv_id = models.CharField(max_length=32, null=True, blank=True, verbose_name='KDV-ID (Barcode-Nummer)')
+    ist_orga = models.BooleanField(default=False, verbose_name='Kiffel ist auch Orga')
 
     class Meta:
         ordering = ('nickname',)

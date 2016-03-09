@@ -11,9 +11,9 @@ from kiffel.serializers import KiffelSerializer
 class KiffelViewSet(viewsets.ModelViewSet):
     serializer_class = KiffelSerializer
     queryset = Kiffel.objects.all()
-    filter_fields = tuple(Kiffel._meta.get_all_field_names())
-    search_fields = tuple(Kiffel._meta.get_all_field_names())
-    ordering_fields = tuple(Kiffel._meta.get_all_field_names())
+    filter_fields = [f.name for f in Kiffel._meta.get_fields()]
+    search_fields = [f.name for f in Kiffel._meta.get_fields()]
+    ordering_fields = [f.name for f in Kiffel._meta.get_fields()]
 
 
 class KiffelAttendingReport(ListView):
