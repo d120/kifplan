@@ -5,6 +5,7 @@ from import_export.formats import base_formats
 from import_export.widgets import DateWidget, BooleanWidget, Widget
 
 from kiffel.models import Kiffel
+from kiffel.helper import EAN8
 
 class JaNeinBooleanWidget(Widget):
     def clean(value):
@@ -61,6 +62,9 @@ class KiffelResource(resources.ModelResource):
     def before_save_instance(self, instance, dry_run):
         instance.status = 'angemeldet'
         instance.ist_orga = False
+        instance.kdv_id = EAN8.get_random()
+        while Kiffel.objects.filter(kdv_id=instance.kdv_id).count() > 0:
+            instance.kdv_id = EAN8.get_random()
 
     class Meta:
         model = Kiffel
@@ -73,7 +77,7 @@ class KiffelResource(resources.ModelResource):
 class KiffelAdmin(ImportExportMixin, admin.ModelAdmin):
     # admin list table view
     list_display = ['nickname', 'vorname', 'nachname', 'email', 'student',
-                    'datum_bezahlt', 'datum_tshirt_erhalten']
+                    'datum_bezahlt', 'datum_tshirt_erhalten', 'kdv_id']
     list_display_links = ['nickname']
 
     # import format options
