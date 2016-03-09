@@ -18,6 +18,10 @@
         templateUrl: 'static/frontend/partials/kiffel.html',
         controller: 'kiffelCtrl'
       })
+      .whenAuthenticated('/anmeldung', {
+        templateUrl: 'static/frontend/partials/anmeldung.html',
+        controller: 'anmeldungCtrl'
+      })
       .otherwise({
         redirectTo: '/kiffels'
       });

@@ -1,0 +1,64 @@
+<div flex>
+  <md-card>
+    <md-card-content>
+      <h3>Nach ankommenden Kiffels suchen</h3>
+      <form ng-submit="update()" layout="row" class="padding-top-1">
+        <md-input-container class="width-100 margin-0 margin-top-point-5">
+          <label>Kiffel-Suche</label>
+          <input ng-model="search">
+        </md-input-container>
+        <div>
+          <md-button class="md-primary md-raised" ng-click="update()">
+            <md-icon>search</md-icon>
+          </md-button>
+        </div>
+      </form>
+    </md-card-content>
+  </md-card>
+
+  <md-card class="margin-top-point-5">
+    <md-card-content>
+      <div ng-if="loading" layout="row" layout-sm="column" layout-align="space-around">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      </div>
+      <table ng-show="!loading" class="table margin-top-1">
+        <tr>
+          <th>Nickname</th>
+          <th>Vorname</th>
+          <th>Nachname</th>
+          <th>Hochschule</th>
+          <th>T-Shirt</th>
+          <th></th>
+        </tr>
+        <tr ng-repeat="kiffel in kiffels">
+          <td><a ng-href="#/kiffels/{{ kiffel.id }}">{{ kiffel.nickname }}</a></td>
+          <td>{{ kiffel.vorname }}</td>
+          <td>{{ kiffel.nachname }}</td>
+          <td>{{ kiffel.hochschule }}</td>
+          <td>{{ kiffel.tshirt_groesse }}</td>
+          <td>
+            <md-button ng-click="standard(kiffel)" ng-disabled="kiffel.status != 'angemeldet'" class="md-accent">Standard</md-button>
+            <md-menu>
+              <md-button class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
+                <md-icon md-menu-origin>more_vert</md-icon>
+              </md-button>
+              <md-menu-content width="3">
+                <md-menu-item>
+                  <md-button ng-click="angekommen(kiffel)" ng-disabled="kiffel.status != 'angemeldet'" class="md-accent">Angekommen</md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="bezahlt(kiffel)" ng-disabled="kiffel.datum_bezahlt" class="md-accent">Bezahlt</md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="tshirt(kiffel)" ng-disabled="kiffel.datum_tshirt_erhalten" class="md-accent">T-Shirt erhalten</md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </td>
+        </tr>
+      </table>
+    </md-card-content>
+  </md-card>
+</div>
+
+<div class="padding-top-1"></div>

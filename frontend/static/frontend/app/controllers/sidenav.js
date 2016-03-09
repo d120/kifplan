@@ -13,6 +13,12 @@
         items: [
           { title: 'Alle Kiffel', url: '/kiffels' },
         ]
+      },
+      {
+        title: 'Anmeldung',
+        items: [
+          { title: 'Dashboard', url: '/anmeldung' },
+        ]
       }
     ];
 

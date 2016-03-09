@@ -22,12 +22,15 @@
 .padding-horizontal-only { padding-top: 0 !important; padding-bottom: 0 !important; }
 .margin-0 { margin: 0; }
 .margin-1 { margin: 1rem; }
+.margin-top-1 { margin-top: 1rem; }
 .margin-top-point-5 { margin-top: .5rem; }
 .margin-left-1 { margin-left: 1rem; }
 .margin-right-1 { margin-right: 1rem; }
 .margin-bottom-1 { margin-bottom: 1rem; }
 .margin-bottom-0 { margin-bottom: 0; }
 .margin-left-2-point-5 { margin-left: 2.5rem; }
+
+.width-100 { width: 100%; }
 
 .left { float: left; }
 .right { float: right; }
@@ -86,3 +89,7 @@ md-tabs md-tab-item.md-active span { color: #689F38; }
 .hover-tile { cursor: pointer; paddings: 1rem; }
 .hover-tile.green { background-color: #AED581; }
 .hover-tile.green:hover { background-color: #C5E1A5; }
+
+.table { border-spacing: 0; border-collapse: collapse; width: 100%; }
+.table td, .table th { text-align: left; padding: 0rem; border-bottom: 1px solid #e6e6e6; }
+.table th { padding-bottom: 1.2rem; }
