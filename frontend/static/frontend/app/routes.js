@@ -14,6 +14,10 @@
         templateUrl: 'static/frontend/partials/kiffels.html',
         controller: 'kiffelsCtrl'
       })
+      .whenAuthenticated('/kiffels/:id', {
+        templateUrl: 'static/frontend/partials/kiffel.html',
+        controller: 'kiffelCtrl'
+      })
       .otherwise({
         redirectTo: '/kiffels'
       });
