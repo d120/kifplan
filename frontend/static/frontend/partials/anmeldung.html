@@ -37,20 +37,20 @@
           <td>{{ kiffel.hochschule }}</td>
           <td>{{ kiffel.tshirt_groesse }}</td>
           <td>
-            <md-button ng-click="standard(kiffel)" ng-disabled="kiffel.status != 'angemeldet'" class="md-accent">Standard</md-button>
+            <md-button ng-click="standard(kiffel)" ng-disabled="kiffel.status != 'angemeldet'" class="md-primary">Standard</md-button>
             <md-menu>
               <md-button class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
                 <md-icon md-menu-origin>more_vert</md-icon>
               </md-button>
               <md-menu-content width="3">
                 <md-menu-item>
-                  <md-button ng-click="angekommen(kiffel)" ng-disabled="kiffel.status != 'angemeldet'" class="md-accent">Angekommen</md-button>
+                  <md-button ng-click="angekommen(kiffel)" ng-disabled="kiffel.status != 'angemeldet'" class="md-primary">Angekommen</md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="bezahlt(kiffel)" ng-disabled="kiffel.datum_bezahlt" class="md-accent">Bezahlt</md-button>
+                  <md-button ng-click="bezahlt(kiffel)" ng-disabled="kiffel.datum_bezahlt" class="md-primary">Bezahlt</md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="tshirt(kiffel)" ng-disabled="kiffel.datum_tshirt_erhalten" class="md-accent">T-Shirt erhalten</md-button>
+                  <md-button ng-click="tshirt(kiffel)" ng-disabled="kiffel.datum_tshirt_erhalten" class="md-primary">T-Shirt erhalten</md-button>
                 </md-menu-item>
               </md-menu-content>
             </md-menu>

@@ -9,10 +9,10 @@
   app.config(['$mdThemingProvider', function($mdThemingProvider) {
     $mdThemingProvider
       .theme('default')
-      .primaryPalette('light-green', {
+      .primaryPalette('indigo', {
         'default': '300'
       })
-      .accentPalette('green', {
+      .accentPalette('pink', {
         'default': '500'
       });
   }]);

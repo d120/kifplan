@@ -1,8 +1,11 @@
 .font-point9 { font-size: 0.9rem; }
 
-.bg-green { background-color: #AED581; }
+.bg-green { background-color: #7986CB; }
 .white { color: #fff; }
+.black { color: #000; }
+.black span { color: #000; }
 .red { color: #f00; }
+.blue-light { color: #E8EAF6; }
 
 .bold { font-weight: bold !important; }
 .center { text-align: center; }
@@ -60,7 +63,7 @@ ng-md-icon svg { vertical-align: middle; }
 md-content { background-color: #e0e0e0; }
 
 a:focus { outline: none; }
-a { color: #4CAF50; text-decoration: none; }
+a { color: #0000ee; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 .login-form { max-width: 400px; margin-bottom: 50px; }
@@ -68,9 +71,9 @@ a:hover { text-decoration: underline; }
 
 .subheader { font-weight: bold; margin-top: 1rem; }
 
-.sidenav-title { min-heights: 7.5rem; background-color: #689F38; }
+.sidenav-title { min-heights: 7.5rem; background-color: #303F9F; }
 .sidenav-nav a { display: block; padding: 0.5rem 1rem 0.5rem 1rem; color: rgba(0, 0, 0, 0.87); text-decoration: none; }
-.sidenav-nav a:hover, .sidenav-nav a.active { background-color: #C5E1A5; }
+.sidenav-nav a:hover, .sidenav-nav a.active { background-color: #C5CAE9; }
 
 .circular-progress-button { height: 36px; }
 .circular-progress-button > md-progress-circular { margin: auto; margin-top: -32px; }
