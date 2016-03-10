@@ -46,14 +46,8 @@ class LaTeX:
         with tempfile.TemporaryDirectory() as tempdir:
             for asset in assets:
                 shutil.copy(os.path.dirname(os.path.realpath(__file__))+'/assets/'+asset, tempdir)
-            for i in range(2):
-                process = Popen(
-                    ['pdflatex'],
-                    stdin=PIPE,
-                    stdout=PIPE,
-                    cwd=tempdir,
-                )
-                process.communicate(rendered_tpl)
+            process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir,)
+            process.communicate(rendered_tpl)
             with open(os.path.join(tempdir, 'texput.pdf'), 'rb') as f:
                 pdf = f.read()
         return pdf
