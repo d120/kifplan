@@ -7,8 +7,11 @@
 
     toolbarService.title('Schildergenerator');
 
+    $scope.template = 'schilder.tex';
+
     $scope.generate = function() {
-      $window.open('api/v1/signs/?text=' + $scope.text, '_blank');
+      var search = '?text=' + $scope.text + '&headline=' + $scope.headline + '&template=' + $scope.template;
+      $window.open('api/v1/signs/'+search, '_blank');
     };
 
   }]);
