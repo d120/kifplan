@@ -1,6 +1,6 @@
 \documentclass{beamer}
 
-\input{support/header}
+\input{schilder_style}
 
 \begin{document}
 
@@ -11,9 +11,9 @@
 \begin{columns}
 \column{.45\textwidth}
 	\centering
-	\arrowleft
+	\arrowup
 \column{.55\textwidth}
-	\IfFileExists{ ${form.img} }{\includegraphics[width=\linewidth]{${ form.img }}}{}
+	\Large{${ form.text }}
 \end{columns}
 \vfill ~
 \end{frame}

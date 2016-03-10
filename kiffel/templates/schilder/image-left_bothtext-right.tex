@@ -1,19 +1,18 @@
 \documentclass{beamer}
 
-\input{support/header}
+\input{schilder_style}
 
 \begin{document}
 
 \begin{frame}
 ~ \vfill
-\defaulthead{${ form.headline }}
-\vskip.5cm
 \begin{columns}
-\column{.45\textwidth}
-	\centering
-	\arrowright
-\column{.55\textwidth}
+\column{.5\textwidth}
 	\IfFileExists{ ${form.img} }{\includegraphics[width=\linewidth]{${ form.img }}}{}
+\column{.5\textwidth}
+	\Huge{${ form.headline }}
+	\vskip1cm
+	\Large{${ form.text }}
 \end{columns}
 \vfill ~
 \end{frame}
