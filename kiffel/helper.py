@@ -2,6 +2,8 @@ from random import randint
 import tempfile, os, shutil
 from subprocess import Popen, PIPE
 from django.template.loader import get_template
+from import_export.widgets import Widget
+
 
 class EAN8:
     def get_random():
@@ -20,6 +22,13 @@ class QueryFilter:
             if value is not None:
                 queryset = queryset.filter(**{ field+'__iexact': value })
         return queryset
+
+
+class JaNeinBooleanWidget(Widget):
+    def clean(value):
+        return True if value == "Ja" else False
+    def render(value):
+        return "Ja" if value else "Nein"
 
 
 class LaTeX:
