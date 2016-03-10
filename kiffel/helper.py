@@ -39,8 +39,7 @@ class LaTeX:
                     item.__dict__[key] = value.replace('_', '\_')
         return queryset
 
-    def render(queryset, template_name, assets):
-        items = LaTeX.escape(queryset)
+    def render(items, template_name, assets):
         template = get_template(template_name)
         rendered_tpl = template.render({'kiffels': items}).encode('utf-8')
         with tempfile.TemporaryDirectory() as tempdir:

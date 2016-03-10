@@ -16,17 +16,14 @@ class KiffelViewSet(viewsets.ModelViewSet):
 
 
 class KiffelAttendingReport(View):
-    """
-    automatic PDF export for attending reports
-    """
-
+    """ automatic PDF export for attending reports """
     def get_queryset(self):
         queryset = Kiffel.objects.all();
         return QueryFilter.filter(queryset, self.request, ['kiffel_id', 'hochschule', 'nickname'])
 
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        pdf = LaTeX.render(queryset, 'kiffel/attending-report.tex', ['KIFLogo-Schrift.jpg', 'scheine.sty'])
+        items = LaTeX.escape(self.get_queryset())
+        pdf = LaTeX.render(items, 'kiffel/attending-report.tex', ['KIFLogo-Schrift.jpg', 'scheine.sty'])
         r = HttpResponse(content_type='application/pdf')
         r['Content-Disposition'] = 'attachment; filename=kiffels-attending-reports.pdf'
         r.write(pdf)
@@ -34,18 +31,28 @@ class KiffelAttendingReport(View):
 
 
 class NametagsExport(View):
-    """
-    automatic PDF export for nametags
-    """
-
+    """ automatic PDF export for nametags """
     def get_queryset(self):
         queryset = Kiffel.objects.all();
         return QueryFilter.filter(queryset, self.request, ['kiffel_id', 'hochschule', 'ist_orga', 'nickname'])
 
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        pdf = LaTeX.render(queryset, 'kiffel/nametags.tex', ['kif_logo.png', 'kifschilder.sty'])
+        items = LaTeX.escape(self.get_queryset())
+        pdf = LaTeX.render(items, 'kiffel/nametags.tex', ['kif_logo.png', 'namensschilder.sty'])
         r = HttpResponse(content_type='application/pdf')
         r['Content-Disposition'] = 'attachment; filename=kiffels-nametags.pdf'
+        r.write(pdf)
+        return r
+
+
+class Schildergenerator(View):
+    """ automatic Schildergenerator """
+    def get(self, request, *args, **kwargs):
+        data = {
+            text: request.GET.get('text')
+        }
+        pdf = LaTeX.render(data, 'kiffel/schilder.tex', ['kif_logo.png', 'schilder.sty'])
+        r = HttpResponse(content_type='application/pdf')
+        r['Content-Disposition'] = 'attachment; filename=schild.pdf'
         r.write(pdf)
         return r
