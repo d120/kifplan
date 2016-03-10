@@ -1,0 +1,34 @@
+% Tobias Otterbein, 09.03.2016
+% Script zur Erstellung der Namensschilder für die KIF
+
+\documentclass{article}
+\usepackage{kifschilder}
+
+\begin{document}
+
+{% for kiffel in kiffels %}
+
+%% {{kiffel.nickname}} ({{kiffel.vorname}} {{kiffel.nachname}})
+
+\Namensschild{
+  {{kiffel.nickname}}
+}{
+  {{kiffel.hochschule}}
+}{
+  {% if kiffel.ist_orga %} ORGA {% else %} ~ {% endif %}
+}{
+  {{kiffel.kdv_id}}
+}
+
+\Namensschild{
+  {{kiffel.nickname}}
+}{
+  {{kiffel.hochschule}}
+}{
+  {% if kiffel.ist_orga %} ORGA {% else %} ~ {% endif %}
+}{
+  {{kiffel.kdv_id}}
+}
+{% endfor %}
+
+\end{document}
