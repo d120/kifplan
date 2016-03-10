@@ -22,6 +22,18 @@
         templateUrl: 'static/frontend/partials/anmeldung.html',
         controller: 'anmeldungCtrl'
       })
+      .whenAuthenticated('/namensschilder', {
+        templateUrl: 'static/frontend/partials/namensschilder.html',
+        controller: 'namensschilderCtrl'
+      })
+      .whenAuthenticated('/teilnahme', {
+        templateUrl: 'static/frontend/partials/teilnahme.html',
+        controller: 'teilnahmeCtrl'
+      })
+      .whenAuthenticated('/hilfe', {
+        templateUrl: 'static/frontend/partials/hilfe.html',
+        controller: 'hilfeCtrl'
+      })
       .otherwise({
         redirectTo: '/kiffels'
       });

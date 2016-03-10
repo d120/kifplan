@@ -9,7 +9,8 @@
       {{ section.title }}
     </div>
     <nav class="sidenav-nav">
-      <a ng-repeat="link in section.items" href="#{{ link.url }}" ng-click="close()" ng-class="{ 'active': isActive(link.url) }">
+      <a ng-repeat="link in section.items" href="{{ link.url }}" ng-click="close()" ng-class="{ 'active': isActive(link.url) }" ng-attr-target="{{link.blank ? '_blank' : undefined}}">
+        <md-icon ng-if="link.blank">open_in_new</md-icon>
         {{ link.title }}
         <span ng-if="link.badge" class="badge badge-accent">{{ link.badge }}</span>
       </a>

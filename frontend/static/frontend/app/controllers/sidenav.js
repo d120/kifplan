@@ -9,20 +9,26 @@
 
     $scope.navigation = [
       {
-        title: 'Anmeldung',
+        title: 'Helpdesk',
         items: [
-          { title: 'Dashboard', url: '/anmeldung' },
+          { title: 'Anmeldung', url: '#/anmeldung' },
+          { title: 'Namensschilder', url: '#/namensschilder' },
+          { title: 'Teilnahmebestätigungen', url: '#/teilnahme' },
+          { title: 'Alle Kiffel', url: '#/kiffels' },
         ]
       }, {
-        title: 'Kiffel',
+        title: 'Links',
         items: [
-          { title: 'Alle Kiffel', url: '/kiffels' },
+          { title: 'Hilfe und Support', url: '#/hilfe' },
+          { title: 'Admin-Bereich', url: '/admin', blank: true },
+          { title: 'API-Browser', url: '/api/v1', blank: true },
+          { title: 'd120.de', url: 'http://www.d120.de/', blank: true },
         ]
       }
     ];
 
     $scope.isActive = function(url) {
-      return $location.path() === url;
+      return '#'+$location.path() === url;
     };
 
     $scope.close = function() {
