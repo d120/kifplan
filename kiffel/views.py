@@ -23,7 +23,7 @@ class KiffelAttendingReport(View):
 
     def get(self, request, *args, **kwargs):
         items = LaTeX.escape(self.get_queryset())
-        pdf = LaTeX.render(items, 'kiffel/attending-report.tex', ['KIFLogo-Schrift.jpg', 'scheine.sty'])
+        pdf = LaTeX.render(items, 'kiffel/attending-report.tex', ['bilder/KIFLogo-Schrift.jpg', 'scheine.sty'])
         r = HttpResponse(content_type='application/pdf')
         r['Content-Disposition'] = 'attachment; filename=kiffels-attending-reports.pdf'
         r.write(pdf)
@@ -38,7 +38,7 @@ class NametagsExport(View):
 
     def get(self, request, *args, **kwargs):
         items = LaTeX.escape(self.get_queryset())
-        pdf = LaTeX.render(items, 'kiffel/nametags.tex', ['kif_logo.png', 'namensschilder.sty'])
+        pdf = LaTeX.render(items, 'kiffel/nametags.tex', ['bilder/kif_logo.png', 'namensschilder.sty'])
         r = HttpResponse(content_type='application/pdf')
         r['Content-Disposition'] = 'attachment; filename=kiffels-nametags.pdf'
         r.write(pdf)
@@ -53,7 +53,7 @@ class Schildergenerator(View):
             'text': request.GET.get('text')
         }
         template = request.GET.get('template')
-        pdf = LaTeX.render(data, 'kiffel/'+template, ['kif_logo.png'])
+        pdf = LaTeX.render(data, 'schilder/'+template, ['bilder/kif_logo.png', 'schilder_style.tex'])
         r = HttpResponse(content_type='application/pdf')
         r['Content-Disposition'] = 'attachment; filename=schild.pdf'
         r.write(pdf)

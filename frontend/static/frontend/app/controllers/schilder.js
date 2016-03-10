@@ -7,7 +7,7 @@
 
     toolbarService.title('Schildergenerator');
 
-    $scope.template = 'schilder.tex';
+    $scope.template = 'headline-top_arrowdown_text-right.tex';
 
     $scope.generate = function() {
       var search = '?text=' + $scope.text + '&headline=' + $scope.headline + '&template=' + $scope.template;
