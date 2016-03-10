@@ -4,7 +4,7 @@ from django.template import Context
 from django.template.loader import get_template
 from rest_framework import viewsets, permissions, filters
 
-import io, odswriter, tempfile, os, shutil
+import io, tempfile, os, shutil
 from subprocess import Popen, PIPE
 
 from kiffel.models import Kiffel

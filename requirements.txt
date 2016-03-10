@@ -3,5 +3,4 @@ Django==1.9.4
 django-filter==0.12.0
 django-import-export==0.4.3
 djangorestframework==3.3.2
-odswriter==0.4.0
 tablib==0.11.2
