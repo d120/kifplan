@@ -1,4 +1,4 @@
-from django.views.generic import ListView, View
+from django.views.generic import View
 from django.http import HttpResponse
 from rest_framework import viewsets, permissions, filters
 
@@ -15,7 +15,7 @@ class KiffelViewSet(viewsets.ModelViewSet):
     ordering_fields = [f.name for f in Kiffel._meta.get_fields()]
 
 
-class KiffelAttendingReport(ListView):
+class KiffelAttendingReport(View):
     """
     automatic PDF export for attending reports
     """
