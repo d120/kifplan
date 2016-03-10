@@ -35,7 +35,7 @@
         controller: 'hilfeCtrl'
       })
       .otherwise({
-        redirectTo: '/kiffels'
+        redirectTo: '/anmeldung'
       });
 
   }]);
