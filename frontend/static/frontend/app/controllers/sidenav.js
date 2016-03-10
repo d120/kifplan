@@ -22,6 +22,7 @@
           { title: 'Hilfe und Support', url: '#/hilfe' },
           { title: 'Admin-Bereich', url: '/admin', blank: true },
           { title: 'API-Browser', url: '/api/v1', blank: true },
+          { title: 'Source Code', url: 'https://git.fachschaft.informatik.tu-darmstadt.de/kif/kiffel-verwaltung', blank: true },
           { title: 'd120.de', url: 'http://www.d120.de/', blank: true },
         ]
       }
