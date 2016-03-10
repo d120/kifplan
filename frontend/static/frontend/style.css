@@ -96,3 +96,5 @@ md-tabs md-tab-item.md-active span { color: #689F38; }
 .table { border-spacing: 0; border-collapse: collapse; width: 100%; }
 .table td, .table th { text-align: left; padding: 0rem; border-bottom: 1px solid #e6e6e6; }
 .table th { padding-bottom: 1.2rem; }
+
+.title-icon { font-size: 1.5em; margin-left: .5rem; top: -.5rem; position: relative; }

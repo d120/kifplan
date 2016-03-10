@@ -1,7 +1,10 @@
 <div ng-controller="sidenavCtrl" flex class="padding-bottom-1">
 
   <div class="sidenav-title md-padding blue-light">
-    <h2>{{ title }}</h2>
+    <h2>
+      {{ title }}
+      <md-icon class="white title-icon">group</md-icon>
+    </h2>
   </div>
 
   <div ng-repeat="section in navigation">
