@@ -1,1 +1,27 @@
-Namensschilder
+<div flex>
+  <md-card>
+    <md-card-content>
+      <h3>Namensschilder generieren</h3>
+      <form ng-submit="generate()">
+        <md-radio-group ng-model="filterChoice">
+          <md-radio-button value="all" class="md-primary">Alle Kiffels</md-radio-button>
+          <md-radio-button value="nickname" class="md-primary">Nur dieser Kiffel (Nickname):</md-radio-button>
+          <md-radio-button value="hochschule" class="md-primary">Nur Kiffels von dieser Hochschule:</md-radio-button>
+          <md-radio-button value="orga" class="md-primary">Nur Orgas</md-radio-button>
+        </md-radio-group>
+        <div>
+          <md-input-container class="margin-0 margin-top-1 width-50">
+            <label>Nickname / Hochschule</label>
+            <input type="text" ng-model="filterValue" ng-disabled="filterChoice != 'nickname' && filterChoice != 'hochschule'" />
+          </md-input-container>
+        </div>
+        <md-button class="md-primary md-raised" ng-click="generate()">
+          <md-icon>brush</md-icon>
+          Namensschilder zeichnen
+        </md-button>
+        <md-icon class="margin-left-1">warning</md-icon>
+        Hinweis: dies kann einige Zeit dauern (pdflatex)
+      </form>
+    </md-card-content>
+  </md-card>
+</div>
