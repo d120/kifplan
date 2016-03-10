@@ -4,7 +4,7 @@ from rest_framework import viewsets, permissions, filters
 
 from kiffel.models import Kiffel
 from kiffel.serializers import KiffelSerializer
-from kiffel.helper import LaTeX
+from kiffel.helper import LaTeX, QueryFilter
 
 
 class KiffelViewSet(viewsets.ModelViewSet):
@@ -22,16 +22,7 @@ class KiffelAttendingReport(ListView):
 
     def get_queryset(self):
         queryset = Kiffel.objects.all();
-        kiffel_id = self.request.GET.get('kiffel_id', None)
-        hochschule = self.request.GET.get('hochschule', None)
-        nickname = self.request.GET.get('nickname', None)
-        if kiffel_id is not None:
-            queryset = queryset.filter(id=kiffel_id)
-        if hochschule is not None:
-            queryset = queryset.filter(hochschule=hochschule)
-        if nickname is not None:
-            queryset = queryset.filter(nickname=nickname)
-        return queryset
+        return QueryFilter.filter(queryset, self.request, ['kiffel_id', 'hochschule', 'nickname'])
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -49,19 +40,7 @@ class NametagsExport(View):
 
     def get_queryset(self):
         queryset = Kiffel.objects.all();
-        kiffel_id = self.request.GET.get('kiffel_id', None)
-        hochschule = self.request.GET.get('hochschule', None)
-        ist_orga = self.request.GET.get('ist_orga', None)
-        nickname = self.request.GET.get('nickname', None)
-        if kiffel_id is not None:
-            queryset = queryset.filter(id=kiffel_id)
-        if hochschule is not None:
-            queryset = queryset.filter(hochschule=hochschule)
-        if ist_orga is not None:
-            queryset = queryset.filter(ist_orga=ist_orga)
-        if nickname is not None:
-            queryset = queryset.filter(nickname=nickname)
-        return queryset
+        return QueryFilter.filter(queryset, self.request, ['kiffel_id', 'hochschule', 'ist_orga', 'nickname'])
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()

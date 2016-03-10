@@ -13,6 +13,15 @@ class EAN8:
         return code
 
 
+class QueryFilter:
+    def filter(queryset, request, fields):
+        for field in fields:
+            value = request.GET.get(field, None)
+            if value is not None:
+                queryset = queryset.filter(**{ field+'__iexact': value })
+        return queryset
+
+
 class LaTeX:
     def escape(queryset):
         for item in queryset:
