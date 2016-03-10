@@ -1,0 +1,21 @@
+<div flex>
+  <md-card>
+    <md-card-content>
+      <h3>Schilder erstellen</h3>
+      <form ng-submit="generate()">
+        <div>
+          <md-input-container class="margin-0 margin-top-1 width-50">
+            <label>Text</label>
+            <input type="text" ng-model="text" />
+          </md-input-container>
+        </div>
+        <md-button class="md-primary md-raised" ng-click="generate()">
+          <md-icon>brush</md-icon>
+          Schild generieren
+        </md-button>
+        <md-icon class="margin-left-1">warning</md-icon>
+        Hinweis: dies kann einige Zeit dauern (pdflatex)
+      </form>
+    </md-card-content>
+  </md-card>
+</div>

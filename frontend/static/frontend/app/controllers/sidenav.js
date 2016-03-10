@@ -15,6 +15,7 @@
           { title: 'Namensschilder', url: '#/namensschilder' },
           { title: 'Teilnahmebestätigungen', url: '#/teilnahme' },
           { title: 'Alle Kiffel', url: '#/kiffels' },
+          { title: 'Schildergenerator', url: '#/schilder' },
         ]
       }, {
         title: 'Links',

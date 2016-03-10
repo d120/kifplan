@@ -49,9 +49,9 @@ class Schildergenerator(View):
     """ automatic Schildergenerator """
     def get(self, request, *args, **kwargs):
         data = {
-            text: request.GET.get('text')
+            'text': request.GET.get('text')
         }
-        pdf = LaTeX.render(data, 'kiffel/schilder.tex', ['kif_logo.png', 'schilder.sty'])
+        pdf = LaTeX.render(data, 'kiffel/schilder.tex', ['kif_logo.png'])
         r = HttpResponse(content_type='application/pdf')
         r['Content-Disposition'] = 'attachment; filename=schild.pdf'
         r.write(pdf)

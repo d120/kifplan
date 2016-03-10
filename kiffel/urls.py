@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'reports/$', views.KiffelAttendingReport.as_view()),
     url(r'nametags/$', views.NametagsExport.as_view()),
+    url(r'signs/$', views.Schildergenerator.as_view()),
 ]

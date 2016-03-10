@@ -34,6 +34,10 @@
         templateUrl: 'static/frontend/partials/hilfe.html',
         controller: 'hilfeCtrl'
       })
+      .whenAuthenticated('/schilder', {
+        templateUrl: 'static/frontend/partials/schilder.html',
+        controller: 'schilderCtrl'
+      })
       .otherwise({
         redirectTo: '/anmeldung'
       });
