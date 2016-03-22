@@ -38,6 +38,10 @@
         templateUrl: 'static/frontend/partials/schilder.html',
         controller: 'schilderCtrl'
       })
+      .whenAuthenticated('/eduroam', {
+        templateUrl: 'static/frontend/partials/eduroam.html',
+        controller: 'eduroamCtrl'
+      })
       .otherwise({
         redirectTo: '/anmeldung'
       });

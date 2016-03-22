@@ -9,21 +9,26 @@
 
     $scope.navigation = [
       {
-        title: 'Helpdesk',
+        title: 'Kiffel',
         items: [
+          { title: 'Kiffel bearbeiten', url: '#/kiffels' },
           { title: 'Anmeldung', url: '#/anmeldung' },
           { title: 'Namensschilder', url: '#/namensschilder' },
           { title: 'Teilnahmebestätigungen', url: '#/teilnahme' },
-          { title: 'Alle Kiffel', url: '#/kiffels' },
-          { title: 'Schildergenerator', url: '#/schilder' },
         ]
+      }, {
+        title: 'eduroam',
+        items: [
+          { title: 'Account-Vergabe', url: '#/eduroam' },
+        ],
       }, {
         title: 'Links',
         items: [
           { title: 'Hilfe und Support', url: '#/hilfe' },
-          { title: 'Admin-Bereich', url: '/admin', blank: true },
-          { title: 'API-Browser', url: '/api/v1', blank: true },
-          { title: 'Source Code', url: 'https://git.fachschaft.informatik.tu-darmstadt.de/kif/kiffel-verwaltung', blank: true },
+          { title: 'Schildergenerator', url: '#', blank: true },
+          { title: 'Engelsystem', url: 'http://www.d120.de/engelsystem', blank: true },
+          { title: 'Pad Manager', url: 'http://www.d120.de/pad', blank: true },
+          { title: 'Orga-Wiki', url: 'https://orga.fachschaften.org/projects/kif-orga-440/issues', blank: true },
           { title: 'd120.de', url: 'http://www.d120.de/', blank: true },
         ]
       }
