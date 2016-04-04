@@ -43,6 +43,7 @@ INSTALLED_APPS = (
 
     'kiffel',
     'eduroam',
+    'aks',
     'frontend',
 )
 
