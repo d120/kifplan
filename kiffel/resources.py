@@ -1,7 +1,7 @@
 from import_export import resources, fields
 from import_export.widgets import DateWidget
 
-from kiffel.models import Kiffel
+from kiffel.models import Person
 from kiffel.helper import EAN8, JaNeinBooleanWidget
 
 
@@ -54,11 +54,11 @@ class KiffelResource(resources.ModelResource):
         instance.status = 'angemeldet'
         instance.ist_orga = False
         instance.kdv_id = EAN8.get_random()
-        while Kiffel.objects.filter(kdv_id=instance.kdv_id).count() > 0:
+        while Person.objects.filter(kdv_id=instance.kdv_id).count() > 0:
             instance.kdv_id = EAN8.get_random()
 
     class Meta:
-        model = Kiffel
+        model = Person
         exclude = ('datum_bezahlt', 'datum_tshirt_erhalten', 'datum_teilnahmebestaetigung_erhalten',
                    'kommentar', 'engel_handle', 'twitter_handle')
         import_id_fields = ('hashtag',)

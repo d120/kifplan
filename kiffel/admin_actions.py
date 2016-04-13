@@ -1,4 +1,4 @@
-from kiffel.models import Kiffel
+from kiffel.models import Person
 from kiffel.helper import EAN8
 
 def renew_kdv_barcode(modeladmin, request, queryset):
@@ -7,7 +7,7 @@ def renew_kdv_barcode(modeladmin, request, queryset):
     """
     for kiffel in queryset:
         kiffel.kdv_id = EAN8.get_random()
-        while Kiffel.objects.filter(kdv_id=kiffel.kdv_id).count() > 0:
+        while Person.objects.filter(kdv_id=kiffel.kdv_id).count() > 0:
             kiffel.kdv_id = EAN8.get_random()
         kiffel.save()
 

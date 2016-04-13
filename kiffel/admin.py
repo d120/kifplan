@@ -2,12 +2,12 @@ from django.contrib import admin
 from import_export.admin import ImportExportMixin
 from import_export.formats import base_formats
 
-from kiffel.models import Kiffel
+from kiffel.models import Person
 from kiffel.resources import KiffelResource
 from kiffel.admin_actions import renew_kdv_barcode
 
 
-@admin.register(Kiffel)
+@admin.register(Person)
 class KiffelAdmin(ImportExportMixin, admin.ModelAdmin):
     # admin list table view
     list_display = ['nickname', 'vorname', 'nachname', 'student', 'datum_bezahlt',

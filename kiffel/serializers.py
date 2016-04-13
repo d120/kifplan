@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from kiffel.models import Kiffel
+from kiffel.models import Person
 
 class KiffelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Kiffel
+        model = Person

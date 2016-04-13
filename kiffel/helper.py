@@ -6,6 +6,7 @@ from import_export.widgets import Widget
 
 
 class EAN8:
+    @staticmethod
     def get_random():
         code = str(randint(1000000, 9999999))
         weighed_sum = int(code[0])*3 + int(code[1])*1 + int(code[2])*3 + \
