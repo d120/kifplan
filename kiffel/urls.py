@@ -1,3 +1,6 @@
+
+# URLs der Kiffel-App
+
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
 
@@ -11,4 +14,5 @@ urlpatterns = [
     url(r'reports/$', views.KiffelAttendingReport.as_view()),
     url(r'nametags/$', views.NametagsExport.as_view()),
     url(r'signs/$', views.Schildergenerator.as_view()),
+    url(r'import/engelsystem/$', views.ImportFromEngelsystem.as_view()),
 ]
