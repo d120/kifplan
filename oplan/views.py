@@ -57,9 +57,47 @@ class ImportRaumliste(View):
                 out += "ok"
             except IntegrityError as ex:
                 out += str(ex)
+        
+        return render(request, "oplan/ak_import_view.html", { 'titel': 'Raumliste importieren', 'output': out })
+
+import re
+
+class ImportWikiAkListe(View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
+        foo = ""
+        return render(request, "oplan/ak_import_view.html", { 'titel': 'AKs importieren (Quelltext der Wikiseite hier pasten)', 'output': '' })
+    
+    def post(self, request, *args, **kwargs):
+        if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
+        
+        wikitext = request.POST["content"]
+        
+        rx = re.compile(r"""
+        ^\s*\{\{Ak\sSpalte[\sa-z0-9]*
+        (.*?)
+        ^\s*\}\}
+        """, re.IGNORECASE | re.MULTILINE | re.DOTALL | re.VERBOSE)
+        rx2 = re.compile(r"""
+        ^\|\s*([a-z]+)\s*=(.*?)$
+        """, re.IGNORECASE | re.MULTILINE | re.DOTALL | re.VERBOSE)
+        
+        
+        out="Ergebnis:"
+        for ak_match in rx.finditer(wikitext):
+            ak_str = ak_match.group(1)
+            #out+="<table>"
+            data = {}
+            for line_match in rx2.finditer(ak_str):
+                key = line_match.group(1)
+                value = line_match.group(2)
+                #out+="<tr><th>"+key+"</th><td>"+value+"</td></tr>"
+                data[key] = value
+            #out+="</table>"
+            AK.objects.create(titel=data['name'], beschreibung=data['beschreibung'],
+                    anzahl=data['wieviele'], leiter=data['wer'],
+                    wann=data['wann'], dauer=data['dauer'])
             
-        
-        
         
         return render(request, "oplan/ak_import_view.html", { 'titel': 'Raumliste importieren', 'output': out })
 
