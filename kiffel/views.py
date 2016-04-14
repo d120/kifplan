@@ -6,6 +6,10 @@ from kiffel.models import Person
 from kiffel.serializers import KiffelSerializer
 from kiffel.helper import LaTeX, QueryFilter
 from django.shortcuts import render
+import datetime
+
+from kiffel.helper import EAN8
+from django.core.exceptions import PermissionDenied
 
 import csv
 
@@ -66,32 +70,153 @@ class ImportFromEngelsystem(View):
     def get(self, request, *args, **kwargs):
         foo = ""
         return render(request, "kiffel/import_csv_template.html")
-
+    
+    def updatePerson(self, person, engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,ist_orga):
+        person.engel_id = engelid
+        if vorname != "": person.vorname = vorname
+        if nachname != "": person.nachname = nachname
+        if nick != "": person.nickname = nick
+        if tshirt_groesse != "": person.tshirt_groesse = tshirt_groesse
+        if kommentar != "": person.kommentar = kommentar
+        person.ist_orga = ist_orga
+        person.ist_helfer = True
+        person.save()
+    
     def post(self, request, *args, **kwargs):
+        if not request.user.has_perm('kiffel.import_persons'):
+            raise PermissionDenied
         the_csv = request.POST["content"]
         reader = csv.reader(the_csv.splitlines())
         out = ""
         for row in reader:
-            [engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar]=row
+            [engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,ist_orga]=row
             if engelid == "ID": continue
             
             out += "<li><b><u>" + engelid + "</u> - " + email + "</b> (" + nick + " - "+vorname+" - "+nachname + ")<br>"
             p_by_id = Person.objects.filter(engel_id=engelid)
             if p_by_id.count() > 0:
                 out += "Found by previously imported Engel ID<br>"
+                self.updatePerson(p_by_id[0], engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,ist_orga)
                 continue
                 
             
             p_by_mail = Person.objects.filter(email=email)
             if p_by_mail.count() > 0:
                 out += "Found by EMAIL<br>"
+                self.updatePerson(p_by_mail[0], engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,ist_orga)
                 continue
                 
-            out += "would import"
+            out += "importing..."
+            Person.objects.create(engel_id=engelid, nickname=nick, vorname=vorname, nachname=nachname, email=email, 
+                    tshirt_groesse=tshirt_groesse, kommentar=kommentar, ist_helfer=True, ist_orga=ist_orga, 
+                    kdv_id=EAN8.get_random())
+            out += "ok"
+            
             
         return HttpResponse(out)
 
 
+
+class ImportFromKiffelAnmeldung(View):
+    def get(self, request, *args, **kwargs):
+        foo = ""
+        return render(request, "kiffel/import_csv_template.html")
+    
+    def updatePerson(self, person, data):
+        for key, value in data.items():
+            setattr(person, key, value)
+        person.save()
+    
+    def post(self, request, *args, **kwargs):
+        if not request.user.has_perm('kiffel.import_persons'):
+            raise PermissionDenied
+        the_csv = request.POST["content"]
+        reader = csv.reader(the_csv.splitlines())
+        out = ""
+        for row in reader:
+            data = dict(zip(anmeldung_csv_cols, row))
+            if data["anmeldung_id"] == "#": continue
+            
+            data['ist_kiffel'] = True
+            
+            data['abreise_geplant'] = datetime.datetime.strptime(data['abreise_geplant'], '%d.%m.%Y')
+            data['anreise_geplant'] = datetime.datetime.strptime(data['anreise_geplant'], '%d.%m.%Y')
+            data['anmeldung_aktualisiert'] = datetime.datetime.strptime(data['anmeldung_aktualisiert'], '%Y-%m-%d %H:%M:%S %z')
+            data['anmeldung_angelegt'] = datetime.datetime.strptime(data['anmeldung_angelegt'], '%Y-%m-%d %H:%M:%S %z')
+            
+            
+            out += "<li><b><u>" + data["anmeldung_id"] + "</u> - " + data["email"] + "</b>  | " + data["nickname"] + " | "+data["vorname"]+" "+data["nachname"] + "<br>"
+            p_by_id = Person.objects.filter(anmeldung_id=data["anmeldung_id"])
+            if p_by_id.count() > 0:
+                out += "Found by previously imported Anmeldung ID<br>"
+                self.updatePerson(p_by_id[0], data)
+                continue
+                
+            
+            p_by_mail = Person.objects.filter(email=data["email"])
+            if p_by_mail.count() > 0:
+                out += "Found by EMAIL<br>"
+                self.updatePerson(p_by_mail[0], data)
+                continue
+            
+            
+            out += "importing..."
+            data['kdv_id'] = EAN8.get_random()
+            Person.objects.create(**data)
+            out += "ok"
+            
+        return HttpResponse(out)
+
+class CreateAnonymPerson(View):
+    def get(self, request, *args, **kwargs):
+        foo = ""
+        return render(request, "kiffel/import_csv_template.html")
+    
+    def post(self, request, *args, **kwargs):
+        if not request.user.has_perm('kiffel.import_persons'):
+            raise PermissionDenied
+        count = int(request.POST["content"])
+        
+        out = "Erstelle Anonyme Accounts "
+        for i in range(count):
+            barcode = EAN8.get_random()
+            
+            Person.objects.create(kdv_id=barcode,
+                ist_anonym=True, nickname="zzz-anonym-"+barcode, email="zzz-anomym-"+barcode+"@example.com")
+            out += "."
+        
+        out += "   OK"
+        
+        return HttpResponse(out)
+
+
+
+anmeldung_csv_cols = [
+    "anmeldung_id",
+    "vorname",
+    "nachname",
+    "email",
+    "nickname",
+    "student",
+    "hochschule",
+    "kommentar_public",
+    "kommentar_orga",
+    "anreise_geplant",
+    "abreise_geplant",
+    "ernaehrungsgewohnheit",
+    "lebensmittelunvertraeglichkeiten",
+    "volljaehrig",
+    "eigener_schlafplatz",
+    "tshirt_groesse",
+    "nickname_auf_tshirt",
+    "kapuzenjacke_groesse",
+    "nickname_auf_kapuzenjacke",
+    "weitere_tshirts",
+    "interesse_theater",
+    "interesse_esoc",
+    "anmeldung_angelegt",
+    "anmeldung_aktualisiert"
+]
 
 
 

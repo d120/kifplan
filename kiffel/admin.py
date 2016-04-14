@@ -6,12 +6,26 @@ from kiffel.models import Person
 from kiffel.resources import KiffelResource
 from kiffel.admin_actions import renew_kdv_barcode
 
+from django.contrib.auth.forms import UserChangeForm
+
+
 
 @admin.register(Person)
-class KiffelAdmin(ImportExportMixin, admin.ModelAdmin):
+class KiffelAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        # Override this to set the password to the value in the field if it's
+        # changed.
+        if obj.pk:
+            orig_obj = Person.objects.get(pk=obj.pk)
+            if obj.password != orig_obj.password:
+                obj.set_password(obj.password)
+        else:
+            obj.set_password(obj.password)
+        obj.save()
+    
     # admin list table view
-    list_display = ['nickname', 'vorname', 'nachname', 'student', 'datum_bezahlt',
-        'datum_tshirt_erhalten', 'kdv_id', 'ist_orga']
+    list_display = ['nickname', 'vorname', 'nachname', 'ist_helfer', 'ist_orga', 'ist_kiffel',
+        'datum_tshirt_erhalten', 'kdv_id',  'engel_id', 'anmeldung_id']
     list_display_links = ['nickname']
     list_filter = ['status', 'ist_orga', 'student', 'datum_bezahlt', 'datum_teilnahmebestaetigung_erhalten']
     actions = [renew_kdv_barcode,]

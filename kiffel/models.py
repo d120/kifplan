@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser, PermissionsMixin)
 
+from kiffel.helper import EAN8
 
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -33,6 +34,9 @@ class Person(PermissionsMixin, AbstractBaseUser):
         ordering = ('nickname',)
         verbose_name = 'Person'
         verbose_name_plural = 'Personen'
+        permissions = (
+            ('import_persons', 'Personen importieren'),
+        )
 
     # Felder aus der Anmeldung (orga.fachschaften.org)
     nickname = models.CharField(null=True, blank=True, max_length=100, verbose_name='Nickname (Namensschild)')
@@ -64,7 +68,7 @@ class Person(PermissionsMixin, AbstractBaseUser):
     # Orga-Status
     kommentar = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=100, null=True, blank=True)
-    datum_bezahlt = models.DateTimeField(null=True, blank=True, verbose_name='Teilnahmebeitrag bezahlt')
+    datum_bezahlt = models.DateTimeField(null=True, blank=True, verbose_name='Tn.beitrag bezahlt')
     datum_tuete_erhalten = models.DateTimeField(null=True, blank=True, verbose_name='Tüte erhalten')
     datum_tshirt_erhalten = models.DateTimeField(null=True, blank=True, verbose_name='T-Shirt erhalten')
     datum_teilnahmebestaetigung_erhalten = models.DateTimeField(null=True, blank=True,
@@ -72,7 +76,7 @@ class Person(PermissionsMixin, AbstractBaseUser):
     twitter_handle = models.CharField(max_length=100, null=True, blank=True, verbose_name='Twitter-Handle')
 
     # KDV-System
-    kdv_id = models.CharField(max_length=32, null=True, blank=True, verbose_name='KDV-ID')
+    kdv_id = models.CharField(max_length=32, null=True, blank=True, unique=True, verbose_name='KDV-ID')
 
     # Typ dieses Eintrags
     ist_kiffel = models.BooleanField(default=False, verbose_name='Person ist Kiffel')
@@ -93,6 +97,15 @@ class Person(PermissionsMixin, AbstractBaseUser):
 
     USERNAME_FIELD = 'email'
 
+    def renew_kdv_barcode(self):
+        """
+        Generates new unique EAN 8 barcodes for selected kiffels
+        """
+        self.kdv_id = EAN8.get_random()
+        while Person.objects.filter(kdv_id=self.kdv_id).count() > 0:
+            self.kdv_id = EAN8.get_random()
+        self.save()
+    
     def get_full_name(self):
         return self.email
 
@@ -111,9 +124,11 @@ class Person(PermissionsMixin, AbstractBaseUser):
         "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
         return True
-
+    
     @property
     def is_staff(self):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+    
+    
