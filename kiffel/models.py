@@ -104,6 +104,24 @@ class Person(PermissionsMixin, AbstractBaseUser):
             self.kdv_id = EAN8.get_random()
         self.save()
     
+    def status_desc(self):
+        o = ""
+        if self.ist_orga: o += "<b><font color=green>Orga</font></b> "
+        if self.ist_helfer: o += "<b><font color=#884411>Helfer</font></b> "
+        if self.ist_kiffel: o += "Kiffel "
+        if self.ist_anonym: o += "Anonym "
+        return o
+    status_desc.allow_tags = True
+    status_desc.short_description = 'Person ist'
+    status_desc.admin_order_field = 'ist_helfer'
+    
+    def engel_id_link(self):
+        if self.engel_id == None: return '--'
+        return '<a href="%s%s">➜ %s</a>' % ('https://www2.fachschaft.informatik.tu-darmstadt.de/engelsystem/?p=users&action=view&user_id=', self.engel_id, self.engel_id)
+    engel_id_link.allow_tags = True
+    engel_id_link.short_description = 'Engel-ID'
+    engel_id_link.admin_order_field = 'engel_id'
+    
     def get_full_name(self):
         return "{0} {1}".format(self.vorname, self.nachname)
 

@@ -24,12 +24,12 @@ class KiffelAdmin(admin.ModelAdmin):
         obj.save()
     
     # admin list table view
-    list_display = ['nickname', 'vorname', 'nachname', 'ist_helfer', 'ist_orga', 'ist_kiffel',
-        'datum_tshirt_erhalten', 'kdv_id',  'engel_id', 'anmeldung_id']
+    list_display = ['nickname', 'vorname', 'nachname', 'status_desc',
+        'datum_tshirt_erhalten', 'kdv_id',  'engel_id_link', 'anmeldung_id']
     list_display_links = ['nickname']
     list_filter = ['status', 'ist_orga', 'student', 'datum_bezahlt', 'datum_teilnahmebestaetigung_erhalten']
     actions = [renew_kdv_barcode,]
-
+    
     # import format options
     formats = (base_formats.CSV,)
     resource_class = KiffelResource
