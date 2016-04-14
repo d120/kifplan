@@ -21,7 +21,7 @@ class MyUserManager(BaseUserManager):
         Creates and saves a superuser with the given email and password.
         """
         u = self.create_user(email=email, password=password)
-        u.is_admin = True
+        u.is_superuser = True
         u.save(using=self._db)
         return u
 
@@ -33,6 +33,9 @@ class Person(PermissionsMixin, AbstractBaseUser):
         ordering = ('nickname',)
         verbose_name = 'Person'
         verbose_name_plural = 'Personen'
+        permissions = (
+            ('import_persons', 'Import new persons'),
+        )
 
     # Felder aus der Anmeldung (orga.fachschaften.org)
     nickname = models.CharField(null=True, blank=True, max_length=100, verbose_name='Nickname (Namensschild)')
@@ -72,7 +75,7 @@ class Person(PermissionsMixin, AbstractBaseUser):
     twitter_handle = models.CharField(max_length=100, null=True, blank=True, verbose_name='Twitter-Handle')
 
     # KDV-System
-    kdv_id = models.CharField(max_length=32, null=True, blank=True, verbose_name='KDV-ID')
+    kdv_id = models.CharField(max_length=32, null=True, blank=True, verbose_name='KDV-ID', unique=True)
 
     # Typ dieses Eintrags
     ist_kiffel = models.BooleanField(default=False, verbose_name='Person ist Kiffel')
@@ -85,8 +88,6 @@ class Person(PermissionsMixin, AbstractBaseUser):
     anmeldung_id = models.IntegerField(null=True, blank=True)
 
     # User fields
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
     email = models.EmailField(null=True, blank=True, verbose_name='E-Mail', unique=True)
 
     objects = MyUserManager()
@@ -94,26 +95,18 @@ class Person(PermissionsMixin, AbstractBaseUser):
     USERNAME_FIELD = 'email'
 
     def get_full_name(self):
-        return self.email
+        return "{0} {1}".format(self.vorname, self.nachname)
 
     def get_short_name(self):
-        return self.email
+        return self.nickname
 
-    def __unicode__(self):
-        return self.email
-
-    def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
-        return True
-
-    def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        # Simplest possible answer: Yes, always
-        return True
+    def __str__(self):
+        return "{0} ({1})".format(self.nickname, self.email)
 
     @property
     def is_staff(self):
-        "Is the user a member of staff?"
-        # Simplest possible answer: All admins are staff
-        return self.is_admin
+        return self.is_superuser or self.ist_orga
+
+    @property
+    def is_active(self):
+        return self.is_superuser or self.ist_orga
