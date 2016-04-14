@@ -69,7 +69,7 @@ class Schildergenerator(View):
 class ImportFromEngelsystem(View):
     def get(self, request, *args, **kwargs):
         foo = ""
-        return render(request, "kiffel/import_csv_template.html")
+        return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import Engelsystem', 'output': '' })
     
     def updatePerson(self, person, engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,ist_orga):
         person.engel_id = engelid
@@ -113,14 +113,14 @@ class ImportFromEngelsystem(View):
             out += "ok"
             
             
-        return HttpResponse(out)
+        return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import Engelsystem', 'output': out })
 
 
 
 class ImportFromKiffelAnmeldung(View):
     def get(self, request, *args, **kwargs):
         foo = ""
-        return render(request, "kiffel/import_csv_template.html")
+        return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import KIF-Anmeldung', 'output': '' })
     
     def updatePerson(self, person, data):
         for key, value in data.items():
@@ -165,12 +165,12 @@ class ImportFromKiffelAnmeldung(View):
             Person.objects.create(**data)
             out += "ok"
             
-        return HttpResponse(out)
+        return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import KIF-Anmeldung', 'output': out })
 
 class CreateAnonymPerson(View):
     def get(self, request, *args, **kwargs):
         foo = ""
-        return render(request, "kiffel/import_csv_template.html")
+        return render(request, "kiffel/import_csv_template.html", { 'titel': 'Anonyme Accounts anlegen (bitte Anzahl eingeben)', 'output': '' })
     
     def post(self, request, *args, **kwargs):
         if not request.user.has_perm('kiffel.import_persons'):
@@ -187,7 +187,7 @@ class CreateAnonymPerson(View):
         
         out += "   OK"
         
-        return HttpResponse(out)
+        return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import KIF-Anmeldung', 'output': out })
 
 
 

@@ -5,6 +5,8 @@
 
 <hr>
 
+<h2>{{ titel }}</h2>
+
 <form action='' method='post'>
 <textarea name='content' style='width:90%;height:200px;background:#ffeeaa'></textarea>
 
@@ -12,3 +14,11 @@
 <p><input type=submit></p>
 
 </form>
+
+<pre>
+{% autoescape off %}
+  {{ output }}
+{% endautoescape %}
+
+</pre>
+
