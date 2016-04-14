@@ -1,11 +1,12 @@
 from django.views.generic import View
 from django.http import HttpResponse
 from rest_framework import viewsets, permissions, filters
-
+from django.contrib.auth.models import Group
 from kiffel.models import Person
 from kiffel.serializers import KiffelSerializer
 from kiffel.helper import LaTeX, QueryFilter
 from django.shortcuts import render
+
 import datetime
 
 from kiffel.helper import EAN8
@@ -71,14 +72,24 @@ class ImportFromEngelsystem(View):
         foo = ""
         return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import Engelsystem', 'output': '' })
     
-    def updatePerson(self, person, engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,ist_orga):
+    def updatePerson(self, person, engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,rollen,gruppen):
         person.engel_id = engelid
         if vorname != "": person.vorname = vorname
         if nachname != "": person.nachname = nachname
         if nick != "": person.nickname = nick
         if tshirt_groesse != "": person.tshirt_groesse = tshirt_groesse
         if kommentar != "": person.kommentar = kommentar
-        person.ist_orga = ist_orga
+        
+        groupNames = (rollen + '|' + gruppen).split('|')
+        for gn in groupNames:
+            if gn == "": continue
+            try:
+                g = Group.objects.get(name=gn)
+                g.user_set.add(person)
+            except Group.DoesNotExist :
+                pass
+        
+        person.ist_orga = "Orga" in groupNames
         person.ist_helfer = True
         person.save()
     
@@ -88,28 +99,31 @@ class ImportFromEngelsystem(View):
         reader = csv.reader(the_csv.splitlines())
         out = ""
         for row in reader:
-            [engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,ist_orga]=row
+            [engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,rollen,gruppen]=row
             if engelid == "ID": continue
             
             out += "<li><b><u>" + engelid + "</u> - " + email + "</b> (" + nick + " - "+vorname+" - "+nachname + ")<br>"
             p_by_id = Person.objects.filter(engel_id=engelid)
             if p_by_id.count() > 0:
                 out += "Found by previously imported Engel ID<br>"
-                self.updatePerson(p_by_id[0], engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,ist_orga)
+                self.updatePerson(p_by_id[0], engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,rollen,gruppen)
                 continue
                 
             
             p_by_mail = Person.objects.filter(email=email)
             if p_by_mail.count() > 0:
                 out += "Found by EMAIL<br>"
-                self.updatePerson(p_by_mail[0], engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,ist_orga)
+                self.updatePerson(p_by_mail[0], engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,rollen,gruppen)
                 continue
                 
             out += "importing..."
-            Person.objects.create(engel_id=engelid, nickname=nick, vorname=vorname, nachname=nachname, email=email, 
-                    tshirt_groesse=tshirt_groesse, kommentar=kommentar, ist_helfer=True, ist_orga=ist_orga, 
-                    kdv_id=EAN8.get_random())
+            pneu = Person.objects.create(email=email, kdv_id=EAN8.get_random())
+            pw = Person.objects.make_random_password()
+            pneu.set_password(pw)
+            
+            self.updatePerson(pneu, engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,rollen,gruppen)
             out += "ok"
+            out += "   created random pw="+pw
             
             
         return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import Engelsystem', 'output': out })
@@ -161,8 +175,11 @@ class ImportFromKiffelAnmeldung(View):
             
             out += "importing..."
             data['kdv_id'] = EAN8.get_random()
-            Person.objects.create(**data)
+            pneu = Person.objects.create(**data)
+            pw = Person.objects.make_random_password()
+            pneu.set_password(pw); pneu.save()
             out += "ok"
+            out += "   created random pw="+pw
             
         return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import KIF-Anmeldung', 'output': out })
 
