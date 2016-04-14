@@ -25,10 +25,10 @@ class AK(models.Model):
 class RoomOpening(models.Model):
     """
     Information of whether a room is occupied (by another event) or reserved (for us) in a given time slot
+    For KIF: AK slot
     """
     class Meta:
-        verbose_name = _('Raumreservierung')
-        verbose_name_plural = _('Raumreservierungen')
+        verbose_name = _('AK-Slot')
 
     STATUS_CHOICES = (
         (1, _('OK (Reserved)')),
@@ -42,11 +42,11 @@ class RoomOpening(models.Model):
     duration = models.DurationField(verbose_name=_('Dauer'))
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES)
     kommentar = models.TextField(verbose_name=_('Kommentar'), blank=True)
-    
 
 
 class Room(models.Model):
     """A room which could be used during the Ophase."""
+
     class Meta:
         verbose_name = _('Raum')
         verbose_name_plural = _('Räume')
