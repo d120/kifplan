@@ -42,6 +42,10 @@
         templateUrl: 'static/frontend/partials/eduroam.html',
         controller: 'eduroamCtrl'
       })
+      .whenAuthenticated('/eduroam', {
+        templateUrl: 'static/frontend/partials/eduroam.html',
+        controller: 'eduroamCtrl'
+      })
       .otherwise({
         redirectTo: '/anmeldung'
       });

@@ -5,7 +5,9 @@ from rest_framework import viewsets, permissions, filters
 from kiffel.models import Person
 from kiffel.serializers import KiffelSerializer
 from kiffel.helper import LaTeX, QueryFilter
+from django.shortcuts import render
 
+import csv
 
 class KiffelViewSet(viewsets.ModelViewSet):
     serializer_class = KiffelSerializer
@@ -58,3 +60,55 @@ class Schildergenerator(View):
         r['Content-Disposition'] = 'attachment; filename=schild.pdf'
         r.write(pdf)
         return r
+
+
+class ImportFromEngelsystem(View):
+    def get(self, request, *args, **kwargs):
+        foo = ""
+        return render(request, "kiffel/import_csv_template.html")
+
+    def post(self, request, *args, **kwargs):
+        the_csv = request.POST["content"]
+        reader = csv.reader(the_csv.splitlines())
+        out = ""
+        for row in reader:
+            [engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar]=row
+            if engelid == "ID": continue
+            
+            out += "<li><b><u>" + engelid + "</u> - " + email + "</b> (" + nick + " - "+vorname+" - "+nachname + ")<br>"
+            p_by_id = Person.objects.filter(engel_id=engelid)
+            if p_by_id.count() > 0:
+                out += "Found by previously imported Engel ID<br>"
+                continue
+                
+            
+            p_by_mail = Person.objects.filter(email=email)
+            if p_by_mail.count() > 0:
+                out += "Found by EMAIL<br>"
+                continue
+                
+            out += "would import"
+            
+        return HttpResponse(out)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
