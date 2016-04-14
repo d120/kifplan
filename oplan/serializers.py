@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from aks.models import AK, Room, RoomOpening
+from oplan.models import AK, Room, RoomOpening
 
 class AKSerializer(serializers.ModelSerializer):
     class Meta:

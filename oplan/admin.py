@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from aks.models import AK, Room, RoomOpening
+from oplan.models import AK, Room, RoomOpening
 
 @admin.register(AK)
 class AKAdmin(admin.ModelAdmin):

@@ -43,7 +43,7 @@ INSTALLED_APPS = (
 
     'kiffel',
     'eduroam',
-    'aks',
+    'oplan',
     'frontend',
 )
 
@@ -123,3 +123,11 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = 'kiffel.Person'
+
+
+try:
+        from kiffelverwaltung.settings_local import *
+except ImportError:
+        pass
+
+

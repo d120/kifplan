@@ -61,7 +61,7 @@ class Room(models.Model):
         ("SO", _('Sonstiges'))
     )
 
-    number = models.CharField(max_length=50, verbose_name=_('Nummer'))
+    number = models.CharField(max_length=50, verbose_name=_('Nummer'), unique=True)
     type = models.CharField(max_length=2, choices=ROOM_TYPE_CHOICES, verbose_name=_('Typ'))
     has_beamer = models.BooleanField(default=False, verbose_name=_('Beamer vorhanden?'))
     capacity = models.IntegerField(verbose_name=_('Anzahl Plätze'))

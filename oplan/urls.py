@@ -13,7 +13,7 @@ router.register(r'slot', views.RoomOpeningViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-    #url(r'reports/$', views.KiffelAttendingReport.as_view()),
+    url(r'raumimport/$', views.ImportRaumliste.as_view(), name="import_room_list"),
     #url(r'nametags/$', views.NametagsExport.as_view()),
     #url(r'signs/$', views.Schildergenerator.as_view()),
 ]

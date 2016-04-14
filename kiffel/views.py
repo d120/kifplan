@@ -83,8 +83,7 @@ class ImportFromEngelsystem(View):
         person.save()
     
     def post(self, request, *args, **kwargs):
-        if not request.user.has_perm('kiffel.import_persons'):
-            raise PermissionDenied
+        if not request.user.has_perm('kiffel.import_persons'): raise PermissionDenied
         the_csv = request.POST["content"]
         reader = csv.reader(the_csv.splitlines())
         out = ""
