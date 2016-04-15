@@ -1,0 +1,28 @@
+<!doctype html>
+<meta charset="utf8">
+<title>Kiffelverwaltung - Admin</title>
+
+{% load static from staticfiles %}
+<script src="{% static 'oplan/vendor/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'oplan/vendor/moment/moment.js' %}"></script>
+<script src="{% static 'oplan/vendor/fullcalendar/dist/fullcalendar.js' %}"></script>
+<link rel=stylesheet href="{% static 'oplan/vendor/fullcalendar/dist/fullcalendar.css' %}">
+<link rel=stylesheet href="{% static 'admin/css/base.css' %}">
+
+<style>
+#mainMenu{background:#444;padding:10px 40px;color:#eee;min-height:20px;}
+#mainMenu h2{ margin:0; }
+#mainMenu a{color:#00ffff!important;font-weight:bold;}
+</style>
+<div id="mainMenu">
+<div style="float:right">
+ <a href='{% url "admin:kiffel_person_changelist" %}'>Zurück</a>
+|||
+<a href='{% url "kiffel:createanonym" %}'>Anonyme Accounts</a> |
+<a href='{% url "kiffel:import_personen" %}'>Import Anmeldung</a> |
+<a href='{% url "kiffel:import_personen_engel" %}'>Import Engelsystem</a>
+</div>
+</div>
+<div id=content>
+
+<h2>{{ titel }}</h2>
