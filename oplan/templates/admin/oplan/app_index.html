@@ -1,0 +1,13 @@
+{% extends "admin/app_index.html" %}
+
+{% block breadcrumbs %}
+    {% include "oplan/menu.html" %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <p>Lorem ipsum dolor sit amet</p>
+{% endblock %}
+
+

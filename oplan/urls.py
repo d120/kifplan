@@ -13,6 +13,11 @@ router.register(r'slot', views.RoomOpeningViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url(r'akwall/$', views.ak_wall, name="ak_wall"),
+    url(r'infoscreen/$', views.infoscreen, name="infoscreen"),
+    url(r'darwin_status/$', views.darwin_status, name="darwin_status"),
+    url(r'raum/(?P<raumnummer>\w+)/$', views.raumansicht, name="raumansicht"),
+    url(r'raum/(?P<raumnummer>\w+)/$', views.raumansicht, name="raumansicht"),
     url(r'raumimport/$', views.ImportRaumliste.as_view(), name="import_room_list"),
     url(r'import/aks-wiki/$', views.ImportWikiAkListe.as_view(), name="import_aks_wikitext"),
     #url(r'signs/$', views.Schildergenerator.as_view()),

@@ -60,6 +60,23 @@ class ImportRaumliste(View):
         
         return render(request, "oplan/ak_import_view.html", { 'titel': 'Raumliste importieren', 'output': out })
 
+
+def raumansicht(request, raumnummer, *args, **kwargs):
+    raum = Room.objects.get(number=raumnummer)
+    return render(request, "oplan/raumansicht.html", { 'titel': 'Rauminfo '+raum.number, 'room': raum })
+
+
+# TODO
+
+def ak_wall(request, *args, **kwargs):
+    return render(request, "oplan/ak_import_view.html", { 'titel': 'TODO: AK-Wall ', 'out': '' })
+
+def infoscreen(request, *args, **kwargs):
+    return render(request, "oplan/ak_import_view.html", { 'titel': 'TODO: Infoscreen ', 'out': '' })
+
+def darwin_status(request, *args, **kwargs):
+    return render(request, "oplan/ak_import_view.html", { 'titel': 'TODO: Automatische AK-Zuordnung ("Darwin") - Status ', 'out': '' })
+
 import re
 
 class ImportWikiAkListe(View):

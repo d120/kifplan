@@ -1,0 +1,18 @@
+
+<style>
+#mainMenu{background:#444;padding:10px 40px;color:#eee;min-height:20px;}
+#mainMenu h2{ margin:0; }
+#mainMenu a{color:#00ffff!important;font-weight:bold;}
+</style>
+<div id="mainMenu">
+<div style="float:right">
+| <a href="{% url 'oplan:ak_wall' %}">AK-Wall</a>
+| <a href="{% url 'oplan:infoscreen' %}">Dashboard</a>
+| <a href="{% url 'admin:oplan_room_changelist' %}">Raumliste</a>
+| <a href="{% url 'admin:oplan_ak_changelist' %}">AK-Liste</a>
+| <a href="{% url 'oplan:darwin_status' %}">Darwin-Status</a>
+|
+</div>
+<h2>{{titel|default:"AK-Planungsmodul"}}</h2>
+</div>
+
