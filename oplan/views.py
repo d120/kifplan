@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.db import IntegrityError
 from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse
+
 
 from rest_framework import viewsets, permissions, filters
 
@@ -61,10 +63,22 @@ class ImportRaumliste(View):
         return render(request, "oplan/ak_import_view.html", { 'titel': 'Raumliste importieren', 'output': out })
 
 
-def raumansicht(request, raumnummer, *args, **kwargs):
-    raum = Room.objects.get(number=raumnummer)
-    return render(request, "oplan/raumansicht.html", { 'titel': 'Rauminfo '+raum.number, 'room': raum })
+def roomcalendar(request, roomnumber, *args, **kwargs):
+    room = Room.objects.get(number=roomnumber)
+    return render(request, "oplan/roomcalendar.html", { 'titel': 'Rauminfo '+room.number, 'room': room })
 
+class RoomSlotsApi(View):
+    def get(self, request, *args, **kwargs):
+        para = request.GET
+        objs = RoomOpening.objects.filter(room__id=para['room'], start_time__range=[ para['start'], para['end'] ])
+        qq = []
+        for obj in objs:
+            qq.append({ 'id': obj.id, 'start': obj.start_time, 'end': obj.start_time + obj.duration, 'title': obj.room.number })
+        return JsonResponse({ 'slots' : qq })
+        
+    def post(self, request, *args, **kwargs):
+        return JsonResponse({ 'success': '???' })
+    
 
 # TODO
 
@@ -98,23 +112,38 @@ class ImportWikiAkListe(View):
         rx2 = re.compile(r"""
         ^\|\s*([a-z]+)\s*=(.*?)$
         """, re.IGNORECASE | re.MULTILINE | re.DOTALL | re.VERBOSE)
-        
+        rx_link = re.compile(r"\s+")
         
         out="Ergebnis:"
+        out+="<table>"
+        
         for ak_match in rx.finditer(wikitext):
+            out += "<tr>"
             ak_str = ak_match.group(1)
-            #out+="<table>"
-            data = {}
+            data = {'wer': 'N.N.', 'wann': '?', 'wieviele': '?', 'dauer': '?', 'beschreibung': '', 'name': '', 'link': ''}
             for line_match in rx2.finditer(ak_str):
-                key = line_match.group(1)
-                value = line_match.group(2)
+                key = line_match.group(1).strip()
+                value = line_match.group(2).strip()
                 #out+="<tr><th>"+key+"</th><td>"+value+"</td></tr>"
                 data[key] = value
-            #out+="</table>"
-            AK.objects.create(titel=data['name'], beschreibung=data['beschreibung'],
+            if data['name'] == '': continue
+            if data['link'] == '':
+                data['link'] = 'KIF440:' + data['name']
+            data['link'] = re.sub(rx_link, '_', data['link'])
+            try:
+                the_ak = AK.objects.get(titel=data['name'])
+                out += "<td>Update</td>"
+            except AK.DoesNotExist:
+                the_ak = AK.objects.create(titel=data['name'])
+                out += "<td>Neu</td>"
+            the_ak.__dict__.update(beschreibung=data['beschreibung'],
                     anzahl=data['wieviele'], leiter=data['wer'],
-                    wann=data['wann'], dauer=data['dauer'])
+                    wann=data['wann'], dauer=data['dauer'], wiki_link=data['link'])
+            out += "<td>"+data['name']+"</td>"
+            the_ak.save()
+            out += "</tr>"
             
+        out+="</table>"
         
         return render(request, "oplan/ak_import_view.html", { 'titel': 'Raumliste importieren', 'output': out })
 

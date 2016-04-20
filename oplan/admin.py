@@ -17,7 +17,7 @@ class RoomAdmin(admin.ModelAdmin):
     list_display_links = ['number']
     
     def slots_link(self, obj):
-        return "<a href='" + reverse('oplan:raumansicht', args=[obj.number]) + "'>Belegungen</a>"
+        return "<a href='" + reverse('oplan:roomcalendar', args=[obj.number]) + "'>Belegungen</a>"
     slots_link.allow_tags = True
 
 

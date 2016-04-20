@@ -1,0 +1,84 @@
+{% include 'oplan/header.html' %}
+
+
+<div id='calendar'></div>
+
+
+<script>
+var room_id = {{ room.id }};
+
+function onSelectTimerange(start, end) {
+    var desc = prompt("Slot von "+start.format("HH:mm")+" bis "+end.format("HH:mm")+" eintragen?");
+    if (desc === null) return;
+
+    $.post("/plan/roomslots/", {
+        start: start,
+        dauer: end,
+        room: room_id,
+    }, "json")
+    .success(function() {
+        uiCalendarConfig.calendars.timetable.fullCalendar('unselect');
+        uiCalendarConfig.calendars.timetable.fullCalendar('refetchEvents');
+    })
+    .error(function(data) {
+        alert("Allgemeiner Fehler");
+    });
+}
+
+function onEventChange(event, delta, revertFunc, jsEvent, ui, view ) {
+    $.post("/plan/roomslots/", {
+        event_id: event.id, 
+        start: event.start.format('YYYY-MM-DD HH:mm:ss'),
+        dauer: event.end.format('YYYY-MM-DD HH:mm:ss'),
+        room: room_id,
+    }, "json")
+    .success(function(data) {
+        uiCalendarConfig.calendars.timetable.fullCalendar('unselect');
+        uiCalendarConfig.calendars.timetable.fullCalendar('refetchEvents');
+        messageBar.show('success', ''+data.modifications+' Einträge verschoben', 1500);
+    })
+    .error(function(data) {
+        revertFunc();
+    });
+}
+
+$(document).ready(function() {
+
+    // page is now ready, initialize the calendar...
+
+    $('#calendar').fullCalendar({
+        defaultView: 'agendaWeek',
+        
+        editable: true,
+        selectable: true,
+        selectHelper: true,
+        select: onSelectTimerange,
+        
+        eventDrop: onEventChange,
+        eventResize: onEventChange,
+        
+        events: function(start, end, timezone, callback) {
+            $.ajax({
+                url: '/plan/roomslots/',
+                dataType: 'json',
+                data: {
+                    // our hypothetical feed requires UNIX timestamps
+                    start: start.format('YYYY-MM-DD')+' 00:00:00',
+                    end: end.format('YYYY-MM-DD')+' 23:59:59',
+                    room: room_id
+                },
+                success: function(doc) {
+                    
+                    callback(doc.slots);
+                }
+            });
+        },
+        
+        
+    });
+    
+    
+
+});
+</script>
+
