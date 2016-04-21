@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from oplan.models import AK, Room, RoomOpening
+from oplan.models import AK, Room, RoomAvailability, AKTermin
 
 class AKSerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,8 +8,12 @@ class AKSerializer(serializers.ModelSerializer):
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
-class RoomOpeningSerializer(serializers.ModelSerializer):
+class RoomAvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = RoomOpening
+        model = RoomAvailability
+class AKTerminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AKTermin
+    ak_titel = serializers.CharField(source='ak.titel', read_only=True)
 
 

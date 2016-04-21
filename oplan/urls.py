@@ -6,21 +6,26 @@ from rest_framework.routers import DefaultRouter
 
 from . import views
 
-router = DefaultRouter()
-router.register(r'ak', views.AKViewSet)
-router.register(r'room', views.RoomViewSet)
-router.register(r'slot', views.RoomOpeningViewSet)
+api_router = DefaultRouter()
+api_router.register(r'ak', views.AKViewSet)
+api_router.register(r'room', views.RoomViewSet)
+api_router.register(r'slot', views.RoomAvailabilityViewSet)
+api_router.register(r'aktermin', views.AKTerminViewSet)
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    url(r'^$', views.oplan_home, name="oplan_home"),
+    url(r'^api/', include(api_router.urls)),
     url(r'akwall/$', views.ak_wall, name="ak_wall"),
+    url(r'ak/(?P<akid>[0-9]+)/$', views.ak_details, name="ak_details"),
     url(r'infoscreen/$', views.infoscreen, name="infoscreen"),
     url(r'darwin_status/$', views.darwin_status, name="darwin_status"),
-    url(r'roomcalendar/(?P<roomnumber>\w+)/$', views.roomcalendar, name="roomcalendar"),
-    url(r'roomcalendar/(?P<roomnumber>\w+)/$', views.roomcalendar, name="roomcalendar"),
-    url(r'raumimport/$', views.ImportRaumliste.as_view(), name="import_room_list"),
+    url(r'roomcalendar/(?P<roomnumber>[^/]+)/$', views.roomcalendar, name="roomcalendar"),
+    url(r'roomcalendar/(?P<roomnumber>[^/]+)/$', views.roomcalendar, name="roomcalendar"),
+    url(r'import/rooms/csv/$', views.ImportRaumliste.as_view(), name="import_room_list"),
+    url(r'import/rooms/dekrr/$', views.ImportDekrr.as_view(), name="import_room_dekrr"),
+    
     url(r'import/aks-wiki/$', views.ImportWikiAkListe.as_view(), name="import_aks_wikitext"),
-    url(r'roomslots/$', views.RoomSlotsApi.as_view(), name="room_get_slots"),
+    url(r'roomevents/$', views.RoomAvailabilityApi.as_view(), name="room_get_slots"),
     
     #url(r'signs/$', views.Schildergenerator.as_view()),
 ]

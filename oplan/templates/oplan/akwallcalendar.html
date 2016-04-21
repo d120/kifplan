@@ -17,7 +17,7 @@
 </div>
 
 <script>
-var room_id = {{ room.id }};
+
 
 $("[name=modus]").click(function() {
     setMode($(this).attr("id").substr(5));
@@ -34,36 +34,40 @@ function setMode(mode) {
     
 }
 
-
-function onEventDropped(event) {
-    console.log(event);
-    event.resourceId = room_id;
-    oplan.api.saveAkTermin(event);
-}
-
-
 $(document).ready(function() {
 
     // page is now ready, initialize the calendar...
 
     $('#calendar').fullCalendar(calendarDefaultOptions({
-        defaultView: 'agendaWeek',
+        defaultView: localStorage.calendarAkView ? localStorage.calendarAkView : 'timelineWeek',
+        header: {
+            left:   'timelineWeek,agendaDay,timelineDay',
+            center: 'title',
+            right:  'today prev,next'
+        },
         
         eventDrop: oplan.api.onCalendarEventChange,
         eventResize: oplan.api.onCalendarEventChange,
-        eventReceive: onEventDropped,
+        eventReceive: oplan.api.saveAkTermin,
         
-        select: function(start, end) {
-            oplan.api.createRoomAvailability(start, end, room_id);
+        select: function(start, end, jsEvent, view, resource) {
+            oplan.api.createRoomAvailability(start, end, resource.id);
         },
         
-        height: window.innerHeight-111,
+        height: window.innerHeight-125,
+        resourceAreaWidth: 120, 
         
         viewRender: function(view,el) {
             localStorage.calendarDate = view.start.toISOString();
+            localStorage.calendarAkView = view.name;
+        },
+        resources: function(callback) {
+            $.get("/plan/api/room/", function(rooms) {
+                callback(rooms.map(function(x) { return { id: x.id, title: x.number }; } ));
+            });
         },
         events: function(start, end, timezone, callback) {
-            oplan.api.loadCalendarEvents(start, end, room_id, callback);
+            oplan.api.loadCalendarEvents(start, end, undefined, callback);
         },
         
         eventRender: function (event, element) {

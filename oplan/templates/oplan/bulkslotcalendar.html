@@ -1,0 +1,79 @@
+{% include 'oplan/header.html' %}
+<div id="oplan">
+
+<form action="" method="post" id="theForm">
+
+{% csrf_token %}
+
+    {{ bulk_form }}
+    <div class="toolbar">
+    Bulk Add Events to {% for room in rooms %} {{ room.number }}, {% endfor %}
+    
+    </div>
+    
+    
+    <div class="calendar_content">
+        <div id='calendar'></div>
+    </div>
+    
+    <input type="hidden" name="action" value="bulk_add_slots" />
+    <input type="hidden" name="slots" id="input_slots" value="" />
+    
+    <input type="submit" name="apply" value="Slots zu allen Räumen hinzufügen" />
+</form>
+</div>
+
+<script>
+
+$(document).ready(function() {
+
+    // page is now ready, initialize the calendar...
+    var mySlots = [];
+    var id=1;
+    $('#calendar').fullCalendar(calendarDefaultOptions({
+        defaultView: 'agendaWeek',
+        
+        select: function(start, end) {
+            mySlots.push({id:(id++),start:start, end:end, title:'New Slot'});
+            $('#calendar').fullCalendar('refetchEvents');
+            $('#calendar').fullCalendar('unselect');
+            
+        },
+        
+        height: window.innerHeight-111,
+        
+        viewRender: function(view,el) {
+            localStorage.calendarDate = view.start.toISOString();
+        },
+        events: function(start, end, timezone, callback) {
+            callback(mySlots);
+        },
+        
+        
+        eventRender: function (event, element) {
+            element.bind('contextmenu', function (jsEvent) {
+                ShowContextMenu(jsEvent, {
+                    'Löschen': function(){
+                        for(var i in mySlots)
+                            if (mySlots[i].id==event.id){
+                                mySlots.splice(i, 1);
+                                break;
+                            }
+                        $('#calendar').fullCalendar('refetchEvents');
+                    }
+                });
+                return false;
+            });
+        }
+        
+        
+    }));
+    
+    $("#theForm").submit(function() {
+        var qq=mySlots.map(function(x) { return x.start.toISOString() + "=>" + x.end.toISOString() });
+        $("#input_slots").val(qq.join("|"));
+    });
+    
+});
+</script>
+

@@ -3,11 +3,14 @@
 <title>AK-Planungsmodul</title>
 
 {% load static from staticfiles %}
-<script src="{% static 'oplan/vendor/jquery/dist/jquery.min.js' %}"></script>
-<script src="{% static 'oplan/vendor/moment/moment.js' %}"></script>
-<script src="{% static 'oplan/vendor/fullcalendar/dist/fullcalendar.js' %}"></script>
 <link rel=stylesheet href="{% static 'oplan/vendor/fullcalendar/dist/fullcalendar.css' %}">
+<link rel=stylesheet href="{% static 'oplan/vendor/fullcalendar-scheduler/dist/scheduler.css' %}">
 <link rel=stylesheet href="{% static 'admin/css/base.css' %}">
 
 {% include "oplan/menu.html" %}
+<script src="{% static 'oplan/vendor/moment/moment.js' %}"></script>
+<script src="{% static 'oplan/vendor/fullcalendar/dist/fullcalendar.js' %}"></script>
+<script src="{% static 'oplan/vendor/fullcalendar/dist/lang/de.js' %}"></script>
+<script src="{% static 'oplan/vendor/fullcalendar-scheduler/dist/scheduler.js' %}"></script>
+<script src="{% static 'oplan/vendor/jquery-ui/jquery-ui.min.js' %}"></script>
 <div id=content>
