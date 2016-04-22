@@ -37,7 +37,7 @@
 a.fc-event[href] { color: white; }
 a.fc-event[href]:hover { text-decoration:underline; }
 .fc-bgevent-container .fc-bgevent {border:1px solid black }
-
+.fc-event.bigtop { border-top-width: 5px; }
 
 @media screen and (max-width: 899px) {
     #content{ padding: 20px 10px; }

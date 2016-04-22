@@ -30,12 +30,16 @@ class AKTerminInline(admin.StackedInline):
 @admin.register(AK)
 class AKAdmin(admin.ModelAdmin):
     # admin list table view
-    list_display = ['titel', 'leiter', 'anzahl', 'wann', 'dauer']
+    list_display = ['color_col', 'titel', 'leiter', 'anzahl', 'wann', 'dauer']
     list_display_links = ['titel']
     inlines = [
         AKTerminInline,
     ]
-
+    def color_col(self, obj):
+        return "<div style='background-color: "+obj.color+"; width:16px; height:16px;'></div>"
+    color_col.allow_tags = True
+    color_col.short_description = "Farbe"
+    color_col.admin_order_field = 'color'
 
 
 @admin.register(Room)
@@ -111,6 +115,7 @@ class AKTerminAdmin(admin.ModelAdmin):
     # admin list table view
     list_display = ['ak', 'duration', 'start_time', 'room', 'status', 'kommentar']
     list_display_links = ['ak', 'duration']
+    
     actions = ['clear_termin', 'set_unscheduled']
     def clear_termin(self, request, queryset):
         for akt in queryset:

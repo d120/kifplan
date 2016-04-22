@@ -11,6 +11,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--iterations', type=int, default=100)
         parser.add_argument('--fertility', type=int, default=4)
+        parser.add_argument('--mutations', type=int, default=1)
         
 
     def handle(self, *args, **options):
@@ -23,7 +24,7 @@ class Command(BaseCommand):
                 sss = DarwinSlot(start=slot.start_time, room=slot.room.number)
                 sss.django_room = slot.room
                 slots.append(sss)
-                #print('  slot: ',slot.start_time,slot.room.number)
+                print('  slot: ',slot.start_time,slot.room.number)
         
         aks = []
         for termin in termine:
@@ -39,7 +40,7 @@ class Command(BaseCommand):
             aks.append(ak)
         
         # calculate solution
-        solution, fitness, messages = find_solution(slots, aks, int(options['iterations']), int(options['fertility']))
+        solution, fitness, messages = find_solution(slots, aks, options['iterations'], options['fertility'], options['mutations'])
 
         # print out result
         if len(messages) > 0:
@@ -49,9 +50,10 @@ class Command(BaseCommand):
         print()
         #print(solution)
         for ak, slot in solution.schedule:
-            ak.django_ak_termin.start_time = slot.start
-            ak.django_ak_termin.end_time = slot.start + ak.django_ak_termin.duration
-            ak.django_ak_termin.room = slot.django_room
-            ak.django_ak_termin.save()
+            if ak and slot:
+                ak.django_ak_termin.start_time = slot.start
+                ak.django_ak_termin.end_time = slot.start + ak.django_ak_termin.duration
+                ak.django_ak_termin.room = slot.django_room
+                ak.django_ak_termin.save()
         
         

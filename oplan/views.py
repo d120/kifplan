@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.generic import View
 from django.db import IntegrityError
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
+#from django.http.shortcuts import redirect
+
 from django.utils.dateparse import parse_datetime
 from django.db.models import Q
 
@@ -95,6 +97,7 @@ class RoomAvailabilityApi(View):
                     'view_url': reverse('oplan:ak_details', args=[ obj.ak.id ]),
                     'edit_url': reverse('admin:oplan_aktermin_change', args=[ obj.id ]),
                     'edit_ak_url': reverse('admin:oplan_ak_change', args=[ obj.ak.id ]),
+                    'ak_color': obj.ak.color
                      })
         return JsonResponse({ 'events' : qq,  })
         
@@ -192,6 +195,23 @@ class ImportDekrr(View):
         
         return render(request, "oplan/ak_import_view.html", { 'titel': self.form_titel, 'output': out })
 
+from random import randint
+def hextodec(color):
+    if color[0] == '#':
+        color = color[1:]
+    assert(len(color) == 6)
+    return int(color[:2], 16), int(color[2:4], 16), int(color[4:6], 16)
+def dectohex(rgb):
+    return '#%02x%02x%02x' % rgb
+
+def random_similar_color(mix):
+    mix = hextodec(mix)
+    (r,g,b) = (randint(0,255), randint(0,255), randint(0,255))
+    r = (r + 2*mix[0]) / 3
+    g = (g + 2*mix[1]) / 3
+    b = (b + 2*mix[2]) / 3
+    return dectohex((r,g,b))
+
 class ImportWikiAkListe(View):
     def get(self, request, *args, **kwargs):
         if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
@@ -204,9 +224,13 @@ class ImportWikiAkListe(View):
         wikitext = request.POST["content"]
         
         rx = re.compile(r"""
+        (?:
+        ^==+\s*(?P<headline>[^\n]+)\s=+=\s*$
+        |
         ^\s*\{\{Ak\sSpalte[\sa-z0-9]*
-        (.*?)
+        (?P<ak_str>.*?)
         ^\s*\}\}
+        )
         """, re.IGNORECASE | re.MULTILINE | re.DOTALL | re.VERBOSE)
         rx2 = re.compile(r"""
         ^\|\s*([a-z]+)\s*=(.*?)$
@@ -215,10 +239,19 @@ class ImportWikiAkListe(View):
         
         out="Ergebnis:"
         out+="<table>"
-        
+        headline = ""
+        color = "#ff00ff"
         for ak_match in rx.finditer(wikitext):
-            out += "<tr>"
-            ak_str = ak_match.group(1)
+            if ak_match.group('headline'):
+                headline = ak_match.group('headline')
+                out += "<tr><td colspan=3>"+headline+"</td></tr>"
+                if 'Inhalt' in headline: color = "#1122ff"
+                if 'Kultur' in headline: color = "#22ff00"
+                continue
+            
+            ak_color = random_similar_color(color)
+            out += "<tr><td bgcolor='"+ak_color+"'></td>"
+            ak_str = ak_match.group('ak_str')
             data = {'wer': 'N.N.', 'wann': '?', 'wieviele': '?', 'dauer': '?', 'beschreibung': '', 'name': '', 'link': ''}
             for line_match in rx2.finditer(ak_str):
                 key = line_match.group(1).strip()
@@ -233,7 +266,7 @@ class ImportWikiAkListe(View):
                 the_ak = AK.objects.get(titel=data['name'])
                 out += "<td>Update</td>"
             except AK.DoesNotExist:
-                the_ak = AK.objects.create(titel=data['name'])
+                the_ak = AK.objects.create(titel=data['name'], color=ak_color)
                 the_termin = AKTermin.objects.create(ak=the_ak,
                         status=3, # 3 = Not Scheduled
                         duration=timedelta(hours=2),
@@ -260,7 +293,8 @@ def roomcalendar(request, roomnumber, *args, **kwargs):
 
 
 def oplan_home(request, *args, **kwargs):
-    return render(request, "oplan/ak_import_view.html", { 'titel': 'Moin moin', 'out': '',  })
+    #return render(request, "oplan/ak_import_view.html", { 'titel': 'Moin moin', 'out': '',  })
+    return redirect('oplan:ak_wall')
 
 def ak_details(request, akid, *args, **kwargs):
     ak = AK.objects.get(id=akid)

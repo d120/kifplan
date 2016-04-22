@@ -15,5 +15,6 @@ class AKTerminSerializer(serializers.ModelSerializer):
     class Meta:
         model = AKTermin
     ak_titel = serializers.CharField(source='ak.titel', read_only=True)
+    ak_color = serializers.CharField(source='ak.color', read_only=True)
 
 

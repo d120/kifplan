@@ -4,7 +4,7 @@ from time import perf_counter as pc
 from .genetics import inception, fitness, mutate
 
 
-def find_solution(slots, aks, iterations, fertility):
+def find_solution(slots, aks, iterations, fertility, mutations):
     """
     runs the evolutionary algorithm and returns a hopefully good solution
     """
@@ -22,10 +22,10 @@ def find_solution(slots, aks, iterations, fertility):
             print("  Generation: {0}  Reached fitness of 1 which can not be increased.".format(generation))
             break
         # generate mutated children genomes
-        candidates = [mutate(genome) for i in range(fertility)]
+        candidates = [mutate(genome, mutations) for i in range(fertility)]
         # find best mutation
         for candidate in candidates:
-            if fitness(candidate)[0] > fitness(genome)[0]:
+            if fitness(candidate)[0] > score:
                 print("reassign")
                 # use fittest for next generation
                 genome = candidate

@@ -63,7 +63,7 @@ class AKBeforeDateTimeConstraint(AKConstraint):
             if ak == self.ak:
                 if slot.start > self.check_dt:
                     mismatches += 1
-                    messages.append("[AKBeforeDateTimeConstraint] AK {0} was not assigned before requested date/time.".format(ak))
+                    messages.append("[AKBeforeDateTime] AK {0} was not assigned before requested date/time.".format(ak))
                 break
         
         return (mismatches, messages)
@@ -82,7 +82,7 @@ class AKAfterDateTimeConstraint(AKConstraint):
             if ak == self.ak:
                 if slot.start < self.check_dt:
                     mismatches += 1
-                    messages.append("[AKAfterDateTimeConstraint] AK {0} was not assigned after requested date/time.".format(ak))
+                    messages.append("[AKAfterDateTime] AK {0} was assigned at {1}, before requested date/time {2}.".format(ak, slot.start, self.check_dt))
                 break
         
         return (mismatches, messages)

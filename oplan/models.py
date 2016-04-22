@@ -13,7 +13,7 @@ class AK(models.Model):
     dauer = models.CharField(max_length=400, null=True, blank=True, verbose_name="Dauer?")
     beschreibung = models.TextField(null=True, blank=True)
     wiki_link = models.CharField(max_length=100, null=True, blank=True, verbose_name="Link zur Wikiseite")
-
+    color = models.CharField(max_length=10, default='#ff00ff', verbose_name="Farbe")
     def __str__(self):
         return self.titel
 
@@ -46,6 +46,9 @@ class AKTermin(models.Model):
     start_time = models.DateTimeField(verbose_name=_('Termin-Anfang'), null=True,blank=True)
     end_time = models.DateTimeField(verbose_name=_('Termin-Ende'), null=True,blank=True)
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES)
+    
+    last_modified = models.DateTimeField(verbose_name=_('Zuletzt geändert'), auto_now=True)
+    last_highlighted = models.DateTimeField(verbose_name=_('Änderungshighlight'), null=True, blank=True)
     
     duration = models.DurationField(verbose_name=_('Dauer'))
     constraintWeekDays = models.CharField(verbose_name=_('An einem der Tage'), max_length=255, null=True, blank=True)

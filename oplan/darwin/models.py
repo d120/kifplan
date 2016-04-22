@@ -46,6 +46,7 @@ class AK:
         return "{0} ({1})".format(self.name, self.host)
 
     def __eq__(self, other):
+        if other == None: return False
         return self.name == other.name and self.host == other.host and self.length == other.length
 
 

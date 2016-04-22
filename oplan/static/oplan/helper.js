@@ -40,12 +40,16 @@ function MessageBar() {
 function ShowContextMenu(event, menuItems) {
     $(".ddmenu").remove();
     var menu = $("<div class='ddmenu'></div>");
-    menu.css({ top: event.pageY + "px", left: event.pageX + "px" });
     for(var k in menuItems) {
         var item = $("<div>"+k+"</div>").appendTo(menu);
         item.click(menuItems[k]);
     }
     $(document.body).append(menu);
+    var x = event.pageX, y = event.pageY, xx = menu.width(), yy = menu.outerHeight();
+    if (x+xx > window.innerWidth) x -= xx;
+    if (y+yy > window.innerHeight) y -= yy;
+    
+    menu.css({ top: y + "px", left: x + "px" });
     setTimeout(function() {
       $(document).one("click", function(e) {
         menu.remove(); e.preventDefault();
@@ -186,6 +190,7 @@ oplan.api = {
                     .text(akt.ak_titel)
                     .appendTo($out)
                     .draggable({ zIndex: 999, revert: true, })
+                    .css('background', akt.ak_color)
                     .data('event', {
                         termin_id: akt.id,
                         title: akt.ak_titel,
@@ -220,7 +225,24 @@ oplan.api = {
         } else if (oplan.mode == "availability") {
             messageBar.show("error", "Not supported...", 1000);
         } else if (oplan.mode == "aktermin") {
-            messageBar.show("error", "Not supported...", 1000);
+            var desc = prompt("Neuen AK mit Termin von "+start.format("HH:mm")+" bis "+end.format("HH:mm")+" eintragen?");
+            if (desc !== null) {
+                $.post("/plan/api/ak/", {
+                    'titel': desc, 'beschreibung': desc, 'leiter': '?',
+                }, function(ok) {
+                    $.post("/plan/api/aktermin/", {
+                        ak: ok.id,
+                        room: room_id,
+                        start_time: start.toISOString(),
+                        end_time: end.toISOString(),
+                        duration: 0, status: 4,
+                    }, function(ok2) {
+                        $('#calendar').fullCalendar('unselect');
+                        $('#calendar').fullCalendar('refetchEvents');
+                    });
+                });
+                return;
+            }
         }
         $('#calendar').fullCalendar('unselect');
     },
@@ -261,8 +283,10 @@ oplan.api = {
                     var e = doc.events[i];
                     if (e.termin_id) {
                         e.editable = (oplan.mode == "aktermin");
-                        e.color = "#ff00ff";
+                        e.color = "#000000";
                         if (oplan.mode == "akreadonly") e.url = e.view_url;
+                        e.borderColor=e.ak_color+" #000000 #000000 #000000";
+                        e.className='bigtop';
                     } else {
                         e.editable = false; e.rendering = "background";
                         
