@@ -22,6 +22,8 @@ class KiffelViewSet(viewsets.ModelViewSet):
     ordering_fields = [f.name for f in Person._meta.get_fields()]
 
 
+#//==> E X P O R T   F U N C T I O N S
+
 class KiffelAttendingReport(View):
     """ automatic PDF export for attending reports """
     def get_queryset(self):
@@ -66,6 +68,9 @@ class Schildergenerator(View):
         r.write(pdf)
         return r
 
+
+
+#//==> I M P O R T   F U N C T I O N S
 
 class ImportFromEngelsystem(View):
     def get(self, request, *args, **kwargs):
