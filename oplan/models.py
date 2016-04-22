@@ -34,7 +34,7 @@ class AKTermin(models.Model):
 
     STATUS_CHOICES = (
         (1, _('Scheduled')),
-        (2, _('Preferred')),
+        #(2, _('Preferred')),
         (3, _('Not scheduled')),
         (4, _('Fixed (Do not autoschedule)')),
     )
@@ -49,8 +49,8 @@ class AKTermin(models.Model):
     
     duration = models.DurationField(verbose_name=_('Dauer'))
     constraintWeekDays = models.CharField(verbose_name=_('An einem der Tage'), max_length=255, null=True, blank=True)
-    constraintBeforeTime = models.DateTimeField(verbose_name=_('Nicht vor Datum/Zeit'), max_length=255, null=True, blank=True)
-    constraintAfterTime = models.DateTimeField(verbose_name=_('Nicht nach Datum/Zeit'), max_length=255, null=True, blank=True)
+    constraintBeforeTime = models.DateTimeField(verbose_name=_('Nicht nach Datum/Zeit'), max_length=255, null=True, blank=True)
+    constraintAfterTime = models.DateTimeField(verbose_name=_('Nicht vor Datum/Zeit'), max_length=255, null=True, blank=True)
     constraintRooms = models.CharField(verbose_name=_('In einem der Räume'), max_length=255, null=True, blank=True)
     constraintNotParallelWithEvents = models.CharField(verbose_name=_('Nicht gleichzeitig mit Veranstaltung(en)'), max_length=255, null=True, blank=True)
     constraintForceParallelWithEvents = models.CharField(verbose_name=_('Gleichzeitig mit Veranstaltung(en)'), max_length=255, null=True, blank=True)

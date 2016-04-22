@@ -111,5 +111,20 @@ class AKTerminAdmin(admin.ModelAdmin):
     # admin list table view
     list_display = ['ak', 'duration', 'start_time', 'room', 'status', 'kommentar']
     list_display_links = ['ak', 'duration']
+    actions = ['clear_termin', 'set_unscheduled']
+    def clear_termin(self, request, queryset):
+        for akt in queryset:
+            akt.status = 3
+            akt.start_time = None
+            akt.end_time = None
+            akt.room = None
+            akt.save()
+    clear_termin.short_description = "Zugeordneten Raum und Termin zurücksetzen"
+    
+    def set_unscheduled(self, request, queryset):
+        for akt in queryset:
+            akt.status = 3
+            akt.save()
+    set_unscheduled.short_description = 'Bei nächster automatischer Zuordnung berücksichtigen'
 
 

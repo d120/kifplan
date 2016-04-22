@@ -1,4 +1,4 @@
-from .models import Constraint
+from .models import Constraint,AKConstraint
 
 
 # global constraints (these work on the genome itself)
@@ -25,6 +25,66 @@ class EveryAKScheduledConstraint(Constraint):
             if (slot is None):
                 mismatches += 1
                 messages.append("[not scheduled] AK {0} was not assigned to a slot.".format(ak))
+        return (mismatches, messages)
+
+
+class AKWantsWeekdayConstraint(AKConstraint):
+    """ checks that the AK is on one of the requested days of week """
+    
+    WEEKDAYS = {'mo':1,'di':2,'mi':3,'do':4,'fr':5,'sa':6,'so':7}
+    
+    def __init__(self, ak, weekdays):
+        self.ak = ak
+        self.weekdays = [ self.WEEKDAYS[wd[0:2]] for wd in weekdays.split('|') ]
+
+    def check(self, genome):
+        mismatches, messages = 0, []
+        for ak, slot in genome.schedule:
+            if ak == self.ak:
+                if not slot.start.isoweekday() in self.weekdays:
+                    mismatches += 1
+                    messages.append("[weekday] AK {0} was not assigned to requested weekday.".format(ak))
+                break
+        
+        return (mismatches, messages)
+
+
+
+class AKBeforeDateTimeConstraint(AKConstraint):
+    """ checks that the AK is on one of the requested days of week """
+    
+    def __init__(self, ak, check_dt):
+        self.ak = ak
+        self.check_dt = check_dt
+
+    def check(self, genome):
+        mismatches, messages = 0, []
+        for ak, slot in genome.schedule:
+            if ak == self.ak:
+                if slot.start > self.check_dt:
+                    mismatches += 1
+                    messages.append("[AKBeforeDateTimeConstraint] AK {0} was not assigned before requested date/time.".format(ak))
+                break
+        
+        return (mismatches, messages)
+
+
+class AKAfterDateTimeConstraint(AKConstraint):
+    """ checks that the AK is on one of the requested days of week """
+    
+    def __init__(self, ak, check_dt):
+        self.ak = ak
+        self.check_dt = check_dt
+
+    def check(self, genome):
+        mismatches, messages = 0, []
+        for ak, slot in genome.schedule:
+            if ak == self.ak:
+                if slot.start < self.check_dt:
+                    mismatches += 1
+                    messages.append("[AKAfterDateTimeConstraint] AK {0} was not assigned after requested date/time.".format(ak))
+                break
+        
         return (mismatches, messages)
 
 

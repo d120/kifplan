@@ -1,5 +1,5 @@
 import time
-from src import config
+from oplan.darwin import config
 
 
 class Slot:
@@ -19,7 +19,7 @@ class Slot:
         self.room = room
 
     def __repr__(self):
-        return "{0} {1}".format(time.strftime(config.DATETIME_FORMAT, self.start), self.room)
+        return "{0} {1}".format(self.start.strftime(config.DATETIME_FORMAT), self.room)
 
     def __eq__(self, other):
         return self.start == other.start and self.room == other.room
@@ -35,7 +35,8 @@ class AK:
     constraints (List of AKConstraint): constraints for this AK
     """
 
-    def __init__(self, name, host, length, constraints=[]):
+    def __init__(self, name, host, length, constraints=None):
+        if constraints == None: constraints = []
         self.name = name
         self.host = host
         self.length = length
