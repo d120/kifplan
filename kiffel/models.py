@@ -39,7 +39,7 @@ class Person(PermissionsMixin, AbstractBaseUser):
         )
 
     # Felder aus der Anmeldung (orga.fachschaften.org)
-    nickname = models.CharField(null=True, blank=True, max_length=100, verbose_name='Nickname (Namensschild)')
+    nickname = models.CharField(null=True, blank=True, max_length=100, verbose_name='Nickname')
     vorname = models.CharField(null=True, blank=True, max_length=100)
     nachname = models.CharField(null=True, blank=True, max_length=100)
     student = models.BooleanField(default=False)

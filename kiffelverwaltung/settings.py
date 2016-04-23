@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'eduroam',
     'oplan',
     'frontend',
+    'kdvadmin',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'kiffelverwaltung.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [ os.path.join(BASE_DIR, 'templates') ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

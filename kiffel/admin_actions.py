@@ -3,18 +3,37 @@ from kiffel.helper import EAN8, LaTeX
 from django.http import HttpResponse
 from django.shortcuts import render
 from datetime import datetime
+import csv , io
 
 def renew_kdv_barcode(modeladmin, request, queryset):
     """
-    Generates new unique EAN 8 barcodes for selected people
+    
     """
-    for kiffel in queryset:
-        kiffel.kdv_id = EAN8.get_random()
-        while Person.objects.filter(kdv_id=kiffel.kdv_id).count() > 0:
-            kiffel.kdv_id = EAN8.get_random()
-        kiffel.save()
-
-renew_kdv_barcode.short_description = 'Neue KDV-Barcodes generieren'
+    filename = '/tmp/oskiosk.csv'
+    with open(filename, 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=';', quoting=csv.QUOTE_ALL)
+        
+        for kiffel in queryset:
+            # Generates unique EAN 8 barcode if the barcode field is empty
+            if not kiffel.kdv_id:
+                kiffel.kdv_id = EAN8.get_random()
+                while Person.objects.filter(kdv_id=kiffel.kdv_id).count() > 0:
+                    kiffel.kdv_id = EAN8.get_random()
+                kiffel.save()
+                
+            hochschule = "n/a"
+            if kiffel.hochschule: hochschule=kiffel.hochschule
+            csvwriter.writerow([ kiffel.nickname, kiffel.kdv_id, hochschule ])
+    
+    with open(filename) as x: csvstring = x.read()
+    
+    return render(request, "kiffel/import_csv_template.html", { "titel": "CSV-Datei zum Import in die KDV:","content": csvstring,
+        "output": """<b>Die CSV-Datei wurde auf dem Server unter /tmp/oskiosk.csv abgelegt und kann wie folgt importiert werden:</b>
+        su kdv
+        RAILS_ENV=production rake 'import:boon:users[/tmp/oskiosk.csv]'
+        """})
+    
+renew_kdv_barcode.short_description = 'KDV-Steuerdatei generieren'
 
 
 def generate_part_cert(modeladmin, request, queryset):

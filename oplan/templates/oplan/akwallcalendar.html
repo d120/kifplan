@@ -1,14 +1,17 @@
-{% include 'oplan/header.html' %}
-<div id="oplan">
-
-    <div class="toolbar">
+{% extends 'oplan/header.html' %}
+{% block toolbar %}
+<style>
+.toolbar label{padding-right: 10px;}
+</style>
     <input type="radio" name="modus" id="mode_slots"><label for="mode_slots"> Slots</label>
     <input type="radio" name="modus" id="mode_availability"><label for="mode_availability"> Verfügbarkeit</label>
     <input type="radio" name="modus" id="mode_aktermin"><label for="mode_aktermin"> AKs / Termine</label>
     <input type="radio" name="modus" id="mode_akreadonly"><label for="mode_akreadonly"> AKs readonly</label>
 
-    </div>
-    
+{% endblock %}
+{% block content %}
+<div id="oplan">
+
     
     <div id="unsched_aktermine"></div>
     <div class="calendar_content">
@@ -87,4 +90,6 @@ $(document).ready(function() {
     
 });
 </script>
+
+{% endblock %}
 

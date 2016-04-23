@@ -1,12 +1,14 @@
 
-#mainMenu{background:#444;padding:10px 40px;color:#eee;min-height:20px;}
-#mainMenu h2{ margin:0; }
-#mainMenu a{color:#00ffff!important;font-weight:bold;}
+#header{background:#444;padding:10px 40px;color:#eee;min-height:20px;}
+#header #branding h1 { margin:0 10px 0 0; font-size: 12pt; font-weight: bold; color: white; }
+#header a.ml, #header div.ml {margin:0 10px 10px;display:block;float:left;color:#00ffff;font-weight:bold;}
 
+.breadcrumbs h3 { display: inline-block; margin: 0 20px 0 0; color: white; font-size: 12pt; }
+.breadcrumbs .toolbar { display: inline-block; color: #ffffff; }
 
-.messageBar { position: fixed; top: 0; left: 0; right: 0; padding: 10px; background: #FDD835; color: white; font-size: 12pt; 
+.messageBar { position: fixed; top: 0; left: 0; right: 0; padding: 10px; background: #FDD835; color: white; font-size: 12pt; z-index: 100;
 	    }
-.progressBar { position: fixed; top: 0; left: 0; width: 30%; height: 5px; background: #0091EA;
+.progressBar { position: fixed; top: 0; left: 0; width: 30%; height: 5px; background: #0091EA; z-index: 101;
 	      animation: slide 5s forwards;
 }
 @keyframes slide {
@@ -17,10 +19,10 @@
 .messageBar.error { background: #E53935;  }
 .messageBar.success { background: #43a047;  }
 
-#raumliste { position: absolute; background: #000; z-index: 9001; min-width: 200px; }
-#raumliste a { display:block; margin: 0; padding: 5px; }
-#raumliste a:hover { background: #555; }
-#raumliste a.ed { float:right;font-weight:normal;display:inline; color:white;}
+.menudropdown { position: absolute; background: #000; z-index: 9001; min-width: 200px; }
+.menudropdown a { display:block; margin: 0; padding: 5px; }
+.menudropdown a:hover { background: #555; }
+.menudropdown a.ed { float:right;font-weight:normal;display:inline; color:white;}
 
 #unsched_aktermine { display: none; }
 .mode_aktermin #unsched_aktermine { position: absolute; right:10px; width: 170px; display: block; }
@@ -28,10 +30,11 @@
 
 .mode_aktermin .calendar_content { margin-right: 170px; }
 
-.ddmenu { position: absolute; border: 1px solid #ddd; overflow-y: auto;  box-shadow: 1px 1px 6px #999; background: white; padding: 5px 0; min-width: 200px; z-index: 12; }
-.ddmenu div { padding: 8px 15px; cursor: default; }
+.ddmenu { position: absolute; font-weight: normal; display: none; border: 1px solid #ddd; overflow-y: auto;  box-shadow: 1px 1px 6px #999; background: white; padding: 5px 0; min-width: 200px; z-index: 12; }
+.ddmenu div, .ddmenu a { display: block; padding: 8px 15px; cursor: default; color: #222 !important; line-height: 1.4; }
 .ddmenu div:hover { background: #eee; }
 .ddmenu div.disabled, .ddmenu div.disabled:hover { color: #777; background: inherit; }
+.ddmenu .right { float:right; }
 
 .fc-event {margin-right: 5px }
 a.fc-event[href] { color: white; }
@@ -43,5 +46,14 @@ a.fc-event[href]:hover { text-decoration:underline; }
     #content{ padding: 20px 10px; }
     #mainMenu{ padding: 10px ; }
 }
-    
+
+
+.datemark { padding: 4px 0; margin: -4px 0; text-align: center; font-size: 140%; width: 1.6em; display: inline-block; cursor: pointer; }
+.datemark-yes { color: green; }
+.datemark-yes:hover { color: #fff; background: green; }
+.datemark-no { color: #bbbbbb; }
+.datemark-no:hover { color: #fff; background: #884444 }
+
+
+
     

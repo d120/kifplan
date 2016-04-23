@@ -1,0 +1,86 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block extrahead %}
+
+{% load static from staticfiles %}
+<link rel=stylesheet href="{% static 'oplan/vendor/fullcalendar/dist/fullcalendar.css' %}">
+<link rel=stylesheet href="{% static 'oplan/vendor/fullcalendar-scheduler/dist/scheduler.css' %}">
+
+<script src="{% static 'oplan/vendor/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'oplan/helper.js' %}"></script>
+<script src="{% static 'kiffel/kiffelhelper.js' %}"></script>
+<link rel=stylesheet href="{% static 'oplan/styles.css' %}">
+<link rel=stylesheet href="{% static 'frontend/vendor/font-awesome/css/font-awesome.css' %}">
+
+<script src="{% static 'oplan/vendor/moment/moment.js' %}"></script>
+<script src="{% static 'oplan/vendor/fullcalendar/dist/fullcalendar.js' %}"></script>
+<script src="{% static 'oplan/vendor/fullcalendar/dist/lang/de.js' %}"></script>
+<script src="{% static 'oplan/vendor/fullcalendar-scheduler/dist/scheduler.js' %}"></script>
+<script src="{% static 'oplan/vendor/jquery-ui/jquery-ui.min.js' %}"></script>
+{% endblock %}
+
+
+{% block title %}{{ title }} | KIF Verwaltung{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">KIF Verwaltung</h1>
+{% endblock %}
+
+
+{% block nav-global %}
+
+    <a class="ml" href="/">Home</a>
+    <a class="ml" href="{% url 'oplan:ak_wall' %}">AK-Wall</a>
+    <a class="ml" href="{% url 'oplan:infoscreen' %}">Dashboard</a>
+    <a class="ml menuddlink" href="{% url 'admin:oplan_room_changelist' %}" data-target="#raumliste">Räume</a>
+    <div class="ml menuddlink" data-target="#tools_dd">Tools
+        <div id="tools_dd" class="ddmenu">
+            <a href="https://caroline.d120.de/schilder/">Schildergenerator  </a>
+            <a href="https://www2.fachschaft.informatik.tu-darmstadt.de/engelsystem/">Engelsystem  </a>
+            <a href="https://www2.fachschaft.informatik.tu-darmstadt.de/pad/">Pad Manager  </a>
+            <a href="https://orga.fachschaften.org/projects/kif-orga-440/issues">Orga-Wiki  </a>
+            <a href="https://www.fachschaft.informatik.tu-darmstadt.de/">d120.de </a>
+        </div>
+    </div>
+    {% if user.is_staff %}
+    <div class="ml menuddlink" data-target="#infopoint_dd">Infopoint
+        <div id="infopoint_dd" class="ddmenu">
+            <a href="{% url 'admin:kiffel_person_changelist' %}">Personen / Anmeldung</a>
+            <a href="{% url 'admin:eduroam_guestaccount_changelist' %}">eduroam</a>
+            <a href="{% url 'admin:oplan_ak_changelist' %}">AKs bearbeiten</a>
+        </div>
+    </div>
+    <div class="ml menuddlink" data-target="#admin_dd">Administration
+        <div id="admin_dd" class="ddmenu">
+            <a href="{% url 'admin:index' %}">Übersicht</a>
+            <a href="{% url 'admin:auth_group_changelist' %}">Gruppen</a>
+            <a href="{% url 'admin:app_list' 'oplan' %}">Oplan</a>
+            
+        </div>
+    </div>
+    
+    {% endif %}
+{% endblock %}
+
+
+{% block usertools %}
+<div id="user-tools">
+{% if user.is_authenticated %}
+    {% block welcome-msg %}
+        <strong>{% firstof user.get_short_name user.get_username %}</strong> &nbsp;|&nbsp;
+    {% endblock %}
+    {% block userlinks %}
+        {% if user.has_usable_password %}
+        <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> &nbsp;|&nbsp;
+        {% endif %}
+        <a href="{% url 'mysite_logout' %}">{% trans 'Log out' %}</a>
+    {% endblock %}
+{% else %}
+    <a href="{% url 'mysite_login' %}">{% trans 'Log in' %}</a>
+{% endif %}
+</div>
+{% endblock %}
+
+
+

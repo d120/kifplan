@@ -1,16 +1,12 @@
-<!doctype html>
-<meta charset="utf8">
-<title>AK-Planungsmodul</title>
+{% extends 'admin/base_site.html' %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<h3>{{ title|default:'Oplan' }}</h3>
+<div class="toolbar">
+{% block toolbar %}{%endblock%}
+</div>
+</div>
+{% endblock %}
 
-{% load static from staticfiles %}
-<link rel=stylesheet href="{% static 'oplan/vendor/fullcalendar/dist/fullcalendar.css' %}">
-<link rel=stylesheet href="{% static 'oplan/vendor/fullcalendar-scheduler/dist/scheduler.css' %}">
-<link rel=stylesheet href="{% static 'admin/css/base.css' %}">
-
-{% include "oplan/menu.html" %}
-<script src="{% static 'oplan/vendor/moment/moment.js' %}"></script>
-<script src="{% static 'oplan/vendor/fullcalendar/dist/fullcalendar.js' %}"></script>
-<script src="{% static 'oplan/vendor/fullcalendar/dist/lang/de.js' %}"></script>
-<script src="{% static 'oplan/vendor/fullcalendar-scheduler/dist/scheduler.js' %}"></script>
-<script src="{% static 'oplan/vendor/jquery-ui/jquery-ui.min.js' %}"></script>
-<div id=content>
+{%block content_title%}
+{% endblock %}

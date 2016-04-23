@@ -26,7 +26,7 @@ import csv
 #//==> A P I   V I E W S
 
 class AKViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = AKSerializer
     queryset = AK.objects.all()
     filter_fields = [f.name for f in AK._meta.get_fields()]
@@ -35,7 +35,7 @@ class AKViewSet(viewsets.ModelViewSet):
 
 
 class RoomViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = RoomSerializer
     queryset = Room.objects.all()
     filter_fields = [f.name for f in Room._meta.get_fields()]
@@ -44,7 +44,7 @@ class RoomViewSet(viewsets.ModelViewSet):
 
 
 class AKTerminViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = AKTerminSerializer
     queryset = AKTermin.objects.all()
     filter_fields = [f.name for f in AKTermin._meta.get_fields()]
@@ -130,7 +130,7 @@ class ImportRaumliste(View):
     def get(self, request, *args, **kwargs):
         if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
         foo = ""
-        return render(request, "oplan/ak_import_view.html", { 'titel': 'Raumliste importieren (Format: "Raumnummer,Kapazität")', 'output': '' })
+        return render(request, "oplan/ak_import_view.html", { 'title': 'Raumliste importieren (Format: "Raumnummer,Kapazität")', 'output': '' })
     
     def post(self, request, *args, **kwargs):
         if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
@@ -148,7 +148,7 @@ class ImportRaumliste(View):
             except IntegrityError as ex:
                 out += str(ex)
         
-        return render(request, "oplan/ak_import_view.html", { 'titel': 'Raumliste importieren', 'output': out })
+        return render(request, "oplan/ak_import_view.html", { 'title': 'Raumliste importieren', 'output': out })
 
 
 
@@ -158,7 +158,7 @@ class ImportDekrr(View):
     def get(self, request, *args, **kwargs):
         if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
         foo = ""
-        return render(request, "oplan/ak_import_view.html", { 'titel': self.form_titel, 'output': '' })
+        return render(request, "oplan/ak_import_view.html", { 'title': self.form_titel, 'output': '' })
     
     def post(self, request, *args, **kwargs):
         if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
@@ -193,7 +193,7 @@ class ImportDekrr(View):
                     out += "<li>" + str(avail['start_time']) + "  " + avail['kommentar']
                 out += "</ul>"
         
-        return render(request, "oplan/ak_import_view.html", { 'titel': self.form_titel, 'output': out })
+        return render(request, "oplan/ak_import_view.html", { 'title': self.form_titel, 'output': out })
 
 from random import randint
 def hextodec(color):
@@ -216,7 +216,7 @@ class ImportWikiAkListe(View):
     def get(self, request, *args, **kwargs):
         if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
         foo = ""
-        return render(request, "oplan/ak_import_view.html", { 'titel': 'AKs importieren (Quelltext der Wikiseite hier pasten)', 'output': '' })
+        return render(request, "oplan/ak_import_view.html", { 'title': 'AKs importieren (Quelltext der Wikiseite hier pasten)', 'output': '' })
     
     def post(self, request, *args, **kwargs):
         if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
@@ -282,14 +282,14 @@ class ImportWikiAkListe(View):
             
         out+="</table>"
         
-        return render(request, "oplan/ak_import_view.html", { 'titel': 'Raumliste importieren', 'output': out })
+        return render(request, "oplan/ak_import_view.html", { 'title': 'Raumliste importieren', 'output': out })
 
 
 #//==> REGULAR VIEWS
 
 def roomcalendar(request, roomnumber, *args, **kwargs):
     room = Room.objects.get(number=roomnumber)
-    return render(request, "oplan/roomcalendar.html", { 'titel': 'Rauminfo '+room.number, 'room': room })
+    return render(request, "oplan/roomcalendar.html", { 'title': 'Rauminfo '+room.number, 'room': room })
 
 
 def oplan_home(request, *args, **kwargs):
@@ -298,10 +298,10 @@ def oplan_home(request, *args, **kwargs):
 
 def ak_details(request, akid, *args, **kwargs):
     ak = AK.objects.get(id=akid)
-    return render(request, "oplan/ak_import_view.html", { 'titel': ak.titel, 'content': ak.beschreibung })
+    return render(request, "oplan/ak_import_view.html", { 'title': ak.titel, 'content': ak.beschreibung })
 
 def ak_wall(request, *args, **kwargs):
-    return render(request, "oplan/akwallcalendar.html", { 'titel': 'AK Wall',  })
+    return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Wall',  })
 
 def infoscreen(request, *args, **kwargs):
     now = datetime.datetime.now()
@@ -310,10 +310,10 @@ def infoscreen(request, *args, **kwargs):
     current = AKTermin.objects.filter(start_time__lte=now, end_time__gte=now)
     upcoming = AKTermin.objects.filter(start_time__gte=now, start_time__lte=now+timedelta(hours=2))
     
-    return render(request, "oplan/infoscreen.html", { 'titel': 'Infoscreen ', 'now': now, 'current_akts': current, 'upcoming_akts': upcoming })
+    return render(request, "oplan/infoscreen.html", { 'title': 'Infoscreen ', 'now': now, 'current_akts': current, 'upcoming_akts': upcoming })
 
 def darwin_status(request, *args, **kwargs):
-    return render(request, "oplan/ak_import_view.html", { 'titel': 'TODO: Automatische AK-Zuordnung ("Darwin") - Status ', 'out': '' })
+    return render(request, "oplan/ak_import_view.html", { 'title': 'TODO: Automatische AK-Zuordnung ("Darwin") - Status ', 'out': '' })
 
 
 

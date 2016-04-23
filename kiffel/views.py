@@ -15,6 +15,7 @@ from django.core.exceptions import PermissionDenied
 import csv
 
 class KiffelViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly,)
     serializer_class = KiffelSerializer
     queryset = Person.objects.all()
     filter_fields = [f.name for f in Person._meta.get_fields()]
@@ -75,7 +76,7 @@ class Schildergenerator(View):
 class ImportFromEngelsystem(View):
     def get(self, request, *args, **kwargs):
         foo = ""
-        return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import Engelsystem', 'output': '' })
+        return render(request, "kiffel/import_csv_template.html", { 'title': 'Import Engelsystem', 'output': '' })
     
     def updatePerson(self, person, engelid,nick,vorname,nachname,email,tshirt_groesse,kommentar,rollen,gruppen):
         person.engel_id = engelid
@@ -131,14 +132,14 @@ class ImportFromEngelsystem(View):
             out += "   created random pw="+pw
             
             
-        return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import Engelsystem', 'output': out })
+        return render(request, "kiffel/import_csv_template.html", { 'title': 'Import Engelsystem', 'output': out })
 
 
 
 class ImportFromKiffelAnmeldung(View):
     def get(self, request, *args, **kwargs):
         foo = ""
-        return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import KIF-Anmeldung', 'output': '' })
+        return render(request, "kiffel/import_csv_template.html", { 'title': 'Import KIF-Anmeldung', 'output': '' })
     
     def updatePerson(self, person, data):
         for key, value in data.items():
@@ -186,12 +187,12 @@ class ImportFromKiffelAnmeldung(View):
             out += "ok"
             out += "   created random pw="+pw
             
-        return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import KIF-Anmeldung', 'output': out })
+        return render(request, "kiffel/import_csv_template.html", { 'title': 'Import KIF-Anmeldung', 'output': out })
 
 class CreateAnonymPerson(View):
     def get(self, request, *args, **kwargs):
         foo = ""
-        return render(request, "kiffel/import_csv_template.html", { 'titel': 'Anonyme Accounts anlegen (bitte Anzahl eingeben)', 'output': '' })
+        return render(request, "kiffel/import_csv_template.html", { 'title': 'Anonyme Accounts anlegen (bitte Anzahl eingeben)', 'output': '' })
     
     def post(self, request, *args, **kwargs):
         if not request.user.has_perm('kiffel.import_persons'):
@@ -208,7 +209,7 @@ class CreateAnonymPerson(View):
         
         out += "   OK"
         
-        return render(request, "kiffel/import_csv_template.html", { 'titel': 'Import KIF-Anmeldung', 'output': out })
+        return render(request, "kiffel/import_csv_template.html", { 'title': 'Import KIF-Anmeldung', 'output': out })
 
 
 

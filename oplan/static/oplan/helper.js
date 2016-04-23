@@ -38,8 +38,8 @@ function MessageBar() {
 //==> Context menu helper
 
 function ShowContextMenu(event, menuItems) {
-    $(".ddmenu").remove();
-    var menu = $("<div class='ddmenu'></div>");
+    $(".ddmenu.context").remove();
+    var menu = $("<div class='ddmenu context'></div>");
     for(var k in menuItems) {
         var item = $("<div>"+k+"</div>").appendTo(menu);
         item.click(menuItems[k]);
@@ -60,7 +60,7 @@ function ShowContextMenu(event, menuItems) {
     },1)
 }
 function CloseContextMenu(event, menuItems) {
-    $(".ddmenu").remove();
+    $(".ddmenu.context").remove();
 }
 
 
@@ -70,22 +70,24 @@ function CloseContextMenu(event, menuItems) {
 $(function() {
     window.messageBar = new MessageBar();
     
-    $("#raumliste_lnk").mouseenter(function() {
-        if (!$("#raumliste").length) {
-            var $lst = $("<div id=raumliste></div>").appendTo(this);
+    $(".menuddlink").mouseenter(function() {
+        var targetSel = $(this).attr("data-target");
+        if (targetSel == "#raumliste" && !$("#raumliste").length) {
+            var $lst = $("<div id=raumliste class=ddmenu></div>").appendTo(this);
             $.get("/plan/api/room/", function(rooms) {
                 rooms.forEach(function(room) {
                     $lst.append("\
-                        <a class='ed' href='/admin/oplan/room/"+escape(room.id)+"/change/'>(edit)</a> \
+                        <a class='right' href='/admin/oplan/room/"+escape(room.id)+"/change/'>(edit)</a> \
                         <a href='/plan/roomcalendar/"+escape(room.number)+"'>"+room.number+"</a> \
                         ");
                 });
             });
         }
-        $("#raumliste").show().css('left', $(this).offset().left);
+        $(targetSel).css({'left': $(this).offset().left, 'display': 'block'});
     })
     .mouseleave(function() {
-        $("#raumliste").hide();
+        var targetSel = $(this).attr("data-target");
+        $(targetSel).hide();
     });
     
 });

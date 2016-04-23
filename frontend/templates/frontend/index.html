@@ -1,6 +1,11 @@
-{% with titel="KIF Verwaltung" %}
-{% include "oplan/header.html" %}
-{% endwith %}
+{% extends 'admin/base_site.html' %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<h3>Moin moin</h3>
+</div>
+{% endblock %}
+
+{% block content %}
 <ul>
 <li><a href="{% url 'oplan:ak_wall' %}">AK-Wall (Kalender)</a></li>
 <li><a href="{% url 'admin:kiffel_person_changelist' %}">Infopoint: Anmeldung  </a></li>
@@ -11,3 +16,4 @@
 <li><a href="https://orga.fachschaften.org/projects/kif-orga-440/issues">Orga-Wiki  </a></li>
 <li><a href="https://www.fachschaft.informatik.tu-darmstadt.de/">d120.de </a></li>
 </ul>
+{% endblock %}
