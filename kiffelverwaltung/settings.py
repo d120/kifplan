@@ -122,7 +122,12 @@ REST_FRAMEWORK = {
     )
 }
 
+
+# Auth
 AUTH_USER_MODEL = 'kiffel.Person'
+LOGIN_URL = 'mysite_login'
+LOGOUT_URL = 'mysite_logout'
+LOGIN_REDIRECT_URL = 'oplan:oplan_home'
 
 
 try:
