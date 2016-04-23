@@ -3,7 +3,7 @@
 
 
 <form action='' method='post'>
-<textarea name='content' style='width:90%;height:200px;background:#ffeeaa'></textarea>
+<textarea name='content' style='width:90%;height:200px;background:#ffeeaa'>{{content|default:''}}</textarea>
 
 {% csrf_token %}
 <p><input type=submit value='   OK   '></p>
@@ -12,7 +12,7 @@
 
 <pre>
 {% autoescape off %}
-  {{ output }}
+  {{ output|default:'' }}
 {% endautoescape %}
 
 </pre>

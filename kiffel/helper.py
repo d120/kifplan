@@ -47,7 +47,10 @@ class LaTeX:
             for asset in assets:
                 shutil.copy(os.path.dirname(os.path.realpath(__file__))+'/assets/'+asset, tempdir)
             process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir,)
-            process.communicate(rendered_tpl)
-            with open(os.path.join(tempdir, 'texput.pdf'), 'rb') as f:
-                pdf = f.read()
-        return pdf
+            pdflatex_output = process.communicate(rendered_tpl)
+            try:
+                with open(os.path.join(tempdir, 'texput.pdf'), 'rb') as f:
+                    pdf = f.read()
+            except FileNotFoundError:
+                pdf = None
+        return (pdf, pdflatex_output)
