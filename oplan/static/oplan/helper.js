@@ -49,7 +49,7 @@ function ShowContextMenu(event, menuItems) {
     if (x+xx > window.innerWidth) x -= xx;
     if (y+yy > window.innerHeight) y -= yy;
     
-    menu.css({ top: y + "px", left: x + "px" });
+    menu.css({ top: y + "px", left: x + "px" }).slideDown();
     setTimeout(function() {
       $(document).one("click", function(e) {
         menu.remove(); e.preventDefault();

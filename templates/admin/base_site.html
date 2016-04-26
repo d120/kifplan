@@ -18,6 +18,9 @@
 <script src="{% static 'oplan/vendor/fullcalendar/dist/lang/de.js' %}"></script>
 <script src="{% static 'oplan/vendor/fullcalendar-scheduler/dist/scheduler.js' %}"></script>
 <script src="{% static 'oplan/vendor/jquery-ui/jquery-ui.min.js' %}"></script>
+<script>
+oplan.is_staff = "{{user.is_staff}}";
+</script>
 {% endblock %}
 
 
@@ -33,7 +36,8 @@
     <a class="ml" href="/">Home</a>
     <a class="ml" href="{% url 'oplan:ak_wall' %}">AK-Wall</a>
     <a class="ml" href="{% url 'oplan:infoscreen' %}">Dashboard</a>
-    <a class="ml menuddlink" href="{% url 'admin:oplan_room_changelist' %}" data-target="#raumliste">Räume</a>
+    
+    <a class="ml menuddlink" href="{% if user.is_staff %}{% url 'admin:oplan_room_changelist' %}{%else%}{% url 'oplan:roomlist' %}{%endif%}" data-target="#raumliste">Räume</a>
     <div class="ml menuddlink" data-target="#tools_dd">Tools
         <div id="tools_dd" class="ddmenu">
             <a href="https://caroline.d120.de/schilder/">Schildergenerator  </a>
@@ -47,7 +51,7 @@
     <div class="ml menuddlink" data-target="#infopoint_dd">Infopoint
         <div id="infopoint_dd" class="ddmenu">
             <a href="{% url 'admin:kiffel_person_changelist' %}">Personen / Anmeldung</a>
-            <a href="{% url 'admin:eduroam_guestaccount_changelist' %}">eduroam</a>
+            <a href="/admin/eduroam/guestaccount/?vergeben__exact=0">eduroam</a>
             <a href="{% url 'admin:oplan_ak_changelist' %}">AKs bearbeiten</a>
         </div>
     </div>
@@ -56,6 +60,7 @@
             <a href="{% url 'admin:index' %}">Übersicht</a>
             <a href="{% url 'admin:auth_group_changelist' %}">Gruppen</a>
             <a href="{% url 'admin:app_list' 'oplan' %}">Oplan</a>
+            <a href="{% url 'admin:kdvadmin_kdvproduct_changelist' %}">KDV-Produkte</a>
             
         </div>
     </div>

@@ -1,5 +1,5 @@
-{% include 'oplan/header.html' %}
-
+{% extends 'oplan/header.html' %}
+{% block content %}
 
 <form action='' method='post'>
 <textarea name='content' style='width:90%;height:200px;background:#ffeeaa'>{{ content|default:'' }}</textarea>
@@ -16,3 +16,4 @@
 
 </pre>
 
+{% endblock %}

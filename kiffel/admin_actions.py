@@ -15,15 +15,12 @@ def renew_kdv_barcode(modeladmin, request, queryset):
         
         for kiffel in queryset:
             # Generates unique EAN 8 barcode if the barcode field is empty
-            if not kiffel.kdv_id:
-                kiffel.kdv_id = EAN8.get_random()
-                while Person.objects.filter(kdv_id=kiffel.kdv_id).count() > 0:
-                    kiffel.kdv_id = EAN8.get_random()
-                kiffel.save()
+            if kiffel.kdvuserbarcode_set.count() == 0:
+                kiffel.kdvuserbarcode_set.create(code=EAN8.get_random())
                 
             hochschule = "n/a"
             if kiffel.hochschule: hochschule=kiffel.hochschule
-            csvwriter.writerow([ kiffel.nickname, kiffel.kdv_id, hochschule ])
+            csvwriter.writerow([ kiffel.nickname, kiffel.kdvuserbarcode_set.first().code, hochschule ])
     
     with open(filename) as x: csvstring = x.read()
     
@@ -34,6 +31,18 @@ def renew_kdv_barcode(modeladmin, request, queryset):
         """})
     
 renew_kdv_barcode.short_description = 'KDV-Steuerdatei generieren'
+
+
+def set_tu_darmstadt(modeladmin, request, queryset):
+    """
+    
+    """
+    for kiffel in queryset:
+        kiffel.hochschule="TU Darmstadt"
+        kiffel.save()
+    
+    
+set_tu_darmstadt.short_description = 'Auf TU Darmstadt zuweisen'
 
 
 def generate_part_cert(modeladmin, request, queryset):
@@ -83,12 +92,12 @@ def mark_tuete_erhalten_now(modeladmin, request, queryset):
     queryset.update(datum_tuete_erhalten = datetime.now())
 mark_tuete_erhalten_now.short_description = 'Als "Tüte erhalten" markieren'
 
-def mark_tshirt_erhalten_now(modeladmin, request, queryset):
+def mark_baendchen_erhalten_now(modeladmin, request, queryset):
     """
     Sets datum_bezahlt to now for all selected people.
     """
-    queryset.update(datum_tshirt_erhalten = datetime.now())
-mark_tshirt_erhalten_now.short_description = 'Als "T-Shirt erhalten" markieren'
+    queryset.update(datum_baendchen_erhalten = datetime.now())
+mark_baendchen_erhalten_now.short_description = 'Als "Bändchen erhalten" markieren'
 
 
 def mark_teilnahmebestaetigung_erhalten_now(modeladmin, request, queryset):

@@ -102,7 +102,7 @@ class RoomAvailabilityApi(View):
         return JsonResponse({ 'events' : qq,  })
         
     def post(self, request, *args, **kwargs):
-        if not request.user.has_perm('oplan.create_roomavailability'): raise PermissionDenied
+        if not request.user.has_perm('oplan.add_roomavailability'): raise PermissionDenied
         para = request.POST
         room = Room.objects.get(id=para['room'])
         startdt = parse_datetime(para['start'])
@@ -128,12 +128,12 @@ import re
 
 class ImportRaumliste(View):
     def get(self, request, *args, **kwargs):
-        if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
+        if not request.user.has_perm('oplan.add_room'): raise PermissionDenied
         foo = ""
         return render(request, "oplan/ak_import_view.html", { 'title': 'Raumliste importieren (Format: "Raumnummer,Kapazität")', 'output': '' })
     
     def post(self, request, *args, **kwargs):
-        if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
+        if not request.user.has_perm('oplan.add_room'): raise PermissionDenied
         
         the_csv = request.POST["content"]
         reader = csv.reader(the_csv.splitlines())
@@ -156,12 +156,12 @@ class ImportRaumliste(View):
 class ImportDekrr(View):
     form_titel = 'Räume aus DEKRR importieren (bitte zu importierende Tage im Format yyyy-mm-dd angeben)'
     def get(self, request, *args, **kwargs):
-        if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
+        if not request.user.has_perm('oplan.add_room'): raise PermissionDenied
         foo = ""
         return render(request, "oplan/ak_import_view.html", { 'title': self.form_titel, 'output': '' })
     
     def post(self, request, *args, **kwargs):
-        if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
+        if not request.user.has_perm('oplan.add_room'): raise PermissionDenied
         
         days = request.POST['content'].split('\n')
         out=""
@@ -214,12 +214,12 @@ def random_similar_color(mix):
 
 class ImportWikiAkListe(View):
     def get(self, request, *args, **kwargs):
-        if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
+        if not request.user.has_perm('oplan.add_room'): raise PermissionDenied
         foo = ""
         return render(request, "oplan/ak_import_view.html", { 'title': 'AKs importieren (Quelltext der Wikiseite hier pasten)', 'output': '' })
     
     def post(self, request, *args, **kwargs):
-        if not request.user.has_perm('oplan.create_room'): raise PermissionDenied
+        if not request.user.has_perm('oplan.add_room'): raise PermissionDenied
         
         wikitext = request.POST["content"]
         
@@ -290,6 +290,12 @@ class ImportWikiAkListe(View):
 def roomcalendar(request, roomnumber, *args, **kwargs):
     room = Room.objects.get(number=roomnumber)
     return render(request, "oplan/roomcalendar.html", { 'title': 'Rauminfo '+room.number, 'room': room })
+
+def roomlist(request, *args, **kwargs):
+    return render(request, "oplan/roomlist.html", { 'title': 'Raumliste', 'rooms': Room.objects.all() })
+
+def aklist(request, *args, **kwargs):
+    return render(request, "oplan/aklist.html", { 'title': 'AK-Liste', 'aks': AK.objects.all() })
 
 
 def oplan_home(request, *args, **kwargs):

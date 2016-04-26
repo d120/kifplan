@@ -5,7 +5,10 @@
         <a href="{% url 'kiffel:createanonym' %}" class="grp-state-focus" class="addlink">Anonyme Barcodes anlegen</a>
     </li>
     <li>
-        <a href="{% url 'kiffel:import_personen' %}" class="grp-state-focus" class="addlink">Personen importieren</a>
+        <a href="{% url 'kiffel:import_personen' %}" class="grp-state-focus" class="addlink">Anmeldungimport</a>
+    </li>
+    <li>
+        <a href="{% url 'kiffel:import_personen_engel' %}" class="grp-state-focus" class="addlink">Engelimport</a>
     </li>
 
     {{ block.super }}

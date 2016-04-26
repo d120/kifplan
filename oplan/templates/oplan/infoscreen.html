@@ -4,12 +4,20 @@
 
 
 {% block content %}
-
+<meta http-equiv="refresh" content="60">
 <meta name="viewport" content="width=device-width">
 
 <div class="dashbox">
 <h2>{{now}}</h2>
 </div>
+<div class="dashbox">
+<h2 id="countdown"></h2>
+</div>
+<script>
+function updCtd(){$("#countdown").html("Noch " + moment.duration(moment("2016-05-04 15:00:00") - moment()).humanize() + " bis zur KIF");}
+setInterval(updCtd,5000);
+updCtd();
+</script>
 <div class="dashbox">
 <h2>Gerade stattfindende AKs</h2>
 

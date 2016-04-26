@@ -1,0 +1,12 @@
+{% extends "admin/change_list.html" %}
+
+
+{% block object-tools-items %}
+
+    <li>
+        <a href="{% url 'eduroam:import_guest_acc' %}" class="grp-state-focus" class="addlink">Importieren</a>
+    </li>
+
+    {{ block.super }}
+
+{% endblock %}
