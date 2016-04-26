@@ -1,5 +1,8 @@
+% Package zur Generierung von Namensschildern für die KIF
+% Tobias Otterbein, totterbein@d120.de , Stand: 13.04.
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{csvtools}
 \usepackage[ngerman]{babel}
 \usepackage[paperwidth=105mm,paperheight=75mm,nohead,nofoot,margin=0mm]{geometry}
 \usepackage{times}
@@ -14,24 +17,26 @@
 % Hintergrund
 \definecolor{ORGA}{RGB}{0, 157,129 }
 \definecolor{KIFFEL}{RGB}{252, 108,22 }
+\definecolor{ANONYM}{RGB}{7, 43, 101 }
+\definecolor{HELFER}{RGB}{255, 198, 97 }
 \pagestyle{empty}
 
 \raggedright
 
 %Namensschild Vorlage
 \newcommand{\Namensschild}[4]{%
-	%% Achtung: die Formatierung um ORGA ist unbedingt notwendig, da das
-	%% von der kiffel-verwaltung Django-App produzierte TeX die Zeilenumbrüche
-	%% enthalten wird. Falls das Template geändert wird, muss dies hier ebenfalls
-	%% angepasst werden!
-	\ifthenelse{\equal{#3}{
-	ORGA
-}}
-	{\pagecolor{ORGA}}{\pagecolor{KIFFEL}}
+	\ifthenelse{\equal{#3}{ORGA}}
+		{\pagecolor{ORGA}}
+		{\ifthenelse{\equal{#3}{HELFER}}
+			{\pagecolor{HELFER}}
+			{\ifthenelse{\equal{#1}{~}}
+				{\pagecolor{ANONYM}}
+				{\pagecolor{KIFFEL}}}}	
+	
 	\sf{
 
-	% Überschrift
-	\colorbox{white}{\parbox[c][6mm]{115mm}{\hspace{3mm}\textbf{  Konferenz der Informatikfachschaften 44,0}}}
+	% Überschrift	
+	\colorbox{white}{\parbox[c][5mm]{115mm}{\hspace{3mm}\textbf{  Konferenz der Informatikfachschaften 44,0}}}
 	\hrule height 2pt
  	\vfill
 
@@ -40,12 +45,12 @@
   	\fboxrule 1pt
  	\fcolorbox{black}{white}{
  		\parbox[c][50mm]{20mm}{
- 			\includegraphics[height=50mm]{kif_logo}}
+ 			\includegraphics[height=50mm]{kif_logo}} 
  		\parbox[c][50mm]{60mm}{\centering{{
  			\vfill
- 			\textbf{\Huge #1}}
- 			\vspace{3mm}\\
- 			\textbf{{\Large #2}}
+ 			\textbf{\Huge #1}} 
+ 			\vspace{3mm}\\ 
+ 			\textbf{{\Large #2}} 
  			\vspace{3mm}\\
  			\textbf{#3}
  			\vfill
@@ -53,16 +58,16 @@
    			}}
    			\hspace{14mm}
    		 }\hfill
-  	}
-%
+  	}  	
+%  	  	   
     \vfill
-
+    
     % Barcode
     \begin{textblock*}{16mm}(62mm,48mm)
     %\includegraphics[height=14mm,width=38mm]{#4}
     \EANBarcode[module_width=0.5mm,module_height=11mm,code=EAN-8]{#4}
     \end{textblock*}
-
+    
     % Vierecke
     \begin{textblock*}{16mm}(47mm,48mm)
     \begin{tikzpicture}
@@ -74,7 +79,7 @@
     	\draw[line width=0.5pt,style=dashed](0, 0) rectangle (1.4,1.4);
    	\end{tikzpicture}
     \end{textblock*}
-
+    
     % Kreise
 	\begin{textblock*}{10mm}(90mm,13mm)
 	\begin{tikzpicture}
@@ -85,19 +90,19 @@
 	\begin{tikzpicture}
 		\draw[line width=0.5pt,,style=dashed](0, 0) circle (4mm);
 	\end{tikzpicture}
-	\end{textblock*}
+	\end{textblock*} 
 	\begin{textblock*}{10mm}(90mm,33mm)
 	\begin{tikzpicture}
 		\draw[line width=0.5pt,style=dashed](0, 0) circle (4mm);
 	\end{tikzpicture}
-	\end{textblock*}
-
+	\end{textblock*}   
+  
   	%\vspace*{2mm}
-
-
+  
+  
  	% Schlusszeile
 	\hrule height 2pt
-	\colorbox{white}{\parbox[c][6mm]{115mm}{\hspace{5mm} \textbf{TU Darmstadt | Fachschaft Informatik}}}
-
+	\colorbox{white}{\parbox[c][5mm]{115mm}{\hspace{5mm} \textbf{TU Darmstadt | Fachschaft Informatik}}}
+  	
   	\clearpage }
 }
