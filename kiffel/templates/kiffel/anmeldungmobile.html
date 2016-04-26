@@ -1,0 +1,22 @@
+{% extends 'admin/base_site.html' %}
+
+{% block extrahead %}
+{{ block.super }}
+<meta name="viewport" content="width=480">
+<style>
+
+.datemark { width: 60px; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<table>
+{% for p in people %}
+<tr><td>{{ p.nickname }}</td><td>{{ p.vorname }}</td><td>{{ p.nachname }}</td><td>{{ p.hochschule }}</td>
+</tr>
+<tr><td colspan=4>{{ p.datemarks|safe }}</td></tr>
+{% endfor %}
+</table>
+
+{% endblock %}

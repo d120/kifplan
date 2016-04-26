@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'import/engelsystem/$', views.ImportFromEngelsystem.as_view(), name='import_personen_engel'),
     url(r'import/anmeldung/$', views.ImportFromKiffelAnmeldung.as_view(), name='import_personen'),
     url(r'createanonym/$', views.CreateAnonymPerson.as_view(), name='createanonym'),
+    url(r'mobi/$', views.anmeldung_mobile, name='mobi'),
     
 ]

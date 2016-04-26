@@ -36,6 +36,7 @@ class Person(PermissionsMixin, AbstractBaseUser):
         verbose_name_plural = 'Personen'
         permissions = (
             ('import_persons', 'Import new persons'),
+            ('resetpw_person', 'Reset a persons password'),
         )
 
     # Felder aus der Anmeldung (orga.fachschaften.org)
@@ -70,14 +71,14 @@ class Person(PermissionsMixin, AbstractBaseUser):
     status = models.CharField(max_length=100, null=True, blank=True)
     datum_bezahlt = models.DateTimeField(null=True, blank=True, verbose_name='Tn.beitrag bezahlt')
     datum_tuete_erhalten = models.DateTimeField(null=True, blank=True, verbose_name='Tüte erhalten')
-    datum_tshirt_erhalten = models.DateTimeField(null=True, blank=True, verbose_name='T-Shirt erhalten')
+    datum_baendchen_erhalten = models.DateTimeField(null=True, blank=True, verbose_name='Bändchen erhalten')
     datum_teilnahmebestaetigung_erhalten = models.DateTimeField(null=True, blank=True,
         verbose_name='Teilnahmebestätigung erhalten')
     twitter_handle = models.CharField(max_length=100, null=True, blank=True, verbose_name='Twitter-Handle')
 
     # KDV-System
-    kdv_id = models.CharField(max_length=32, null=True, blank=True, verbose_name='KDV-ID', unique=True)
-
+    kdv_balance = models.IntegerField(default=0)
+    
     # Typ dieses Eintrags
     ist_kiffel = models.BooleanField(default=False, verbose_name='Person ist Kiffel')
     ist_orga = models.BooleanField(default=False, verbose_name='Person ist Orga')
@@ -127,15 +128,54 @@ class Person(PermissionsMixin, AbstractBaseUser):
 
     def get_short_name(self):
         return self.nickname
-
+    
+    def get_barcode(self):
+        return self.kdvuserbarcode_set.first().code
+    
     def __str__(self):
         return "{0} ({1})".format(self.nickname, self.email)
 
+    def get_datemark(self, icon, field_name):
+        # der Event Handler hierzu ist in static/kiffel/kiffelhelper.js definiert
+        val = getattr(self, field_name)
+        title = Person._meta.get_field(field_name).verbose_name
+        if val != None:
+            state = "datemark-yes"
+            title += ": ja, am " + str(val)
+        else:
+            state = "datemark-no"
+            title += ": nein"
+        return "<span class='datemark "+state+"' title='"+title+"' data-mark-id='"+str(self.id)+"' data-mark-field='"+field_name+"'><i class='fa fa-"+icon+"'></i></span>"
+    
+    def datemarks(self):
+        o = ""
+        o += self.get_datemark('money', 'datum_bezahlt')
+        o += self.get_datemark('shopping-bag', 'datum_tuete_erhalten')
+        o += self.get_datemark('glide-g', 'datum_baendchen_erhalten')
+        o += self.get_datemark('file-text', 'datum_teilnahmebestaetigung_erhalten')
+        return "<nobr>" + o + "</nobr>"
+    datemarks.short_description = "stuff"
+    datemarks.allow_tags = True
+    
     @property
     def is_staff(self):
         return self.is_superuser or self.ist_orga
 
     @property
     def is_active(self):
-        return self.is_superuser or self.ist_orga
+        return self.is_superuser or self.ist_orga or self.ist_helfer
+
+
+class KDVUserBarcode(models.Model):
+    class Meta:
+        db_table  = 'kdv_user_identifiers'
+    code = models.CharField(null=True, blank=True, max_length=255, verbose_name='Barcode')
+    identifiable = models.ForeignKey(Person, on_delete=models.CASCADE)
+    identifiable_type = models.CharField(max_length=255, default='User') #models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    #identifiable = GenericForeignKey('identifiable_type', 'identifiable_id')
+    
+    created_at = models.DateTimeField(null=True, auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, auto_now=True)
+    def __str__(self):
+        return self.code
 

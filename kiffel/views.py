@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from kiffel.models import Person
 from kiffel.serializers import KiffelSerializer
 from kiffel.helper import LaTeX, QueryFilter
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 
 import datetime
 
@@ -70,6 +70,12 @@ class Schildergenerator(View):
         return r
 
 
+def anmeldung_mobile(request, *args, **kwargs):
+    if not request.user.has_perm('kiffel.change_person'): raise PermissionDenied
+    people = Person.objects.filter(ist_kiffel=True)
+    return render(request, "kiffel/anmeldungmobile.html", { 'people': people })
+
+
 
 #//==> I M P O R T   F U N C T I O N S
 
@@ -123,7 +129,8 @@ class ImportFromEngelsystem(View):
                 continue
                 
             out += "importing..."
-            pneu = Person.objects.create(email=email, kdv_id=EAN8.get_random())
+            pneu = Person.objects.create(email=email)
+            pneu.kdvuserbarcode_set.create(code=EAN8.get_random())
             pw = Person.objects.make_random_password()
             pneu.set_password(pw)
             
@@ -143,6 +150,7 @@ class ImportFromKiffelAnmeldung(View):
     
     def updatePerson(self, person, data):
         for key, value in data.items():
+            if value == "Nein": value = False
             setattr(person, key, value)
         person.save()
     
@@ -150,7 +158,7 @@ class ImportFromKiffelAnmeldung(View):
         if not request.user.has_perm('kiffel.import_persons'):
             raise PermissionDenied
         the_csv = request.POST["content"]
-        reader = csv.reader(the_csv.splitlines())
+        reader = csv.reader(the_csv.splitlines(), delimiter=';')
         out = ""
         for row in reader:
             data = dict(zip(anmeldung_csv_cols, row))
@@ -180,9 +188,9 @@ class ImportFromKiffelAnmeldung(View):
             
             
             out += "importing..."
-            data['kdv_id'] = EAN8.get_random()
             pneu = Person.objects.create(**data)
-            pw = Person.objects.make_random_password()
+            pw = EAN8.get_random()
+            pneu.kdvuserbarcode_set.create(code=pw)
             pneu.set_password(pw); pneu.save()
             out += "ok"
             out += "   created random pw="+pw
@@ -203,8 +211,9 @@ class CreateAnonymPerson(View):
         for i in range(count):
             barcode = EAN8.get_random()
             
-            Person.objects.create(kdv_id=barcode,
-                ist_anonym=True, nickname="zzz-anonym-"+barcode, email="zzz-anomym-"+barcode+"@example.com")
+            pneu = Person.objects.create(ist_anonym=True, nickname="zzz-anonym-"+barcode, 
+                            email="zzz-anomym-"+barcode+"@example.com")
+            pneu.kdvuserbarcode_set.create(code=EAN8.get_random())
             out += "."
         
         out += "   OK"

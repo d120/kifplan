@@ -3,18 +3,20 @@ from django.contrib import admin
 from kdvadmin.models import *
 
 
-class KDVProductBarcodeInline(admin.StackedInline):
+class KDVProductBarcodeInline(admin.TabularInline):
     model = KDVProductBarcode
     fields = ('code',)
     extra = 0
+    min_num = 1
 
-class KDVProductPricingInline(admin.StackedInline):
+class KDVProductPricingInline(admin.TabularInline):
     model = KDVPricing
     extra = 0
+    min_num = 1
 
 @admin.register(KDVProduct)
 class KDVProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'get_barcodes', 'get_lowest_price', 'get_quantity', )
+    list_display = ('name', 'get_lowest_price', 'get_quantity', 'get_barcodes', )
     ordering = ('name',)
     
     inlines = [
@@ -32,21 +34,3 @@ class KDVProductAdmin(admin.ModelAdmin):
         return sum([x.quantity for x in obj.kdvpricing_set.all()])
     get_quantity.short_description = 'Anzahl'
 
-class KDVUserBarcodeInline(admin.StackedInline):
-    model = KDVUserBarcode
-    fields = ('code',)
-    extra = 0
-    
-@admin.register(KDVUser)
-class KDVUserAdmin(admin.ModelAdmin):
-    list_display = ('name', 'get_barcodes', 'balance', 'allow_negative_balance',)
-    ordering = ('name',)
-    
-    inlines = [
-        KDVUserBarcodeInline,
-    ]
-    
-    def get_barcodes(self, obj):
-        return ", ".join([x.code for x in obj.kdvuserbarcode_set.all()])
-    
-    

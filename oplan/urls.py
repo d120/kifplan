@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'ak/(?P<akid>[0-9]+)/$', views.ak_details, name="ak_details"),
     url(r'infoscreen/$', views.infoscreen, name="infoscreen"),
     url(r'darwin_status/$', views.darwin_status, name="darwin_status"),
+    url(r'roomcalendar/$', views.roomlist, name="roomlist"),
     url(r'roomcalendar/(?P<roomnumber>[^/]+)/$', views.roomcalendar, name="roomcalendar"),
     url(r'roomcalendar/(?P<roomnumber>[^/]+)/$', views.roomcalendar, name="roomcalendar"),
     url(r'import/rooms/csv/$', views.ImportRaumliste.as_view(), name="import_room_list"),

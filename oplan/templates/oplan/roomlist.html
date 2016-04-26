@@ -1,0 +1,14 @@
+{% extends 'oplan/header.html' %}
+{% block content %}
+
+<div id="results">
+<table id="result_list">
+    <thead><tr><th>Raumnummer</th><th>Anzahl Plätze</th><th>Raumtyp</th><th>Bemerkung</th></tr></thead>
+    
+    {% for room in rooms %}
+    <tr><td>{{room.number}}</td><td>{{room.capacity}}</td><td>{{room.type}}</td><td>{{room.mgmt_comment}}</td></tr>
+    {% endfor %}
+</table>
+</div>
+
+{% endblock %}

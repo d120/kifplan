@@ -3,6 +3,9 @@
 #header #branding h1 { margin:0 10px 0 0; font-size: 12pt; font-weight: bold; color: white; }
 #header a.ml, #header div.ml {margin:0 10px 10px;display:block;float:left;color:#00ffff;font-weight:bold;}
 
+#content{padding-bottom: 0;}
+#footer{padding:0;}
+
 .breadcrumbs h3 { display: inline-block; margin: 0 20px 0 0; color: white; font-size: 12pt; }
 .breadcrumbs .toolbar { display: inline-block; color: #ffffff; }
 
@@ -45,8 +48,12 @@ a.fc-event[href]:hover { text-decoration:underline; }
 @media screen and (max-width: 899px) {
     #content{ padding: 20px 10px; }
     #mainMenu{ padding: 10px ; }
+    #container {min-width:inherit;width:inherit;position:inherit;}
+    #header{width:inherit;height:auto;}
+    #header #branding {float:none;}
+    #header #user-tools {margin-top:-4em;}
+    #header a.ml { margin-left:0; }
 }
-
 
 .datemark { padding: 4px 0; margin: -4px 0; text-align: center; font-size: 140%; width: 1.6em; display: inline-block; cursor: pointer; }
 .datemark-yes { color: green; }

@@ -7,7 +7,7 @@ class GuestAccount(models.Model):
     """
 
     # Account Stammdaten
-    login = models.CharField(max_length=100, verbose_name='Accountname')
+    login = models.CharField(max_length=100, verbose_name='Accountname', unique=True)
     password = models.CharField(max_length=100, verbose_name='Passwort')
     gueltig_von = models.DateTimeField()
     gueltig_bis = models.DateTimeField()
@@ -21,7 +21,10 @@ class GuestAccount(models.Model):
     # ausleihender Infopunkt-Engel
     vergeben_am = models.DateTimeField(null=True, blank=True)
     vergeben_durch = models.CharField(max_length=100, null=True, blank=True)
-
+    
+    def __str__(self):
+        return self.login
+    
     class Meta:
         ordering = ('login',)
         verbose_name = 'Gastaccount'

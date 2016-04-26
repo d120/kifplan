@@ -15,7 +15,7 @@ $(function() {
             data[field_name] = moment().toISOString();
         }
         $.ajax({
-            url: '/api/v1/kiffels/' + $el.attr('data-mark-id') + '/',
+            url: '/kiffel/kiffels/' + $el.attr('data-mark-id') + '/',
             method: 'PATCH',
             data: data,
         }).success(function(ok) {

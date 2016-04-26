@@ -13,21 +13,21 @@
 \Namensschild{
   {{kiffel.nickname}}
 }{
-  {{kiffel.hochschule}}
+  {{kiffel.hochschule|default:'~'}}
 }{
   {% if kiffel.ist_orga %} ORGA {% else %} ~ {% endif %}
 }{
-  {{kiffel.kdv_id}}
+  {{kiffel.get_barcode}}
 }
 
 \Namensschild{
   {{kiffel.nickname}}
 }{
-  {{kiffel.hochschule}}
+  {{kiffel.hochschule|default:'~'}}
 }{
   {% if kiffel.ist_orga %} ORGA {% else %} ~ {% endif %}
 }{
-  {{kiffel.kdv_id}}
+  {{kiffel.get_barcode}}
 }
 {% endfor %}
 
