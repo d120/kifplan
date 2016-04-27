@@ -109,6 +109,7 @@ class RoomAvailabilityAdmin(admin.ModelAdmin):
     # admin list table view
     list_display = ['status', 'room', 'start_time', 'end_time', 'kommentar']
     list_display_links = ['status', 'room', 'start_time']
+    list_filter = ['status']
 
 @admin.register(AKTermin)
 class AKTerminAdmin(admin.ModelAdmin):

@@ -25,11 +25,11 @@
 
 %Namensschild Vorlage
 \newcommand{\Namensschild}[4]{%
-	\ifthenelse{\equal{#3}{ORGA}}
+	\ifthenelse{\equal{#3}{  ORGA  }}
 		{\pagecolor{ORGA}}
-		{\ifthenelse{\equal{#3}{HELFER}}
+		{\ifthenelse{\equal{#3}{  HELFER  }}
 			{\pagecolor{HELFER}}
-			{\ifthenelse{\equal{#1}{~}}
+			{\ifthenelse{\equal{#1}{   ~  }}
 				{\pagecolor{ANONYM}}
 				{\pagecolor{KIFFEL}}}}	
 	

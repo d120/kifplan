@@ -213,7 +213,7 @@ class CreateAnonymPerson(View):
             
             pneu = Person.objects.create(ist_anonym=True, nickname="zzz-anonym-"+barcode, 
                             email="zzz-anomym-"+barcode+"@example.com")
-            pneu.kdvuserbarcode_set.create(code=EAN8.get_random())
+            pneu.kdvuserbarcode_set.create(code=barcode)
             out += "."
         
         out += "   OK"

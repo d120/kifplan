@@ -139,10 +139,10 @@ class KiffelAdmin(admin.ModelAdmin):
     # admin list table view
     list_display = ['nickname', 'vorname', 'nachname',
         'datemarks', 'tshirt_groesse', 'hochschule', 'status_desc', 'engel_id_link', ]
-    list_editable = ['hochschule', ]
+    #list_editable = ['hochschule', ]
     list_display_links = ['nickname']
     list_filter = [
-        'ist_kiffel', 'ist_orga', 'student', 
+        'ist_kiffel', 'ist_orga', 'ist_helfer', 'student', 
         ('datum_bezahlt', IsNullListFilter),
         ('datum_teilnahmebestaetigung_erhalten', IsNullListFilter),
         'hochschule', ]
@@ -156,7 +156,7 @@ class KiffelAdmin(admin.ModelAdmin):
             kiffel.admin_actions.generate_nametags,
             kiffel.admin_actions.generate_part_cert,
             kiffel.admin_actions.renew_kdv_barcode,
-            #kiffel.admin_actions.set_tu_darmstadt,
+            kiffel.admin_actions.set_tu_darmstadt,
     ]
     
     

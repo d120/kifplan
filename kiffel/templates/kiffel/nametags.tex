@@ -6,29 +6,27 @@
 
 \begin{document}
 
+
 {% for kiffel in kiffels %}
 
-%% {{kiffel.nickname}} ({{kiffel.vorname}} {{kiffel.nachname}})
-
 \Namensschild{
-  {{kiffel.nickname}}
+  {% if kiffel.ist_anonym %} ~ {% else %} {{kiffel.nickname|default:'~'}} {% endif %}
 }{
   {{kiffel.hochschule|default:'~'}}
-}{
-  {% if kiffel.ist_orga %} ORGA {% else %} ~ {% endif %}
-}{
+}{ {% if kiffel.ist_orga %} ORGA {% elif kiffel.ist_helfer %} HELFER {% else %} ~ {% endif %} }{
   {{kiffel.get_barcode}}
 }
 
 \Namensschild{
-  {{kiffel.nickname}}
+  {% if kiffel.ist_anonym %} ~ {% else %} {{kiffel.nickname|default:'~'}} {% endif %}
 }{
   {{kiffel.hochschule|default:'~'}}
 }{
-  {% if kiffel.ist_orga %} ORGA {% else %} ~ {% endif %}
+  {% if kiffel.ist_orga %} ORGA {% elif kiffel.ist_helfer %} HELFER {% else %} ~ {% endif %}
 }{
   {{kiffel.get_barcode}}
 }
+
 {% endfor %}
 
 \end{document}

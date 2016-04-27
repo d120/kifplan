@@ -130,7 +130,7 @@ class Person(PermissionsMixin, AbstractBaseUser):
         return self.nickname
     
     def get_barcode(self):
-        return self.kdvuserbarcode_set.first().code
+        return self.kdvuserbarcode_set.first().code[-8:]
     
     def __str__(self):
         return "{0} ({1})".format(self.nickname, self.email)
