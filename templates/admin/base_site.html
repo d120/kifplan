@@ -13,6 +13,8 @@
 <link rel=stylesheet href="{% static 'oplan/styles.css' %}">
 <link rel=stylesheet href="{% static 'frontend/vendor/font-awesome/css/font-awesome.css' %}">
 
+{% block customstyle %}{% endblock %}
+
 <script src="{% static 'oplan/vendor/moment/moment.js' %}"></script>
 <script src="{% static 'oplan/vendor/fullcalendar/dist/fullcalendar.js' %}"></script>
 <script src="{% static 'oplan/vendor/fullcalendar/dist/lang/de.js' %}"></script>
@@ -27,7 +29,9 @@ oplan.is_staff = "{{user.is_staff}}";
 {% block title %}{{ title }} | KIF Verwaltung{% endblock %}
 
 {% block branding %}
-<h1 id="site-name">KIF Verwaltung</h1>
+<h1 id="site-name">
+  <a href="/"><i class="fa fa-gears"></i>&nbsp;&nbsp;KIF Verwaltung</a>
+</h1>
 {% endblock %}
 
 
@@ -36,8 +40,18 @@ oplan.is_staff = "{{user.is_staff}}";
     <a class="ml" href="/">Home</a>
     <a class="ml" href="{% url 'oplan:ak_wall' %}">AK-Wall</a>
     <a class="ml" href="{% url 'oplan:infoscreen' %}">Dashboard</a>
-    
+
     <a class="ml menuddlink" href="{% if user.is_staff %}{% url 'admin:oplan_room_changelist' %}{%else%}{% url 'oplan:roomlist' %}{%endif%}" data-target="#raumliste">Räume</a>
+
+    {% if user.is_staff %}
+    <div class="ml menuddlink" data-target="#infopoint_dd">Infopoint
+        <div id="infopoint_dd" class="ddmenu">
+            <a href="{% url 'admin:kiffel_person_changelist' %}">Personen / Anmeldung</a>
+            <a href="/admin/eduroam/guestaccount/?vergeben__exact=0">eduroam</a>
+            <a href="{% url 'admin:oplan_ak_changelist' %}">AKs bearbeiten</a>
+        </div>
+    </div>
+    {% endif %}
     <div class="ml menuddlink" data-target="#tools_dd">Tools
         <div id="tools_dd" class="ddmenu">
             <a href="https://caroline.d120.de/schilder/">Schildergenerator  </a>
@@ -48,23 +62,14 @@ oplan.is_staff = "{{user.is_staff}}";
         </div>
     </div>
     {% if user.is_staff %}
-    <div class="ml menuddlink" data-target="#infopoint_dd">Infopoint
-        <div id="infopoint_dd" class="ddmenu">
-            <a href="{% url 'admin:kiffel_person_changelist' %}">Personen / Anmeldung</a>
-            <a href="/admin/eduroam/guestaccount/?vergeben__exact=0">eduroam</a>
-            <a href="{% url 'admin:oplan_ak_changelist' %}">AKs bearbeiten</a>
-        </div>
-    </div>
     <div class="ml menuddlink" data-target="#admin_dd">Administration
         <div id="admin_dd" class="ddmenu">
             <a href="{% url 'admin:index' %}">Übersicht</a>
             <a href="{% url 'admin:auth_group_changelist' %}">Gruppen</a>
             <a href="{% url 'admin:app_list' 'oplan' %}">Oplan</a>
             <a href="{% url 'admin:kdvadmin_kdvproduct_changelist' %}">KDV-Produkte</a>
-            
         </div>
     </div>
-    
     {% endif %}
 {% endblock %}
 

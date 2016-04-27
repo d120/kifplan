@@ -306,8 +306,11 @@ def ak_details(request, akid, *args, **kwargs):
     ak = AK.objects.get(id=akid)
     return render(request, "oplan/ak_import_view.html", { 'title': ak.titel, 'content': ak.beschreibung })
 
-def ak_wall(request, *args, **kwargs):
-    return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Wall',  })
+def akcalendar(request, *args, **kwargs):
+    return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Kalender',  })
+
+def akbeamer(request, *args, **kwargs):
+    return render(request, "oplan/akbeamer.html", { 'title': 'AK Wall',  })
 
 def infoscreen(request, *args, **kwargs):
     now = datetime.datetime.now()
@@ -316,7 +319,10 @@ def infoscreen(request, *args, **kwargs):
     current = AKTermin.objects.filter(start_time__lte=now, end_time__gte=now)
     upcoming = AKTermin.objects.filter(start_time__gte=now, start_time__lte=now+timedelta(hours=2))
     
-    return render(request, "oplan/infoscreen.html", { 'title': 'Infoscreen ', 'now': now, 'current_akts': current, 'upcoming_akts': upcoming })
+    return render(request, "oplan/infoscreen.html", {
+        'title': 'Infoscreen ', 'now': now,
+        'current_akts': current, 'upcoming_akts': upcoming
+    })
 
 def darwin_status(request, *args, **kwargs):
     return render(request, "oplan/ak_import_view.html", { 'title': 'TODO: Automatische AK-Zuordnung ("Darwin") - Status ', 'out': '' })

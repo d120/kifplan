@@ -1,4 +1,24 @@
 {% extends 'admin/base_site.html' %}
+
+{% block customstyle %}
+<link rel="stylesheet" href="" />
+<style>
+h2 { font-size: 2em; margin-top: .5rem; }
+.clearfix { display: block; clear: both; }
+ul.buttons { padding: 0; }
+ul.buttons li { list-style: none; padding: 0; }
+ul.buttons li a {
+  display: block; float: left; width: 150px; height: 100px; padding: 30px 10px 10px;  margin: 0 20px 20px 0;
+  border: 1px solid #474e53; box-shadow: 1px 1px 4px #000; border-radius: 2px; background-color: #444;
+  text-align: center; color: white; text-decoration: none;
+}
+ul.buttons li a:hover { background-color: #777; }
+ul.buttons li a .fa { font-size: 26pt; }
+ul.buttons li a span.text { display: block; padding-top: 10px; font-size: 12pt; }
+@media(screen and max-width: 400px) { ul.buttons li a { width: 140px; } }
+</style>
+{% endblock %}
+
 {% block breadcrumbs %}
 <div class="breadcrumbs">
 <h3>Moin moin</h3>
@@ -6,15 +26,28 @@
 {% endblock %}
 
 {% block content %}
+<h2>Infopoint</h2>
+<ul class="buttons">
+  <li><a href="{% url 'oplan:ak_wall' %}"><span class="fa fa-calendar"></span> <span class='text'>AK-Wall (Kalender)</span></a></li>
+  <li><a href="{% url 'admin:kiffel_person_changelist' %}"><span class="fa fa-child"></span> <span class='text'>Anmeldung</span></a></li>
+  <li><a href="{% url 'kiffel:mobi' %}"><span class="fa fa-tablet"></span> <span class='text'>mobile Anmeldung</span></a></li>
+  <li><a href="{% url 'admin:eduroam_guestaccount_changelist' %}"><span class="fa fa-wifi"></span> <span class='text'>eduroam-Gastaccounts</span></a></li>
+  <li><a href="https://www2.fachschaft.informatik.tu-darmstadt.de/engelsystem/"><span class="fa fa-heart"></span> <span class='text'>Engelsystem</span></a></li>
+  <li><a href="https://kif.d120.de/schilder/"><span class="fa fa-language"></span> <span class='text'>Schildergenerator</span></a></li>
+</ul>
+
+<div class="clearfix"></div>
+<h2>Weitere Ressourcen</h2>
+<ul class="buttons">
+  <li><a href="https://kif.d120.de/twitterwall"><span class="fa fa-twitter"></span> <span class='text'>Twitterwall</span></a></li>
+  <li><a href="https://orga.fachschaften.org/projects/kif-orga-440/issues"><span class="fa fa-paste"></span> <span class='text'>Orga-Wiki</span></a></li>
+  <li><a href="https://www2.fachschaft.informatik.tu-darmstadt.de/pad/"><span class="fa fa-pencil"></span> <span class='text'>Pad Manager</span></a></li>
+  <li><a href="https://www.fachschaft.informatik.tu-darmstadt.de/"><span class="fa fa-home"></span> <span class='text'>d120.de</span></a></li>
+</ul>
+
+<div class="clearfix"></div>
+<h2>Anleitungen</h2>
 <ul>
-<li><a href="{% url 'oplan:ak_wall' %}">AK-Wall (Kalender)</a></li>
-<li><a href="{% url 'admin:kiffel_person_changelist' %}">Infopoint: Anmeldung  </a></li>
-<li><a href="{% url 'kiffel:mobi' %}">Infopoint: mobile Anmeldung  </a></li>
-<li><a href="{% url 'admin:eduroam_guestaccount_changelist' %}">Infopoint: eduroam-Gastaccounts  </a></li>
-<li><a href="https://caroline.d120.de/schilder/">Schildergenerator  </a></li>
-<li><a href="https://www2.fachschaft.informatik.tu-darmstadt.de/engelsystem/">Engelsystem  </a></li>
-<li><a href="https://www2.fachschaft.informatik.tu-darmstadt.de/pad/">Pad Manager  </a></li>
-<li><a href="https://orga.fachschaften.org/projects/kif-orga-440/issues">Orga-Wiki  </a></li>
-<li><a href="https://www.fachschaft.informatik.tu-darmstadt.de/">d120.de </a></li>
+  <li><a href="https://www.google.de/">Google (Suchmaschine)</a></li>
 </ul>
 {% endblock %}
