@@ -2,6 +2,7 @@
 {% block toolbar %}
 <style>
 .toolbar label{padding-right: 10px;}
+#content > br {display:none}
 </style>
     <input type="radio" name="modus" id="mode_slots"><label for="mode_slots"> Slots</label>
     <input type="radio" name="modus" id="mode_availability"><label for="mode_availability"> Verfügbarkeit</label>
@@ -65,7 +66,7 @@ $(document).ready(function() {
             oplan.api.createRoomAvailability(start, end, resource.id);
         },
         
-        height: window.innerHeight-150,
+        height: window.innerHeight-$('#calendar').offset().top-10,
         resourceAreaWidth: 120, 
         
         viewRender: function(view,el) {

@@ -18,23 +18,23 @@
   <h2>eduroam-Account an folgende Person ausgeben:</h2>
   <div class="formgroup">
     <label for="vorname">Vorname:</label>
-    <input type="text" name="vorname" /><br />
+    <input type="text" name="vorname" required/><br />
   </div>
   <div class="formgroup">
     <label for="nachname">Nachname:</label>
-    <input type="text" name="nachname" />
+    <input type="text" name="nachname" required/>
   </div>
 
   <h2>Personalausweis überprüfen!</h2>
   <div class="formgroup">
     <label for="perso_id">Personalausweisnummer:</label>
-    <input type="text" name="perso_id" />
+    <input type="text" name="perso_id" required/>
   </div>
 
   <h2>Ausgebender Infopoint-Engel</h2>
   <div class="formgroup">
     <label for="vergeben_durch">Vergeben durch:</label>
-    <input type="text" name="vergeben_durch" value="{{current_user}}" />
+    <input type="text" name="vergeben_durch" value="{{current_user}}" required/>
   </div>
 
   {% csrf_token %}

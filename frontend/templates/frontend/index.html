@@ -9,13 +9,32 @@ ul.buttons { padding: 0; }
 ul.buttons li { list-style: none; padding: 0; }
 ul.buttons li a {
   display: block; float: left; width: 150px; height: 100px; padding: 30px 10px 10px;  margin: 0 20px 20px 0;
-  border: 1px solid #474e53; box-shadow: 1px 1px 4px #000; border-radius: 2px; background-color: #444;
   text-align: center; color: white; text-decoration: none;
 }
 ul.buttons li a:hover { background-color: #777; }
 ul.buttons li a .fa { font-size: 26pt; }
 ul.buttons li a span.text { display: block; padding-top: 10px; font-size: 12pt; }
 @media(screen and max-width: 400px) { ul.buttons li a { width: 140px; } }
+
+
+ul.buttons li a.Color-Purple {background: #8C0095 }
+ul.buttons li a.Color-Purple:hover {background: #A700AE }
+ul.buttons li a.Color-DarkPurple {background: #5133AB }
+ul.buttons li a.Color-DarkPurple:hover {background: #643EBF }
+ul.buttons li a.Color-Teal, .Color-Default {background: #008299 }
+ul.buttons li a.Color-Teal:hover, .Color-Default:hover {background: #00A0B1 }
+ul.buttons li a.Color-Orange {background: #D24726 }
+ul.buttons li a.Color-Orange:hover {background: #DC572E }
+ul.buttons li a.Color-Blue {background: #2672EC }
+ul.buttons li a.Color-Blue:hover {background: #2E8DEF }
+ul.buttons li a.Color-SkyBlue {background: #094AB2 }
+ul.buttons li a.Color-SkyBlue:hover {background: #0A5BC4 }
+ul.buttons li a.Color-Red {background: #AC193D }
+ul.buttons li a.Color-Red:hover {background: #BF1E4B }
+ul.buttons li a.Color-Green {background: #008A00 }
+ul.buttons li a.Color-Green:hover {background: #00A600 }
+ul.buttons li a.Color-Yellow {background: #e8be1b }
+ul.buttons li a.Color-Yellow:hover {background: #f7d240 }
 </style>
 {% endblock %}
 
@@ -26,24 +45,37 @@ ul.buttons li a span.text { display: block; padding-top: 10px; font-size: 12pt; 
 {% endblock %}
 
 {% block content %}
+<img src="https://kif.d120.de/kiflogo.jpg" style="float:right;width:200px;">
+<h2>Öffentliche Dienste</h2>
+<ul class="buttons">
+  <li><a class='Color-Blue' href="https://kif.d120.de/twitterwall"><span class="fa fa-twitter"></span> <span class='text'>Twitterwall</span></a></li>
+  <li><a class="Color-DarkPurple" href="https://caroline.d120.de/apfifoges/"><span class="fa fa-home"></span> <span class='text'>APFIFoGeS</span></a></li>
+  <li><a class="Color-Orange" href="https://www.fachschaft.informatik.tu-darmstadt.de/"><span class="fa fa-home"></span> <span class='text'>d120.de</span></a></li>
+
+  <li><a class="Color-Green" href="{% url 'oplan:ak_wall' %}"><span class="fa fa-calendar"></span> <span class='text'>AK-Wall</span></a></li>
+</ul>
+
+<div class="clearfix"></div>
 <h2>Infopoint</h2>
 <ul class="buttons">
-  <li><a href="{% url 'oplan:ak_wall' %}"><span class="fa fa-calendar"></span> <span class='text'>AK-Wall (Kalender)</span></a></li>
-  <li><a href="{% url 'admin:kiffel_person_changelist' %}"><span class="fa fa-child"></span> <span class='text'>Anmeldung</span></a></li>
-  <li><a href="{% url 'kiffel:mobi' %}"><span class="fa fa-tablet"></span> <span class='text'>mobile Anmeldung</span></a></li>
-  <li><a href="{% url 'admin:eduroam_guestaccount_changelist' %}"><span class="fa fa-wifi"></span> <span class='text'>eduroam-Gastaccounts</span></a></li>
-  <li><a href="https://www2.fachschaft.informatik.tu-darmstadt.de/engelsystem/"><span class="fa fa-heart"></span> <span class='text'>Engelsystem</span></a></li>
-  <li><a href="https://kif.d120.de/schilder/"><span class="fa fa-language"></span> <span class='text'>Schildergenerator</span></a></li>
+  {% if user.is_staff %}
+  <li><a class="Color-Red" href="{% url 'oplan:ak_wall' %}"><span class="fa fa-calendar"></span> <span class='text'>AKs bearbeiten</span></a></li>
+  <li><a class="Color-Red" href="{% url 'admin:kiffel_person_changelist' %}"><span class="fa fa-child"></span> <span class='text'>Anmeldung</span></a></li>
+  <li><a class="Color-Red" href="{% url 'kiffel:mobi' %}"><span class="fa fa-tablet"></span> <span class='text'>mobile Anmeldung</span></a></li>
+  <li><a class="Color-Red" href="{% url 'admin:eduroam_guestaccount_changelist' %}"><span class="fa fa-wifi"></span> <span class='text'>eduroam-Gastaccounts</span></a></li>
+  {% else %}
+  <li><a class="Color-Red" href="{% url 'mysite_login' %}"><span class="fa fa-sign-in"></span> <span class='text'>Einloggen</span></a></li>
+
+  {% endif %}
 </ul>
 
 <div class="clearfix"></div>
 <h2>Weitere Ressourcen</h2>
 <ul class="buttons">
-  <li><a href="https://kif.d120.de/twitterwall"><span class="fa fa-twitter"></span> <span class='text'>Twitterwall</span></a></li>
-  <li><a href="https://orga.fachschaften.org/projects/kif-orga-440/issues"><span class="fa fa-paste"></span> <span class='text'>Orga-Wiki</span></a></li>
-  <li><a href="https://www2.fachschaft.informatik.tu-darmstadt.de/pad/"><span class="fa fa-pencil"></span> <span class='text'>Pad Manager</span></a></li>
-  <li><a href="https://kif.d120.de/"><span class="fa fa-share-alt"></span> <span class='text'>KIF 44.0 Hub</span></a></li>
-  <li><a href="https://www.fachschaft.informatik.tu-darmstadt.de/"><span class="fa fa-home"></span> <span class='text'>d120.de</span></a></li>
+  <li><a class="Color-DarkPurple" href="https://www2.fachschaft.informatik.tu-darmstadt.de/engelsystem/"><span class="fa fa-heart"></span> <span class='text'>Engelsystem</span></a></li>
+  <li><a class="Color-Yellow" href="https://kif.d120.de/schilder/"><span class="fa fa-language"></span> <span class='text'>Schildergenerator</span></a></li>
+  <li><a class="Color-Blue" href="https://orga.fachschaften.org/projects/kif-orga-440/issues"><span class="fa fa-paste"></span> <span class='text'>Orga-Wiki</span></a></li>
+  <li><a class="Color-Orange" href="https://www2.fachschaft.informatik.tu-darmstadt.de/pad/"><span class="fa fa-pencil"></span> <span class='text'>Pad Manager</span></a></li>
 </ul>
 
 <div class="clearfix"></div>
