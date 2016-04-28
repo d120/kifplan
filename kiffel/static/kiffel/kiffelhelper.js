@@ -8,7 +8,7 @@ $(function() {
         
         var data = {};
         if ($el.hasClass("datemark-yes")) {
-            if (!confirm("Möchtest du die Markierung \"" + $el.attr("title") + "\" wirklich aufheben?"))
+            if (!confirm("Möchtest du die Markierung wirklich aufheben?"))
                 return;
             data[field_name] = null;
         } else {

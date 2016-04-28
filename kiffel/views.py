@@ -1,4 +1,5 @@
 from django.views.generic import View
+from django.db.models import Q
 from django.http import HttpResponse
 from rest_framework import viewsets, permissions, filters
 from django.contrib.auth.models import Group
@@ -72,8 +73,16 @@ class Schildergenerator(View):
 
 def anmeldung_mobile(request, *args, **kwargs):
     if not request.user.has_perm('kiffel.change_person'): raise PermissionDenied
+    search = request.GET.get('search', '')
     people = Person.objects.filter(ist_kiffel=True)
-    return render(request, "kiffel/anmeldungmobile.html", { 'people': people })
+    if search != '':
+        search_fields = ['nickname','vorname','nachname','hochschule','email',]
+        queries = [Q(**{f: search}) for f in ["{0}__icontains".format(field) for field in search_fields]]
+        qs = Q()
+        for query in queries:
+            qs = qs | query
+        people = people.filter(qs)
+    return render(request, "kiffel/anmeldungmobile.html", { 'people': people, 'search': search })
 
 
 

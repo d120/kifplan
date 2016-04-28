@@ -149,12 +149,12 @@ class KiffelAdmin(admin.ModelAdmin):
     search_fields = ['nickname','vorname','nachname','hochschule','email',]
     
     actions = [
+            kiffel.admin_actions.generate_nametags,
+            kiffel.admin_actions.generate_part_cert,
             kiffel.admin_actions.mark_bezahlt_now,
             kiffel.admin_actions.mark_tuete_erhalten_now,
             kiffel.admin_actions.mark_baendchen_erhalten_now,
             kiffel.admin_actions.mark_teilnahmebestaetigung_erhalten_now,
-            kiffel.admin_actions.generate_nametags,
-            kiffel.admin_actions.generate_part_cert,
             kiffel.admin_actions.renew_kdv_barcode,
             kiffel.admin_actions.set_tu_darmstadt,
     ]

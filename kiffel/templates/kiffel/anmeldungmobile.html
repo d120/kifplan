@@ -1,22 +1,38 @@
 {% extends 'admin/base_site.html' %}
 
-{% block extrahead %}
-{{ block.super }}
-<meta name="viewport" content="width=480">
-<style>
+{% block nav-global %}{% endblock %}
 
-.datemark { width: 60px; }
-</style>
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <h3>Mobile Kiffel-Anmeldung</h3>
+</div>
 {% endblock %}
 
 {% block content %}
 
-<table>
+<p>Es werden nur Kiffel angezeigt (keine Darmstädter).</p>
+<p>Auf das Symbol klicken, um "Bändchen ausgegeben" zu markieren.</p>
+<p>Ist die gesuchte Person nicht enthalten? Bitte unter 06151 16-25522 die OvD anrufen.</p>
+
+<div class="padding-top-1"></div>
+
+<form action="" method="GET">
+  {% csrf_token %}
+  <b><label for="search">Suchen:</label></b>&nbsp;&nbsp;
+  <input type="text" name="search" value="{{ search }}" />
+  <input type="submit" value="OK" />
+</form>
+
+<div class="padding-top-1"></div>
+<div class="padding-top-1"></div>
+
 {% for p in people %}
-<tr><td>{{ p.nickname }}</td><td>{{ p.vorname }}</td><td>{{ p.nachname }}</td><td>{{ p.hochschule }}</td>
-</tr>
-<tr><td colspan=4>{{ p.datemarks|safe }}</td></tr>
+<div class="mobile-kiffel">
+  <p><b>{{ p.nickname }}</b></p>
+  <p>{{ p.vorname }} {{ p.nachname }}</p>
+  <p>{{ p.hochschule }}</p>
+  <p class="action">{{ p.mobile_datemarks|safe }}</p>
+</div>
 {% endfor %}
-</table>
 
 {% endblock %}

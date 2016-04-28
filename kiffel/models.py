@@ -156,6 +156,23 @@ class Person(PermissionsMixin, AbstractBaseUser):
         return "<nobr>" + o + "</nobr>"
     datemarks.short_description = "stuff"
     datemarks.allow_tags = True
+
+    def mobile_datemarks(self):
+        o = ""
+        o += self.get_datemark('glide-g', 'datum_baendchen_erhalten')
+        return "<nobr>" + o + "</nobr>"
+    datemarks.short_description = "mobile stuff"
+    datemarks.allow_tags = True
+    
+    @property
+    def is_staff(self):
+        return self.is_superuser or self.ist_orga
+
+    @property
+    def is_active(self):
+        return self.is_superuser or self.ist_orga or self.ist_helfer
+
+
     
     @property
     def is_staff(self):

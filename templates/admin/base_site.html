@@ -3,6 +3,8 @@
 
 {% block extrahead %}
 
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
 {% load static from staticfiles %}
 <link rel=stylesheet href="{% static 'oplan/vendor/fullcalendar/dist/fullcalendar.css' %}">
 <link rel=stylesheet href="{% static 'oplan/vendor/fullcalendar-scheduler/dist/scheduler.css' %}">
@@ -47,6 +49,7 @@ oplan.is_staff = "{{user.is_staff}}";
     <div class="ml menuddlink" data-target="#infopoint_dd">Infopoint
         <div id="infopoint_dd" class="ddmenu">
             <a href="{% url 'admin:kiffel_person_changelist' %}">Personen / Anmeldung</a>
+            <a href="{% url 'kiffel:mobi' %}">mobile Anmeldung</a>
             <a href="/admin/eduroam/guestaccount/?vergeben__exact=0">eduroam</a>
             <a href="{% url 'admin:oplan_ak_changelist' %}">AKs bearbeiten</a>
         </div>
