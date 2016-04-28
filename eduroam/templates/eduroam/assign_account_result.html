@@ -1,0 +1,55 @@
+{% extends 'admin/base_site.html' %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <h3>{{ title }}&nbsp;&nbsp;&nbsp;|||&nbsp;&nbsp;&nbsp;
+  <a href='{% url "admin:eduroam_guestaccount_changelist" %}'>Zurück</a></h3>
+</div>
+{% endblock %}
+
+{%block content_title%}
+{% endblock %}
+
+{% block content %}
+
+{% if status == "unavailable" %}
+
+  <h1>Fehler</h1>
+  <p>Es sind keine eduroam-Accounts mehr verfügbar. Bitte wende dich an die OvD.</p>
+
+{% else %}
+
+  <h1>eduroam Gastaccount wurde vergeben</h1>
+
+  <div class="prettyform">
+    <div class="formgroup">
+      <label>Login:</label>
+      <b>{{ account.login }}</b><br />
+    </div>
+    <div class="formgroup">
+      <label>Passwort:</label>
+      <b>{{ account.password }}</b><br />
+    </div>
+    <div class="formgroup">
+      <label>Gültig von:</label>
+      <b>{{ account.gueltig_von }}</b><br />
+    </div>
+    <div class="formgroup">
+      <label>Gültig bis:</label>
+      <b>{{ account.gueltig_bis }}</b><br />
+    </div>
+  </div>
+
+  <div class="padding-top-1"></div>
+  <h2>Folgende Person hat den eduroam-Account erhalten:</h2>
+  <p>
+    {{ account.vorname }} {{ account.nachname }}<br />
+    {{ account.perso_id }}
+  </p>
+
+  <h2>Ausgegeben durch:</h2>
+  <p>{{ account.vergeben_durch }} am {{ account.vergeben_am }}</p>
+
+{% endif %}
+
+{% endblock %}

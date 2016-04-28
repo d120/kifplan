@@ -1,9 +1,11 @@
+.padding-top-1 { padding-top: 1rem; }
 
 #header{background:#444;padding:0 40px;color:#eee;min-height:60px; box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.75); }
 #header #branding h1 { margin:0 10px 0 0; padding: 10px 0; font-size: 12pt; font-weight: bold; color: white; }
 #header #branding h1 a { color: white; text-decoration: none; }
 #header #user-tools { padding: 10px 0; height: 100%; }
 #header a.ml, #header div.ml {margin:0 10px; padding: 10px 10px; display:block;float:left;color:#ffffff;font-weight:bold;text-decoration:none;}
+#header div.ml { cursor: default; }
 #header a.ml:hover, #header div.ml:hover { text-decoration:none; background-color: #777; color: #fff; }
 
 #content{padding-bottom: 0;}
@@ -70,6 +72,4 @@ a.fc-event[href]:hover { text-decoration:underline; }
 .datemark-no { color: #bbbbbb; }
 .datemark-no:hover { color: #fff; background: #884444 }
 
-
-
-    
+.prettyform .formgroup label { display: inline-block; min-width: 250px; text-align: right; padding-right: 1rem; }

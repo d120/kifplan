@@ -304,7 +304,10 @@ def oplan_home(request, *args, **kwargs):
 
 def ak_details(request, akid, *args, **kwargs):
     ak = AK.objects.get(id=akid)
-    return render(request, "oplan/ak_import_view.html", { 'title': ak.titel, 'content': ak.beschreibung })
+    return render(request, "oplan/ak_details_view.html", { 'title': "AK-Details", 'ak': ak })
+
+def ak_wall(request, *args, **kwargs):
+    return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Wall',  })
 
 def akcalendar(request, *args, **kwargs):
     return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Kalender',  })

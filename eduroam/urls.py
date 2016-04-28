@@ -4,4 +4,5 @@ from . import views
 
 urlpatterns = [
     url(r'^import/', views.ImportGuestAccounts.as_view(), name='import_guest_acc'),
+    url(r'^assign/', views.AssignGuestAccount.as_view(), name='assign_guest_acc'),
 ]

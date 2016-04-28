@@ -1,0 +1,51 @@
+{% extends 'admin/base_site.html' %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <h3>{{ title }}&nbsp;&nbsp;&nbsp;|||&nbsp;&nbsp;&nbsp;
+  <a href='{% url "admin:eduroam_guestaccount_changelist" %}'>Zurück</a></h3>
+</div>
+{% endblock %}
+
+{%block content_title%}
+{% endblock %}
+
+
+{% block content %}
+
+<form action='' method='post' class="prettyform">
+
+  <h2>eduroam-Account an folgende Person ausgeben:</h2>
+  <div class="formgroup">
+    <label for="vorname">Vorname:</label>
+    <input type="text" name="vorname" /><br />
+  </div>
+  <div class="formgroup">
+    <label for="nachname">Nachname:</label>
+    <input type="text" name="nachname" />
+  </div>
+
+  <h2>Personalausweis überprüfen!</h2>
+  <div class="formgroup">
+    <label for="perso_id">optional: Personalausweisnummer:</label>
+    <input type="text" name="perso_id" />
+  </div>
+
+  <h2>Ausgebender Infopoint-Engel</h2>
+  <div class="formgroup">
+    <label for="vergeben_durch">Vergeben durch:</label>
+    <input type="text" name="vergeben_durch" value="{{current_user}}" />
+  </div>
+
+  {% csrf_token %}
+  <p class="padding-top-1"><input type=submit value='   Account vergeben   '></p>
+
+</form>
+
+<pre>
+{% autoescape off %}
+  {{ output|default:'' }}
+{% endautoescape %}
+
+</pre>
+{% endblock %}

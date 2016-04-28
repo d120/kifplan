@@ -24,7 +24,10 @@ class GuestAccount(models.Model):
     
     def __str__(self):
         return self.login
-    
+
     class Meta:
         ordering = ('login',)
         verbose_name = 'Gastaccount'
+        permissions = (
+            ('assign_guestaccount', 'Assign existing guest accounts'),
+        )

@@ -1,0 +1,15 @@
+{% extends 'oplan/header.html' %}
+{% block content %}
+
+<h1>{{ ak.titel }}</h1>
+
+<p><b>Von: </b> {{ ak.leiter }}</p>
+<p><b>Anzahl Menschen: </b> {{ ak.anzahl }}</p>
+<p><b><a href="{{ ak.wiki_link }}">Dieser AK im KIF-Wiki</a></b></p>
+
+<div class="padding-top-1"></div>
+<p>{{ ak.beschreibung }}</p>
+
+<div class="padding-top-1"></div>
+
+{% endblock %}

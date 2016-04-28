@@ -1,4 +1,3 @@
-
 from django.views.generic import View
 from django.db import IntegrityError
 from eduroam.models import GuestAccount
@@ -45,3 +44,26 @@ class ImportGuestAccounts(View):
         out += "OK"
         
         return render(request, "kiffel/import_csv_template.html", { 'title': 'Eduroam Gastaccounts importieren', 'output': out })
+
+
+class AssignGuestAccount(View):
+    def get(self, request, *args, **kwargs):
+        current_user = request.user.nickname
+        return render(request, "eduroam/assign_account.html", { 'title': 'eduroam Gastaccount neu vergeben', 'current_user': current_user })
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.has_perm('eduroam.assign_guestaccount'):
+            raise PermissionDenied
+        accounts = GuestAccount.objects.filter(vergeben=False)
+        if len(accounts) == 0:
+            return render(request, "eduroam/assign_account_result.html", { 'title': 'Vergebener eduroam Gastaccount', 'status': 'unavailable' })
+        account = accounts[0]
+        account.vorname = request.POST.get('vorname', '')
+        account.nachname = request.POST.get('nachname', '')
+        account.perso_id = request.POST.get('perso_id', '')
+        account.vergeben_durch = request.POST.get('vergeben_durch', '')
+        account.vergeben = True
+        account.vergeben_am = datetime.datetime.now()
+        account.save()
+        return render(request, "eduroam/assign_account_result.html", { 'title': 'Vergebener eduroam Gastaccount', 'status': 'ok', 'account': account })
+
