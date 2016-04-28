@@ -8,15 +8,23 @@
     <input type="radio" name="modus" id="mode_aktermin"><label for="mode_aktermin"> AKs / Termine</label>
     <input type="radio" name="modus" id="mode_akreadonly"><label for="mode_akreadonly"> AKs readonly</label>
 
+    <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'oplan:ak_wall_beamer' %}">Zur Beamer-Version</a></h3>
 {% endblock %}
+
+
+{% block header %}{% if not beamer %} {{ block.super }} {% endif %}{% endblock %}
+{% block breadcrumbs %}{% if not beamer %} {{ block.super }} {% endif %}{% endblock %}
+
 {% block content %}
 <div id="oplan">
 
-    
+  {% if beamer %} <div class="beamer"> {% endif %}
     <div id="unsched_aktermine"></div>
     <div class="calendar_content">
         <div id='calendar'></div>
     </div>
+  {% if beamer %} </div> {% endif %}
+
 </div>
 
 <script>

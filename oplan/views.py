@@ -299,7 +299,6 @@ def aklist(request, *args, **kwargs):
 
 
 def oplan_home(request, *args, **kwargs):
-    #return render(request, "oplan/ak_import_view.html", { 'titel': 'Moin moin', 'out': '',  })
     return redirect('oplan:ak_wall')
 
 def ak_details(request, akid, *args, **kwargs):
@@ -307,7 +306,10 @@ def ak_details(request, akid, *args, **kwargs):
     return render(request, "oplan/ak_details_view.html", { 'title': "AK-Details", 'ak': ak })
 
 def ak_wall(request, *args, **kwargs):
-    return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Wall',  })
+    return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Wall', 'beamer': False })
+
+def ak_wall_beamer(request, *args, **kwargs):
+    return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Wall', 'beamer': True  })
 
 def akcalendar(request, *args, **kwargs):
     return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Kalender',  })
@@ -318,13 +320,27 @@ def akbeamer(request, *args, **kwargs):
 def infoscreen(request, *args, **kwargs):
     now = datetime.datetime.now()
     if 'now' in request.GET: now = datetime.datetime.strptime(request.GET['now'], '%y-%m-%d-%H-%M')
-    
+
     current = AKTermin.objects.filter(start_time__lte=now, end_time__gte=now)
     upcoming = AKTermin.objects.filter(start_time__gte=now, start_time__lte=now+timedelta(hours=2))
-    
+
     return render(request, "oplan/infoscreen.html", {
         'title': 'Infoscreen ', 'now': now,
-        'current_akts': current, 'upcoming_akts': upcoming
+        'current_akts': current, 'upcoming_akts': upcoming,
+        'beamer': False
+    })
+
+def infoscreen_beamer(request, *args, **kwargs):
+    now = datetime.datetime.now()
+    if 'now' in request.GET: now = datetime.datetime.strptime(request.GET['now'], '%y-%m-%d-%H-%M')
+
+    current = AKTermin.objects.filter(start_time__lte=now, end_time__gte=now)
+    upcoming = AKTermin.objects.filter(start_time__gte=now, start_time__lte=now+timedelta(hours=2))
+
+    return render(request, "oplan/infoscreen.html", {
+        'title': 'Infoscreen ', 'now': now,
+        'current_akts': current, 'upcoming_akts': upcoming,
+        'beamer': True
     })
 
 def darwin_status(request, *args, **kwargs):

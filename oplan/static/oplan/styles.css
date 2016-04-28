@@ -38,6 +38,9 @@
 
 .mode_aktermin .calendar_content { margin-right: 170px; }
 
+.beamer .calendar_content { margin-right: 0; }
+.beamer .fc-toolbar { display: none; }
+
 .ddmenu { position: absolute; font-weight: normal; display: none; border: 1px solid #ddd; overflow-y: auto;  box-shadow: 1px 1px 6px #999; background: white; padding: 5px 0; min-width: 200px; z-index: 12; }
 .ddmenu div, .ddmenu a { display: block; padding: 8px 15px; cursor: default; color: #222 !important; line-height: 1.4; }
 .ddmenu div:hover { background: #eee; }

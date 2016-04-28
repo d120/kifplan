@@ -1,7 +1,13 @@
 {% extends 'oplan/header.html' %}
 {% block breadcrumbs %}
+  {% if not beamer %}
+  <div class="breadcrumbs">
+    <h3><a href="{% url 'oplan:infoscreen_beamer' %}">Zur Beamer-Version</a></h3>
+  </div>
+  {% endif %}
 {%endblock %}
 
+{% block header %}{% if not beamer %} {{ block.super }} {% endif %}{% endblock %}
 
 {% block content %}
 <meta http-equiv="refresh" content="60">
