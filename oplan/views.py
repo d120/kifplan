@@ -12,6 +12,8 @@ from django.core.urlresolvers import reverse
 
 import datetime
 from datetime import timedelta
+from django.utils import timezone
+
 
 from rest_framework import viewsets, permissions, filters
 
@@ -287,6 +289,9 @@ class ImportWikiAkListe(View):
 
 #//==> REGULAR VIEWS
 
+def clamp(n, smallest, largest):
+    return max(smallest, min(n, largest))
+
 def roomcalendar(request, roomnumber, *args, **kwargs):
     room = Room.objects.get(number=roomnumber)
     return render(request, "oplan/roomcalendar.html", { 'title': 'Rauminfo '+room.number, 'room': room })
@@ -308,10 +313,35 @@ def ak_details(request, akid, *args, **kwargs):
 def ak_wall(request, *args, **kwargs):
     return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Wall', 'beamer': False })
 
+def get_day_date(y,m,d):
+    return timezone.make_aware(datetime.datetime(year=y, month=m, day=d, hour=9, minute=0))
 def ak_wall_beamer(request, *args, **kwargs):
     akts = AKTermin.objects.all().order_by('start_time')
-    rooms = Room.objects.all().order_by('number')
-    return render(request, "oplan/akwallbeamer.html", { 'title': 'AK Wall', 'termine': akts, 'rooms': rooms  })
+    rooms = Room.objects.filter(visible=True).order_by('number')
+    days = [ (get_day_date(2016,5,5), [], []) ,
+             (get_day_date(2016,5,6), [], []) ,
+             (get_day_date(2016,5,7), [], []) , ]
+    pixpersec = 0.01
+    now = timezone.now()
+    
+    for daystart,list,hours in days:
+        daydate = daystart.date()
+        for i in range(0,18,2):
+            thishour = daystart+timedelta(hours=i)
+            secsfromstart = (thishour-daystart).total_seconds()
+            hours.append({ 'leftpixels': secsfromstart*pixpersec, 'start_time': thishour })
+        for t in akts:
+            if t.start_time.date() == daydate:
+                secsfromstart = (t.start_time-daystart).total_seconds()
+                t.leftpixels = secsfromstart * pixpersec
+                t.widthpixels = t.duration.total_seconds() * pixpersec - 2
+                if t.last_highlighted:
+                    t.red = int(255-clamp((now - t.last_highlighted).total_seconds() / 21600 * 155, 0,155))
+                else:
+                    t.red = 100
+                if t.leftpixels >= 0:
+                    list.append(t)
+    return render(request, "oplan/akwallbeamer.html", { 'title': 'AK Wall', 'days': days, 'rooms': rooms  })
 
 def akcalendar(request, *args, **kwargs):
     return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Kalender',  })

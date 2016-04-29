@@ -238,6 +238,7 @@ oplan.api = {
                         start_time: start.toISOString(),
                         end_time: end.toISOString(),
                         duration: 0, status: 4,
+                        last_highlighted: moment().toISOString(),
                     }, function(ok2) {
                         $('#calendar').fullCalendar('unselect');
                         $('#calendar').fullCalendar('refetchEvents');
@@ -329,6 +330,7 @@ oplan.api = {
             room: event.resourceId,
             start_time: event.start.toISOString(),
             end_time: event.end.toISOString(),
+            last_highlighted: moment().toISOString(),
         });
     },
     saveAkTerminRaw: function(terminId, postData) {

@@ -1,14 +1,50 @@
 <!doctype html>
 <html><head>
 
+<style>
+div.event {
+    position: absolute; overflow: hidden; height: 40px;
+    color: white;
+}
+div.event a { color: white; text-decoration: none; display: block; height: 40px; }
+div.hour { color: #777; border-left: 1px solid #999; padding-left: 5px; }
+td {height: 50px; vertical-align: top; }
+body {background: #111; color: #eee; }
+body,td { font-size: 8pt; font-family: Helvetica,sans-serif; }
+h4{ margin: 0; padding: 5px; background: #444; text-align: center; }
+</style>
+
 </head><body>
-<table border="1" style="table-layout: fixed;">
+
+{% load l10n %}
+
+<table border="1" style="table-layout: fixed; width: 100%">
+<tr><td style="width:100px;"><div align=right>Tag/Uhrzeit</div>Räume</td>
+{% for day,termine,hours in days %}
+<td style="width:650px">
+    <div><h4>{{ day|date:'D d.m.Y' }}</h4></div>
+    {% for t in hours %}
+        <div class="hour" style="margin-left:{{t.leftpixels|unlocalize}}px;position:absolute;">
+        {{ t.start_time|date:'H:i' }}</div>
+    {% endfor %}
+</td>
+{% endfor %}
+</tr>
 <tbody>
 {% for room in rooms %}
 <tr><td>{{ room.number }}</td>
-<td style="width:900px">xxx</td>
-<td style="width:900px">xxx</td>
-<td style="width:900px">xxx</td>
+{% for day,termine in days %}
+<td>
+    {% for t in termine %}
+    {% if t.room.id == room.id %}
+        <div class="event" 
+            style="margin-left:{{t.leftpixels|unlocalize}}px;width:{{t.widthpixels|unlocalize}}px;
+                border-top: 5px solid {{t.ak.color}}; background-color: rgba({{t.red}},100,100,0.8);">
+        <a href="{% url 'oplan:ak_details' t.ak.id %}">{{ t.ak.titel }}</a></div>
+    {% endif %}
+    {% endfor %}
+</td>
+{% endfor %}
 </tr>
 {% endfor %}
 </tbody>
