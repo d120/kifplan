@@ -321,7 +321,7 @@ def ak_wall_beamer(request, *args, **kwargs):
     days = [ (get_day_date(2016,5,5), [], []) ,
              (get_day_date(2016,5,6), [], []) ,
              (get_day_date(2016,5,7), [], []) , ]
-    pixpersec = 0.01
+    pixpersec = 0.007
     now = timezone.now()
     
     for daystart,list,hours in days:
@@ -341,7 +341,7 @@ def ak_wall_beamer(request, *args, **kwargs):
                     t.red = 100
                 if t.leftpixels >= 0:
                     list.append(t)
-    return render(request, "oplan/akwallbeamer.html", { 'title': 'AK Wall', 'days': days, 'rooms': rooms  })
+    return render(request, "oplan/akwallbeamer.html", { 'title': 'AK Wall', 'days': days, 'rooms': rooms, 'daywidth': 57600*pixpersec  })
 
 def akcalendar(request, *args, **kwargs):
     return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Kalender',  })

@@ -21,7 +21,7 @@ h4{ margin: 0; padding: 5px; background: #444; text-align: center; }
 <table border="1" style="table-layout: fixed; width: 100%">
 <tr><td style="width:100px;"><div align=right>Tag/Uhrzeit</div>Räume</td>
 {% for day,termine,hours in days %}
-<td style="width:650px">
+<td style="width:{{daywidth|unlocalize}}px">
     <div><h4>{{ day|date:'D d.m.Y' }}</h4></div>
     {% for t in hours %}
         <div class="hour" style="margin-left:{{t.leftpixels|unlocalize}}px;position:absolute;">
