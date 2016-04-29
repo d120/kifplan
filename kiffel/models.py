@@ -176,7 +176,7 @@ class Person(PermissionsMixin, AbstractBaseUser):
     
     @property
     def is_staff(self):
-        return self.is_superuser or self.ist_orga
+        return self.is_superuser or self.ist_orga or self.ist_helfer
 
     @property
     def is_active(self):

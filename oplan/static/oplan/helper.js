@@ -74,12 +74,12 @@ $(function() {
         var targetSel = $(this).attr("data-target");
         if (targetSel == "#raumliste" && !$("#raumliste").length) {
             var $lst = $("<div id=raumliste class=ddmenu></div>").appendTo(this);
-            $.get("/plan/api/room/", function(rooms) {
+            $.get("/plan/api/room/?visible="+oplan.is_staff, function(rooms) {
                 rooms.forEach(function(room) {
-                    $lst.append("\
-                        <a class='right' href='/admin/oplan/room/"+escape(room.id)+"/change/'>(edit)</a> \
-                        <a href='/plan/roomcalendar/"+escape(room.number)+"'>"+room.number+"</a> \
-                        ");
+                    $lst.append(
+                        (oplan.is_staff=="True" ? "<a class='right' href='/admin/oplan/room/"+escape(room.id)+"/change/'>(edit)</a> ":"") +
+                        "<a href='/plan/roomcalendar/"+escape(room.number)+"'>"+room.number+"</a> " +
+                        "");
                 });
             });
         }

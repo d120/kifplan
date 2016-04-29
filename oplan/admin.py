@@ -45,12 +45,13 @@ class AKAdmin(admin.ModelAdmin):
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
     # admin list table view
-    list_display = ['number', 'capacity', 'type', 'slots_link']
+    list_display = ['number', 'capacity', 'type', 'slots_link', 'visible',]
+    list_editable=['visible']
     list_display_links = ['number']
     
     fieldsets = (
       ('Allgemein', {
-          'fields': ('number', 'type', 'capacity',)
+          'fields': ('number', 'type', 'capacity', 'visible', )
       }),
       ('Ausstattung', {
           'fields': ('has_beamer',)

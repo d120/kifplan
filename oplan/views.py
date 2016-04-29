@@ -309,7 +309,9 @@ def ak_wall(request, *args, **kwargs):
     return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Wall', 'beamer': False })
 
 def ak_wall_beamer(request, *args, **kwargs):
-    return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Wall', 'beamer': True  })
+    akts = AKTermin.objects.all().order_by('start_time')
+    rooms = Room.objects.all().order_by('number')
+    return render(request, "oplan/akwallbeamer.html", { 'title': 'AK Wall', 'termine': akts, 'rooms': rooms  })
 
 def akcalendar(request, *args, **kwargs):
     return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Kalender',  })

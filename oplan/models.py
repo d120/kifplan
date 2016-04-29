@@ -138,7 +138,9 @@ class Room(models.Model):
     mgmt_id = models.CharField(max_length=50, blank=True, verbose_name=_('ID in Raumbuchungssystem'))
     mgmt_link = models.CharField(max_length=255, blank=True, verbose_name=_('Link zum Raumbuchungssystem'))
     mgmt_comment = models.CharField(max_length=255, blank=True)
-
+    
+    visible = models.BooleanField(default=False, verbose_name=_('Im Frontend sichtbar'))
+    
     def get_name(self):
         return self.number
     get_name.short_description = _('Name')
