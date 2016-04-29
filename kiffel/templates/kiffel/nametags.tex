@@ -4,28 +4,36 @@
 \documentclass{article}
 \usepackage{namensschilder}
 
+\newcommand{\schilder}[4]{
+  \Namensschild{#1}{#2}{#3}{#4}
+  \Namensschild{#1}{#2}{#3}{#4}
+}
+
+
 \begin{document}
 
 
 {% for kiffel in kiffels %}
 
-\Namensschild{
-  {% if kiffel.ist_anonym %} ~ {% else %} {{kiffel.nickname|default:'~'}} {% endif %}
-}{
-  {{kiffel.hochschule|default:'~'}}
-}{ {% if kiffel.ist_orga %} ORGA {% elif kiffel.ist_helfer %} HELFER {% else %} ~ {% endif %} }{
-  {{kiffel.get_barcode}}
-}
+  {% if kiffel.ist_anonym %}
 
-\Namensschild{
-  {% if kiffel.ist_anonym %} ~ {% else %} {{kiffel.nickname|default:'~'}} {% endif %}
-}{
-  {{kiffel.hochschule|default:'~'}}
-}{
-  {% if kiffel.ist_orga %} ORGA {% elif kiffel.ist_helfer %} HELFER {% else %} ~ {% endif %}
-}{
-  {{kiffel.get_barcode}}
-}
+    \schilder{ ~ }{ ~ }{  ~  }{ {{kiffel.get_barcode}} }
+
+  {% elif kiffel.ist_orga %}
+
+    \schilder{ {{kiffel.nickname|default:'~'}} }{ {{kiffel.hochschule|default:'~'}} }{ ORGA }{ {{kiffel.get_barcode}} }
+
+  {% else %}
+
+    {% if kiffel.ist_kiffel %}
+      \schilder{ {{kiffel.nickname|default:'~'}} }{ {{kiffel.hochschule|default:'~'}} }{ ~ }{ {{kiffel.get_barcode}} }
+    {% endif %}
+
+    {% if kiffel.ist_helfer %}
+      \schilder{ {{kiffel.nickname|default:'~'}} }{ {{kiffel.hochschule|default:'~'}} }{ HELFER }{ {{kiffel.get_barcode}} }
+    {% endif %}
+
+  {% endif %}
 
 {% endfor %}
 
