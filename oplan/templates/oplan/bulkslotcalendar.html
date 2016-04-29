@@ -1,15 +1,19 @@
-{% include 'oplan/header.html' %}
+{% extends 'oplan/header.html' %}
+{% block toolbar %}
+Bulk Add Events to {% for room in rooms %} {{ room.number }}, {% endfor %}  
+
+<input type="button" class="button default"  style="position:absolute;right:20px;margin-top:-26px;padding: 6px 16px;"
+    onclick="document.theForm.submit()" value="Slots zu allen Räumen hinzufügen" />
+{% endblock %}
+
+{% block content %}
 <div id="oplan">
 
-<form action="" method="post" id="theForm">
+<form action="" name="theForm" method="post" id="theForm">
 
 {% csrf_token %}
 
     {{ bulk_form }}
-    <div class="toolbar">
-    Bulk Add Events to {% for room in rooms %} {{ room.number }}, {% endfor %}
-    
-    </div>
     
     
     <div class="calendar_content">
@@ -25,19 +29,27 @@
 
 <script>
 
+var mySlots = [];
+
 $(document).ready(function() {
 
     // page is now ready, initialize the calendar...
-    var mySlots = [];
-    var id=1;
+    
+    var id=0;
     $('#calendar').fullCalendar(calendarDefaultOptions({
         defaultView: 'agendaWeek',
         
         select: function(start, end) {
-            mySlots.push({id:(id++),start:start, end:end, title:'New Slot'});
+            mySlots[id] = ({id:id,start:start, end:end, title:'New Slot'});
+            id++;
             $('#calendar').fullCalendar('refetchEvents');
             $('#calendar').fullCalendar('unselect');
-            
+        },
+        eventResize: function(event) {
+            mySlots[event.id] = event;
+        },
+        eventDrop: function(event) {
+            mySlots[event.id] = event;
         },
         
         height: window.innerHeight-111,
@@ -77,3 +89,4 @@ $(document).ready(function() {
 });
 </script>
 
+{% endblock %}
