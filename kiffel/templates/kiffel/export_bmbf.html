@@ -1,0 +1,40 @@
+{% extends 'admin/base_site.html' %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+ <a href='{% url "admin:kiffel_person_changelist" %}'>Zurück</a>
+|||
+<a href='{% url "kiffel:createanonym" %}'>Anonyme Accounts</a> |
+<a href='{% url "kiffel:import_personen" %}'>Import Anmeldung</a> |
+<a href='{% url "kiffel:import_personen_engel" %}'>Import Engelsystem</a> |
+<a href='{% url "kiffel:export_bmbf" %}'>Export BMBF</a>
+</div>
+{% endblock %}
+
+{%block content_title%}
+{% endblock %}
+
+{% block content %}
+
+<h1>BMBF-Export</h1>
+
+<p>Diese Felder jeweils in die Dateien <code>teilnehmer_mi.csv</code>, <code>teilnehmer_do.csv</code>, <code>teilnehmer_mi.csv</code>, <code>teilnehmer_sa.csv</code>, <code>teilnehmer_so.csv</code> eintragen. Anschließend <code>pdflatex bmbf_liste.tex</code> etc. ausführen.</p>
+
+<h3>Mittwoch</h3>
+<textarea name='content' style='width:90%;height:200px;background:#ffeeaa'>{{content|default:''}}</textarea>
+
+<h3>Donnerstag</h3>
+<textarea name='content' style='width:90%;height:200px;background:#ffeeaa'>{{content|default:''}}</textarea>
+
+<h3>Freitag</h3>
+<textarea name='content' style='width:90%;height:200px;background:#ffeeaa'>{{content|default:''}}</textarea>
+
+<h3>Samstag</h3>
+<textarea name='content' style='width:90%;height:200px;background:#ffeeaa'>{{content|default:''}}</textarea>
+
+<h3>Sonntag</h3>
+<textarea name='content' style='width:90%;height:200px;background:#ffeeaa'>{{content|default:''}}</textarea>
+
+<div class="padding-top-1"></div>
+
+{% endblock %}

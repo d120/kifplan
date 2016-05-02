@@ -1,0 +1,70 @@
+<div class="dashbox">
+<h2 align=center><big>{{now|date:"l"}}</big> {{now}}</h2>
+</div>
+<div class="dashbox">
+<h2 id="countdown" align=center></h2>
+</div>
+<script>
+function updCtd(){
+    var dur = moment.duration(moment("2016-05-04 15:00:00") - moment());
+    $("#countdown").html(" <big>Noch " + dur.days()+" Tage</big> "+dur.hours()+" Stunden "+dur.minutes()+" Minuten " + " bis zur KIF");}
+setInterval(updCtd,5000);
+updCtd();
+</script>
+<div class="dashbox">
+<h2>Gerade stattfindende AKs</h2>
+
+{% for akt in current_akts %}
+<div class="ak">
+    <time>{{ akt.start_time|date:"G" }}<small><u>{{ akt.start_time|date:"i" }}</u></small></time>
+    <span>{{ akt.room.number }}</span>
+    <div>
+        <h3>{{ akt.ak.titel }}</h3>
+        <p>{{ akt.ak.beschreibung|truncatewords:15 }}</p>
+    </div>
+</div>
+{% endfor %}
+</div>
+
+<div class="dashbox">
+<h2>In den nächsten zwei Stunden beginnende AKs</h2>
+
+
+{% for akt in upcoming_akts %}
+<div class="ak">
+    <time>{{ akt.start_time|date:"G" }}<small><u>{{ akt.start_time|date:"i" }}</u></small></time>
+    <span>{{ akt.room.number }}</span>
+    <div>
+        <h3>{{ akt.ak.titel }}</h3>
+        <p>{{ akt.ak.beschreibung|truncatewords:15 }}</p>
+    </div>
+</div>
+{% endfor %}
+</div>
+
+
+<style>
+.ak { background: #333; padding: 3px; margin: 3px 0; }
+.ak h3:first-line { font-size: 15pt; }
+.ak h3 { margin: 0; color: #fff; }
+.ak time { font-size: 20pt; }
+.ak time small { font-size: 12pt; display: inline-block; vertical-align:top; }
+.ak span { float: right; font-size: 20pt; }
+.ak div {  }
+.dashbox { border-radius: 2px; background: #222; padding: 1%; margin: 10px 1% 10px 0; }
+.dashbox h2 { margin: 0 0 5px 0; }
+h2 big{display:block;font-size:180%}
+body{background:black;color:#ccc;}
+
+@media screen and (min-width: 900px) {
+.dashbox { width: 45%;  padding: 1%; margin: 10px 1% 10px 0; float: left; }
+.ak time { float: left; width: 60px; }
+.ak span { }
+.ak div { margin-left: 60px; }
+}
+/*
+@media screen and (min-width: 1300px) {
+.dashbox { width: 30%;  padding: 1%; margin: 10px 1% 10px 0; }
+}
+*/
+</style>

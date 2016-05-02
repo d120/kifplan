@@ -63,6 +63,7 @@ ul.buttons li a.Color-Yellow:hover {background: #f7d240 }
   <li><a class="Color-Red" href="{% url 'admin:kiffel_person_changelist' %}"><span class="fa fa-child"></span> <span class='text'>Anmeldung</span></a></li>
   <li><a class="Color-Red" href="{% url 'kiffel:mobi' %}"><span class="fa fa-tablet"></span> <span class='text'>mobile Anmeldung</span></a></li>
   <li><a class="Color-Red" href="{% url 'admin:eduroam_guestaccount_changelist' %}"><span class="fa fa-wifi"></span> <span class='text'>eduroam-Gastaccounts</span></a></li>
+  <li><a class="Color-Red" href="http://caroline.d120.de/kdv/ui#admin/search"><span class="fa fa-money"></span> <span class='text'>KdV-Admin</span></a></li>
   {% else %}
   <li><a class="Color-Red" href="{% url 'mysite_login' %}"><span class="fa fa-sign-in"></span> <span class='text'>Einloggen</span></a></li>
 
@@ -81,6 +82,8 @@ ul.buttons li a.Color-Yellow:hover {background: #f7d240 }
 <div class="clearfix"></div>
 <h2>Anleitungen</h2>
 <ul>
+  <li>Checklisten für jeden Vorgang, den der Infopoint durchführen kann, sind im Infopoint- oder OvD-Ordner zu finden.</li>
   <li><a href="https://www.google.de/">Google (Suchmaschine)</a></li>
+  <li>Im Zweifel die Entwickler des Systems fragen: johnny und luelistan für die KIF-Verwaltung, Fabian und Felix für die KDV. Beim OvD anrufen.</li>
 </ul>
 {% endblock %}

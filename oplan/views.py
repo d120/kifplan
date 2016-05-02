@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 import datetime
 from datetime import timedelta
 from django.utils import timezone
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 
 from rest_framework import viewsets, permissions, filters
@@ -315,21 +316,26 @@ def ak_wall(request, *args, **kwargs):
 
 def get_day_date(y,m,d):
     return timezone.make_aware(datetime.datetime(year=y, month=m, day=d, hour=9, minute=0))
+
+
+@xframe_options_exempt
 def ak_wall_beamer(request, *args, **kwargs):
-    akts = AKTermin.objects.all().order_by('start_time')
+    akts = AKTermin.objects.filter(start_time__isnull=False).order_by('start_time')
     rooms = Room.objects.filter(visible=True).order_by('number')
     days = [ (get_day_date(2016,5,5), [], []) ,
              (get_day_date(2016,5,6), [], []) ,
              (get_day_date(2016,5,7), [], []) , ]
-    pixpersec = 0.007
+    pixpersec = 0.0103
+    if 'zoom' in request.GET: pixpersec=float(request.GET["zoom"])
     now = timezone.now()
-    
+    hoursperday = 16
     for daystart,list,hours in days:
         daydate = daystart.date()
-        for i in range(0,18,2):
+        for i in range(0,hoursperday,2):
             thishour = daystart+timedelta(hours=i)
             secsfromstart = (thishour-daystart).total_seconds()
             hours.append({ 'leftpixels': secsfromstart*pixpersec, 'start_time': thishour })
+            
         for t in akts:
             if t.start_time.date() == daydate:
                 secsfromstart = (t.start_time-daystart).total_seconds()
@@ -339,16 +345,21 @@ def ak_wall_beamer(request, *args, **kwargs):
                     t.red = int(255-clamp((now - t.last_highlighted).total_seconds() / 21600 * 155, 0,155))
                 else:
                     t.red = 100
+                
                 if t.leftpixels >= 0:
                     list.append(t)
-    return render(request, "oplan/akwallbeamer.html", { 'title': 'AK Wall', 'days': days, 'rooms': rooms, 'daywidth': 57600*pixpersec  })
+                
+                
+    return render(request, "oplan/akwallbeamer.html", { 'title': 'AK Wall', 'days': days, 'rooms': rooms, 'daywidth': hoursperday*3600*pixpersec  })
 
 def akcalendar(request, *args, **kwargs):
     return render(request, "oplan/akwallcalendar.html", { 'title': 'AK Kalender',  })
 
+@xframe_options_exempt
 def akbeamer(request, *args, **kwargs):
     return render(request, "oplan/akbeamer.html", { 'title': 'AK Wall',  })
 
+@xframe_options_exempt
 def infoscreen(request, *args, **kwargs):
     now = datetime.datetime.now()
     if 'now' in request.GET: now = datetime.datetime.strptime(request.GET['now'], '%y-%m-%d-%H-%M')
@@ -362,6 +373,7 @@ def infoscreen(request, *args, **kwargs):
         'beamer': False
     })
 
+@xframe_options_exempt
 def infoscreen_beamer(request, *args, **kwargs):
     now = datetime.datetime.now()
     if 'now' in request.GET: now = datetime.datetime.strptime(request.GET['now'], '%y-%m-%d-%H-%M')
@@ -369,7 +381,7 @@ def infoscreen_beamer(request, *args, **kwargs):
     current = AKTermin.objects.filter(start_time__lte=now, end_time__gte=now)
     upcoming = AKTermin.objects.filter(start_time__gte=now, start_time__lte=now+timedelta(hours=2))
 
-    return render(request, "oplan/infoscreen.html", {
+    return render(request, "oplan/infoscreenbeamer.html", {
         'title': 'Infoscreen ', 'now': now,
         'current_akts': current, 'upcoming_akts': upcoming,
         'beamer': True

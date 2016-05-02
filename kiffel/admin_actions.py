@@ -6,42 +6,34 @@ from datetime import datetime
 import csv , io
 
 def renew_kdv_barcode(modeladmin, request, queryset):
-    """
-    
-    """
     filename = '/tmp/oskiosk.csv'
     with open(filename, 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, delimiter=';', quoting=csv.QUOTE_ALL)
-        
+
         for kiffel in queryset:
             # Generates unique EAN 8 barcode if the barcode field is empty
             if kiffel.kdvuserbarcode_set.count() == 0:
                 kiffel.kdvuserbarcode_set.create(code=EAN8.get_random())
-                
+
             hochschule = "n/a"
             if kiffel.hochschule: hochschule=kiffel.hochschule
             csvwriter.writerow([ kiffel.nickname, kiffel.kdvuserbarcode_set.first().code, hochschule ])
-    
+
     with open(filename) as x: csvstring = x.read()
-    
+
     return render(request, "kiffel/import_csv_template.html", { "titel": "CSV-Datei zum Import in die KDV:","content": csvstring,
         "output": """<b>Die CSV-Datei wurde auf dem Server unter /tmp/oskiosk.csv abgelegt und kann wie folgt importiert werden:</b>
         su kdv
         RAILS_ENV=production rake 'import:boon:users[/tmp/oskiosk.csv]'
         """})
-    
+
 renew_kdv_barcode.short_description = 'KDV-Steuerdatei generieren'
 
 
 def set_tu_darmstadt(modeladmin, request, queryset):
-    """
-    
-    """
     for kiffel in queryset:
         kiffel.hochschule="TU Darmstadt"
         kiffel.save()
-    
-    
 set_tu_darmstadt.short_description = 'Auf TU Darmstadt zuweisen'
 
 
@@ -106,4 +98,3 @@ def mark_teilnahmebestaetigung_erhalten_now(modeladmin, request, queryset):
     """
     queryset.update(datum_teilnahmebestaetigung_erhalten = datetime.now())
 mark_teilnahmebestaetigung_erhalten_now.short_description = 'Als "Teilnahmebestätigung erhalten" markieren'
-

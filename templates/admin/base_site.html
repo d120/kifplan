@@ -39,7 +39,6 @@ oplan.is_staff = "{{user.is_staff}}";
 
 {% block nav-global %}
 
-    <a class="ml" href="/">Home</a>
     <a class="ml" href="{% url 'oplan:ak_wall' %}">AK-Wall</a>
     <a class="ml" href="{% url 'oplan:infoscreen' %}">Dashboard</a>
 
@@ -70,7 +69,7 @@ oplan.is_staff = "{{user.is_staff}}";
             <a href="{% url 'admin:index' %}">Übersicht</a>
             <a href="{% url 'admin:auth_group_changelist' %}">Gruppen</a>
             <a href="{% url 'admin:app_list' 'oplan' %}">Oplan</a>
-            <a href="{% url 'admin:kdvadmin_kdvproduct_changelist' %}">KDV-Produkte</a>
+            <a href="{% url 'admin:kdvadmin_kdvproduct_changelist' %}">KdV-Produkte</a>
         </div>
     </div>
     {% endif %}

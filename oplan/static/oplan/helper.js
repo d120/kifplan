@@ -237,7 +237,7 @@ oplan.api = {
                         room: room_id,
                         start_time: start.toISOString(),
                         end_time: end.toISOString(),
-                        duration: 0, status: 4,
+                        duration: (end-start)/1000, status: 4,
                         last_highlighted: moment().toISOString(),
                     }, function(ok2) {
                         $('#calendar').fullCalendar('unselect');

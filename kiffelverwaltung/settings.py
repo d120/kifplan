@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'oplan',
     'frontend',
     'kdvadmin',
+    'neuigkeiten',
 )
 
 MIDDLEWARE_CLASSES = (

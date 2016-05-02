@@ -1,27 +1,38 @@
 <!doctype html>
 <html><head>
-
+<meta http-equiv="refresh" content="60">
+<script src="/static/oplan/vendor/jquery/dist/jquery.min.js"></script>
 <style>
 div.event {
-    position: absolute; overflow: hidden; height: 40px;
-    color: white;
+    position: absolute; overflow: hidden; height: 60px;
+    color: white; word-wrap: break-word;
 }
-div.event a { color: white; text-decoration: none; display: block; height: 40px; }
+div.event a { color: white; text-decoration: none; display: block; height: 100%; }
 div.hour { color: #777; border-left: 1px solid #999; padding-left: 5px; }
-td {height: 50px; vertical-align: top; }
-body {background: #111; color: #eee; }
-body,td { font-size: 8pt; font-family: Helvetica,sans-serif; }
+td {__height: 65px; vertical-align: top; }
+body {background: #111;background:#000; color: #eee;}
+body,td { font-size: 12pt; font-family: Helvetica,sans-serif; }
 h4{ margin: 0; padding: 5px; background: #444; text-align: center; }
+table tr:nth-child(even) { background:#111; }
+
+{% if 'white' in request.GET %}
+div.event {background: #fff!important;}
+div.event a{color:black;}
+body{background:#ddd!important;color:#555;}
+.dateheader h4 {color: white;}
+table tr:nth-child(even) { background:#e7e7e7; }
+{% endif %}
 </style>
 
 </head><body>
 
 {% load l10n %}
 
-<table border="1" style="table-layout: fixed; width: 100%">
-<tr><td style="width:100px;"><div align=right>Tag/Uhrzeit</div>Räume</td>
+<table border="0" style="table-layout: fixed; width: 1000px; ">
+<tbody>
+<tr><td style="width:100px;height:50px;"><div align=right>Tag/Uhrzeit</div>Räume</td>
 {% for day,termine,hours in days %}
-<td style="width:{{daywidth|unlocalize}}px">
+<td style="width:{{daywidth|unlocalize}}px" class="dateheader">
     <div><h4>{{ day|date:'D d.m.Y' }}</h4></div>
     {% for t in hours %}
         <div class="hour" style="margin-left:{{t.leftpixels|unlocalize}}px;position:absolute;">
@@ -30,23 +41,83 @@ h4{ margin: 0; padding: 5px; background: #444; text-align: center; }
 </td>
 {% endfor %}
 </tr>
-<tbody>
 {% for room in rooms %}
-<tr><td>{{ room.number }}</td>
+<tr class=roomrow><td class=roomnumber>{{ room.number }}</td>
 {% for day,termine in days %}
-<td>
-    {% for t in termine %}
-    {% if t.room.id == room.id %}
-        <div class="event" 
+<td class=events>
+    {% for t in termine %}{% if t.room.id == room.id %}
+        <div class="event"
             style="margin-left:{{t.leftpixels|unlocalize}}px;width:{{t.widthpixels|unlocalize}}px;
-                border-top: 5px solid {{t.ak.color}}; background-color: rgba({{t.red}},100,100,0.8);">
-        <a href="{% url 'oplan:ak_details' t.ak.id %}">{{ t.ak.titel }}</a></div>
-    {% endif %}
-    {% endfor %}
+                border-top: 5px solid {{t.ak.color}}; background-color: rgba({{t.red}},100,100,0.8);background-color:#222;">
+        <a href="{% url 'oplan:ak_details' t.ak.id %}">{{ t.ak.titel.split|join:"&nbsp;" }}</a></div>
+    {% endif %}{% endfor %}
 </td>
 {% endfor %}
 </tr>
 {% endfor %}
 </tbody>
 </table>
+
+<script>
+function groupOverlappingEventElements($weekDay) {
+    var $events = $weekDay.find('.event');
+    var complexEvents = jQuery.map($events, function (element, index) {
+        var $event = $(element);
+        var left = parseFloat($event.css("margin-left"));
+        var width = $event.width();
+        var complexEvent = {
+            'event': $event,
+            'left': left,
+            'right': left + width
+        };
+        return complexEvent;
+    }).sort(function (a, b) {
+        var result = a.left - b.left;
+        if (result) {
+            return result;
+        }
+        return a.right - b.right;
+    });
+    var groups = new Array();
+    var currentGroup;
+    var lastright = -1;
+    jQuery.each(complexEvents, function (index, element) {
+        var complexEvent = element;
+        var $event = complexEvent.event;
+        var left = complexEvent.left;
+        var right = complexEvent.right;
+        //console.log($event.text(),lastright,left,right);
+        if (!currentGroup || lastright <= left) {
+            currentGroup = new Array();
+            groups.push(currentGroup);
+        }
+        currentGroup.push($event);
+        lastright = Math.max(lastright, right);
+    });
+    return groups;
+}
+function doResize() {
+    var count = $(".roomrow").length;
+    var height = window.innerHeight - 130;
+    var yy = Math.round(height / count);
+    $(".roomrow td").css("height", yy-1+"px");
+    $(".event").css("height", (yy-7)+"px");
+    $("td.events").each(function() {
+        var groups = groupOverlappingEventElements($(this));
+        for(var i in groups) {
+            var group = groups[i];
+            if (group.length > 1) {
+                var gh = ((yy-3)/group.length)-5;
+                //console.log(gh,group);
+                $(group).each(function(idx){ 
+                    $(this).css({"height":gh+"px","margin-top": (gh+6)*idx + "px"})
+                });
+            }
+        }
+    });
+}
+doResize();
+window.addEventListener("resize", doResize, false);
+</script>
+
 </body></html>

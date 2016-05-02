@@ -45,7 +45,7 @@ class AKTermin(models.Model):
     room = models.ForeignKey("Room", verbose_name=_('Raum'), null=True,blank=True)
     start_time = models.DateTimeField(verbose_name=_('Termin-Anfang'), null=True,blank=True)
     end_time = models.DateTimeField(verbose_name=_('Termin-Ende'), null=True,blank=True)
-    status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES)
+    status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=3)
     
     last_modified = models.DateTimeField(verbose_name=_('Zuletzt geändert'), auto_now=True)
     last_highlighted = models.DateTimeField(verbose_name=_('Änderungshighlight'), null=True, blank=True)

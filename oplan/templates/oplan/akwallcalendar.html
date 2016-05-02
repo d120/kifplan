@@ -9,7 +9,8 @@
     <input type="radio" name="modus" id="mode_aktermin"><label for="mode_aktermin"> AKs / Termine</label>
     <input type="radio" name="modus" id="mode_akreadonly"><label for="mode_akreadonly"> AKs readonly</label>
 
-    <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'oplan:ak_wall_beamer' %}">Zur Beamer-Version</a></h3>
+    <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'oplan:ak_wall_beamer' %}">Zur Beamer-Version</a>
+    &nbsp;&nbsp;<a href="{% url 'admin:oplan_ak_changelist' %}">Zur Liste</a></h3>
 {% endblock %}
 
 

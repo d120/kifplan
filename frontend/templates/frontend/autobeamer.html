@@ -1,0 +1,29 @@
+<!doctype html>
+<html><head>
+<style>
+html,body{margin:0;padding:0;height:100%;}
+iframe{width:100%;height:100%;border:0;}
+</style>
+<script>
+var index=0;
+window.onload=function(){
+    var iframes = document.getElementsByTagName("iframe");
+    setInterval(function() {
+        for(var i=0;i<iframes.length;i++) iframes[i].style.display = (index!=i)?"none":"block";
+        index = (index+1) % iframes.length;
+    },500);
+}
+</script>
+</head>
+<body>
+<iframe src="https://plan.kif.d120.de/plan/akwall/beamer/?white=true"></iframe>
+
+
+<iframe src="https://plan.kif.d120.de/plan/infoscreen/beamer/"></iframe>
+
+<iframe src="http://kif.d120.de:3033/"></iframe>
+
+<iframe src="https://moerderspiel.org/view?id=kif440"></iframe>
+
+</body>
+</html>
