@@ -1,7 +1,9 @@
 {% extends 'admin/base_site.html' %}
 
 {% block customstyle %}
-<link rel="stylesheet" href="" />
+<link rel="manifest" href="/static/oplan/manifest.json">
+<script src="/static/oplan/pushnotify.js"></script>
+
 <style>
 h2 { font-size: 2em; margin-top: .5rem; }
 .clearfix { display: block; clear: both; }
@@ -14,8 +16,18 @@ ul.buttons li a {
 ul.buttons li a:hover { background-color: #777; }
 ul.buttons li a .fa { font-size: 26pt; }
 ul.buttons li a span.text { display: block; padding-top: 10px; font-size: 12pt; }
-@media(screen and max-width: 400px) { ul.buttons li a { width: 140px; } }
-
+@media screen and (min-width: 500px) {
+    .col-md-6{ width: 50%; float: left; }
+    .col-md-big{ width: 63%; float: left; }
+    .col-md-small{ width: 36%; float: left; margin-left: 0.5%; }
+    .row::after { display:block;clear:left; }
+}
+@media screen and (max-width: 400px) { 
+    ul.buttons li a { width: 140px; margin: 0 5px 5px 0; }
+    #content{padding: 10px 5px;}
+ }
+article h4{ font-size: 120%; margin-bottom: 0; padding-bottom: 0; }
+article aside{ font-size: 90%; margin-top: 0; margin-bottom: 1em; color: #666; }
 
 ul.buttons li a.Color-Purple {background: #8C0095 }
 ul.buttons li a.Color-Purple:hover {background: #A700AE }
@@ -40,12 +52,20 @@ ul.buttons li a.Color-Yellow:hover {background: #f7d240 }
 
 {% block breadcrumbs %}
 <div class="breadcrumbs">
-<h3>Moin moin</h3>
+<span class="mobile-only">
+
+    <button onclick='location="{% url 'oplan:infoscreen' %}"'>Dashboard</button> 
+    <button onclick='location="#news"'> News</button> 
+</span>
+
+    <button disabled class="js-push-button" style="display:none">Push-Nachrichten einschalten</a>
+
 </div>
 {% endblock %}
 
 {% block content %}
-<img src="https://kif.d120.de/kiflogo.jpg" style="float:right;width:200px;">
+<div class="row"><div class="col-md-big">
+
 <h2>Öffentliche Dienste</h2>
 <ul class="buttons">
   <li><a class='Color-Blue' href="https://kif.d120.de/twitterwall"><span class="fa fa-twitter"></span> <span class='text'>Twitterwall</span></a></li>
@@ -53,17 +73,18 @@ ul.buttons li a.Color-Yellow:hover {background: #f7d240 }
   <li><a class="Color-Orange" href="https://www.fachschaft.informatik.tu-darmstadt.de/"><span class="fa fa-home"></span> <span class='text'>d120.de</span></a></li>
 
   <li><a class="Color-Green" href="{% url 'oplan:ak_wall' %}"><span class="fa fa-calendar"></span> <span class='text'>AK-Wall</span></a></li>
+  <li><a class="Color-Teal" href="https://kif.d120.de/workshop/"><span class="fa fa-pencil-square"></span> <span class='text'>Workshop-Anmeldung</span></a></li>
 </ul>
 
 <div class="clearfix"></div>
 <h2>Infopoint</h2>
 <ul class="buttons">
   {% if user.is_staff %}
-  <li><a class="Color-Red" href="{% url 'oplan:ak_wall' %}"><span class="fa fa-calendar"></span> <span class='text'>AKs bearbeiten</span></a></li>
+  <li><a class="Color-Red" href="{% url 'admin:oplan_ak_changelist' %}"><span class="fa fa-pencil"></span> <span class='text'>AKs bearbeiten</span></a></li>
   <li><a class="Color-Red" href="{% url 'admin:kiffel_person_changelist' %}"><span class="fa fa-child"></span> <span class='text'>Anmeldung</span></a></li>
   <li><a class="Color-Red" href="{% url 'kiffel:mobi' %}"><span class="fa fa-tablet"></span> <span class='text'>mobile Anmeldung</span></a></li>
   <li><a class="Color-Red" href="{% url 'admin:eduroam_guestaccount_changelist' %}"><span class="fa fa-wifi"></span> <span class='text'>eduroam-Gastaccounts</span></a></li>
-  <li><a class="Color-Red" href="http://caroline.d120.de/kdv/ui#admin/search"><span class="fa fa-money"></span> <span class='text'>KdV-Admin</span></a></li>
+  <li><a class="Color-Red" href="https://caroline.d120.de/kdv/ui#admin/search"><span class="fa fa-money"></span> <span class='text'>KdV-Admin</span></a></li>
   {% else %}
   <li><a class="Color-Red" href="{% url 'mysite_login' %}"><span class="fa fa-sign-in"></span> <span class='text'>Einloggen</span></a></li>
 
@@ -77,6 +98,7 @@ ul.buttons li a.Color-Yellow:hover {background: #f7d240 }
   <li><a class="Color-Yellow" href="https://kif.d120.de/schilder/"><span class="fa fa-language"></span> <span class='text'>Schildergenerator</span></a></li>
   <li><a class="Color-Blue" href="https://orga.fachschaften.org/projects/kif-orga-440/issues"><span class="fa fa-paste"></span> <span class='text'>Orga-Wiki</span></a></li>
   <li><a class="Color-Orange" href="https://www2.fachschaft.informatik.tu-darmstadt.de/pad/"><span class="fa fa-pencil"></span> <span class='text'>Pad Manager</span></a></li>
+  <li><a class="Color-SkyBlue" href="http://kif.d120.de/beamer/"><span class="fa fa-television"></span> <span class='text'>Beamer</span></a></li>
 </ul>
 
 <div class="clearfix"></div>
@@ -86,4 +108,25 @@ ul.buttons li a.Color-Yellow:hover {background: #f7d240 }
   <li><a href="https://www.google.de/">Google (Suchmaschine)</a></li>
   <li>Im Zweifel die Entwickler des Systems fragen: johnny und luelistan für die KIF-Verwaltung, Fabian und Felix für die KDV. Beim OvD anrufen.</li>
 </ul>
+
+</div><div class="col-md-small">
+<p><center>
+<img src="https://kif.d120.de/kiflogo.jpg" style="width:300px;max-width:80%;" >
+</center></p>
+
+<a name="news"></a>
+<h2>News</h2>
+
+{% for item in news %}
+<article>
+<h4>{{item.title}}</h4>
+<aside>Veröffentlicht von {{item.author}} am {{item.published_date|date:'d. M Y'}} um {{item.published_date|date:'H:i'}} Uhr </aside>
+<p>{{item.content_text}}</p>
+</article>
+{% endfor %}
+
+<p><a href="{% url 'neuigkeiten:list_all' %}">Mehr ...</a></p>
+
+</div></div>
+
 {% endblock %}

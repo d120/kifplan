@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^$', views.oplan_home, name="oplan_home"),
     url(r'^api/', include(api_router.urls)),
     url(r'akwall/$', views.ak_wall, name="ak_wall"),
+    url(r'check_constraints/$', views.check_all_constraints, name="check_constraints"),
     url(r'akwall/beamer/$', views.ak_wall_beamer, name="ak_wall_beamer"),
     url(r'ak/(?P<akid>[0-9]+)/$', views.ak_details, name="ak_details"),
     url(r'infoscreen/$', views.infoscreen, name="infoscreen"),
@@ -29,6 +30,8 @@ urlpatterns = [
     
     url(r'import/aks-wiki/$', views.ImportWikiAkListe.as_view(), name="import_aks_wikitext"),
     url(r'roomevents/$', views.RoomAvailabilityApi.as_view(), name="room_get_slots"),
+    
+    
     
     #url(r'signs/$', views.Schildergenerator.as_view()),
 ]

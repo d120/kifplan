@@ -40,6 +40,19 @@
     </div>
   </div>
 
+  <p>
+    Beispielhafte Einstellungen:
+    <ul>
+      <li>Netzwerktyp: WPA2 Enterprise</li>
+      <li>Äußere Legitimierung: PEAP</li>
+      <li>Anonyme Identität: anonymous@tu-darmstadt.de</li>
+      <li>CA-Zertifikat (kann technisch gesehen ignoriert werden, für bessere Sicherheit aber dringend empfohlen): Root-Zertifikat der Deutsche Telekom CA2 herunterladen von <a href="https://www.pki.dfn.de/root/globalroot/">https://www.pki.dfn.de/root/globalroot/</a></li>
+      <li>Innere Legitimierung: MSCHAPv2</li>
+      <li>Benutzername: {{ account.login }}@tu-darmstadt.de</li>
+      <li>Passwort: {{ account.password }}</li>
+    </ul>
+  </p>
+
   <div class="padding-top-1"></div>
   <h2>Folgende Person hat den eduroam-Account erhalten:</h2>
   <p>

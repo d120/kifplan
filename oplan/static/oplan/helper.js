@@ -3,11 +3,13 @@
 //==> MessageBar helper
 
 function MessageBar() {
-    this.show = function(className, text, interval) {
+    this.show = function(className, text, interval, isHtml) {
       var id = "loadingWidget_" + className;
       if ($('#'+id).length == 0)
-        $('<div id="'+id+'" class="messageBar"></div>').prependTo("body");
-      $('#'+id).text(text).addClass(className).slideDown();
+        $('<div id="'+id+'" class="messageBar"></div>').prependTo("body").click(function(){messageBar.hide(className)});
+      var $el = $('#'+id);
+      if (isHtml) $el.html(text); else $el.text(text);
+      $el.addClass(className).slideDown();
       if (interval) setInterval(function() { messageBar.hide(className); }, interval);
     };
     this.hide = function(className) {
@@ -65,6 +67,42 @@ function CloseContextMenu(event, menuItems) {
 
 
 //==>
+//==> make new stuff red
+// Converts a #ffffff hex string into an [r,g,b] array
+var h2r = function(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if( result ) return [
+        parseInt(result[1], 16),
+        parseInt(result[2], 16),
+        parseInt(result[3], 16)
+    ];
+    var result = /^rgb\(([\d]+),\s*([\d]+),\s*([\d]+)\)$/i.exec(hex);
+    if( result ) return [
+        parseInt(result[1], 10),
+        parseInt(result[2], 10),
+        parseInt(result[3], 10)
+    ];
+    return null;
+};
+var _interpolateColor = function(color1, color2, factor) {
+  if (arguments.length < 3) { factor = 0.5; }
+  var result = color1.slice();
+  for (var i=0;i<3;i++) {
+    result[i] = Math.round(result[i] + factor*(color2[i]-color1[i]));
+  }
+  return result;
+};
+function make_new_stuff_red($el) {
+    var age = parseInt($el.attr("data-age"));
+    var oldAge = parseInt($el.attr("data-old"));
+    if (!oldAge) oldAge = 21600;
+    var curColorAttr = $el.css("background-color");
+    var curColor = h2r(curColorAttr);
+    var redColor = [255,0,0];
+    //TODO var newColor = _interpolateColor(curColor, redColor, Math.max(0, age - oldAge)
+}
+
+//==>
 //==> Startup Code OPLAN
 
 $(function() {
@@ -89,6 +127,8 @@ $(function() {
         var targetSel = $(this).attr("data-target");
         $(targetSel).hide();
     });
+    
+    //$("[data-age]").each(make_new_stuff_red);
     
 });
 
@@ -145,6 +185,12 @@ function getEventContextMenu(event, jsEvent) {
         if (event.termin_id) {
             menu["AK bearbeiten"] = function() {
                 window.open(event.edit_ak_url+"?_popup=1", "", "width=800,height=600,scrollbars=yes");
+            };
+            menu["Auf Änderung hinweisen"] = function() {
+                $.post("/plan/api/akmodified/", { aktermin_id: event.termin_id },
+                function(data) {
+                        messageBar.show("success", "Der AK wurde als verändert markiert. "+data.number+" Push-Benachrichtigungen wurden versandt.", 2000);
+                });
             };
         }
         if (event.editable && event.avail_id) {
@@ -326,6 +372,8 @@ oplan.api = {
     },
 
     saveAkTermin: function (event) {
+        console.log(event.start,event.end,event.duration);
+        if (!event.end) event.end = moment(event.start).add(moment.duration(event.duration));
         oplan.api.saveAkTerminRaw(event.termin_id, {
             room: event.resourceId,
             start_time: event.start.toISOString(),
@@ -338,11 +386,36 @@ oplan.api = {
             url: "/plan/api/aktermin/"+terminId+"/", 
             data: postData,
             method: "PATCH",
-            success: function(ok) {
+            success: function(ok) {console.log(ok);
                 $('#calendar').fullCalendar('unselect');
+                oplan.api.checkConflicts(terminId);
                 $('#calendar').fullCalendar('refetchEvents');
-                messageBar.show('success', 'Änderungen am AK-Termin '+event.titel+' wurden gespeichert', 1500);
+                messageBar.show('success', 'Änderungen am AK-Termin #'+ok.id+' '+ok.ak_titel+' wurden gespeichert', 1500);
                 oplan.api.loadUnschedAkTermine();
+            }
+        });
+    },
+    checkConflicts: function(terminId) {
+        messageBar.hide('warning');
+        $.get("/plan/api/aktermin/"+terminId+"/check_constraints", function(result) {
+            var out = [];
+            if (result.constraints.fail.length > 0) {
+                out.push( "Folgende Einschränkungen dieses Termins werden verletzt:" );
+                for(var i in result.constraints.fail) {
+                    var ctr = result.constraints.fail[i];
+                    out.push( " - " + ctr[2] );
+                }
+            }
+            if (result.constraints.reverse_fail.length > 0) {
+                out.push( "Folgende Einschränkungen anderer Termine werden verletzt:" );
+                for(var i in result.constraints.reverse_fail) {
+                    var ctr = result.constraints.reverse_fail[i];
+                    out.push( " - " + ctr[0] + " *** " + ctr[1][2] );
+                }
+            }
+            if (out.length > 0) {
+                messageBar.hide('success');
+                messageBar.show("warning", out.join("<br>"), null, true);
             }
         });
     },

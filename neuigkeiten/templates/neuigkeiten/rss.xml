@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<rss version="2.0">
+
+  <channel>
+    <title>Neuigkeiten zur KIF</title>
+    <link>https://plan.kif.d120.de</link>
+    <description>Neuigkeiten zur KIF</description>
+    <language>de-DE</language>
+    <copyright>Fachschaft Informatik</copyright>
+    
+    {% for item in items%}
+    <item>
+      <title>{{item.title}}</title>
+      <description>{{item.content_text}}</description>
+      <author>{{item.author}}</author>
+      <guid>news-{{item.id}}</guid>
+      <pubDate>{{item.published_date|date:"D, d M Y H:i:s O"}}</pubDate>
+    </item>
+    {% endfor %}
+    
+  </channel>
+
+</rss>

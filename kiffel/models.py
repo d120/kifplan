@@ -91,7 +91,8 @@ class Person(PermissionsMixin, AbstractBaseUser):
 
     # User fields
     email = models.EmailField(null=True, blank=True, verbose_name='E-Mail', unique=True)
-
+    is_active = models.BooleanField(default=True, verbose_name='Benutzer kann sich einloggen')
+    
     objects = MyUserManager()
 
     USERNAME_FIELD = 'email'
@@ -164,29 +165,21 @@ class Person(PermissionsMixin, AbstractBaseUser):
     datemarks.short_description = "mobile stuff"
     datemarks.allow_tags = True
     
-    @property
-    def is_staff(self):
-        return self.is_superuser or self.ist_orga
 
-    @property
-    def is_active(self):
-        return self.is_superuser or self.ist_orga or self.ist_helfer
-
-
-    
     @property
     def is_staff(self):
         return self.is_superuser or self.ist_orga or self.ist_helfer
 
-    @property
-    def is_active(self):
-        return self.is_superuser or self.ist_orga or self.ist_helfer
 
 
 class KDVUserBarcode(models.Model):
     class Meta:
         db_table  = 'kdv_user_identifiers'
-    code = models.CharField(null=True, blank=True, max_length=255, verbose_name='Barcode')
+        managed = False
+    
+    def randomcode():
+        return EAN8.get_random()
+    code = models.CharField(null=True, blank=True, max_length=255, verbose_name='Barcode', default=randomcode)
     identifiable = models.ForeignKey(Person, on_delete=models.CASCADE)
     identifiable_type = models.CharField(max_length=255, default='User') #models.ForeignKey(ContentType, on_delete=models.CASCADE)
     #identifiable = GenericForeignKey('identifiable_type', 'identifiable_id')

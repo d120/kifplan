@@ -1,4 +1,25 @@
 {% extends 'oplan/header.html' %}
+{% block extrahead %}
+{{block.super}}
+<link rel="manifest" href="/static/oplan/manifest.json">
+<script src="/static/oplan/pushnotify.js"></script>
+<script>
+oplan.current_ak_id = {{ak.id}};
+</script>
+{% endblock %}
+
+
+{% block toolbar %}
+<div>
+    <button id="bookmark_btn" disabled>Als Interessant markieren</button>
+    
+    
+    <button id="edit_btn" onclick="location='{% url 'admin:oplan_ak_change' ak.id %}'">Bearbeiten</button>
+    
+</div>
+{% endblock %}
+
+
 {% block content %}
 
 <h1>{{ ak.titel }}</h1>

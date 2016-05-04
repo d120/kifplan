@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 
 {% load static from staticfiles %}
+<link rel=icon href="{% static 'kiffel/favicon.ico' %}">
 <link rel=stylesheet href="{% static 'oplan/vendor/fullcalendar/dist/fullcalendar.css' %}">
 <link rel=stylesheet href="{% static 'oplan/vendor/fullcalendar-scheduler/dist/scheduler.css' %}">
 
@@ -25,6 +26,8 @@
 <script>
 oplan.is_staff = "{{user.is_staff}}";
 </script>
+<link rel="alternate" type="application/rss+xml"
+   title="RSS" href="{% url 'neuigkeiten:list_rss' %}" />
 {% endblock %}
 
 
@@ -32,7 +35,7 @@ oplan.is_staff = "{{user.is_staff}}";
 
 {% block branding %}
 <h1 id="site-name">
-  <a href="/"><i class="fa fa-gears"></i>&nbsp;&nbsp;KIF Verwaltung</a>
+  <a href="/"><i class="fa fa-bars mobile-only"></i><i class="fa fa-map mobile-hidden"></i>&nbsp;&nbsp;KIFPlan</a>
 </h1>
 {% endblock %}
 
@@ -47,7 +50,7 @@ oplan.is_staff = "{{user.is_staff}}";
     {% if user.is_staff %}
     <div class="ml menuddlink" data-target="#infopoint_dd">Infopoint
         <div id="infopoint_dd" class="ddmenu">
-            <a href="{% url 'admin:kiffel_person_changelist' %}">Personen / Anmeldung</a>
+            <a href="{% url 'admin:kiffel_person_changelist' %}">Anmeldung</a>
             <a href="{% url 'kiffel:mobi' %}">mobile Anmeldung</a>
             <a href="/admin/eduroam/guestaccount/?vergeben__exact=0">eduroam</a>
             <a href="{% url 'admin:oplan_ak_changelist' %}">AKs bearbeiten</a>
@@ -67,6 +70,8 @@ oplan.is_staff = "{{user.is_staff}}";
     <div class="ml menuddlink" data-target="#admin_dd">Administration
         <div id="admin_dd" class="ddmenu">
             <a href="{% url 'admin:index' %}">Übersicht</a>
+            <a href="{% url 'admin:neuigkeiten_beitrag_changelist' %}">Neuigkeiten</a>
+            <a href="{% url 'admin:kiffel_person_changelist' %}">Personen</a>
             <a href="{% url 'admin:auth_group_changelist' %}">Gruppen</a>
             <a href="{% url 'admin:app_list' 'oplan' %}">Oplan</a>
             <a href="{% url 'admin:kdvadmin_kdvproduct_changelist' %}">KdV-Produkte</a>
@@ -80,14 +85,13 @@ oplan.is_staff = "{{user.is_staff}}";
 <div id="user-tools">
 {% if user.is_authenticated %}
     {% block welcome-msg %}
-        <strong>{% firstof user.get_short_name user.get_username %}</strong> &nbsp;|&nbsp;
+        <strong class="uml">{% firstof user.get_short_name user.get_username %}</strong> 
     {% endblock %}
-    {% block userlinks %}
         {% if user.has_usable_password %}
-        <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> &nbsp;|&nbsp;
+        <a class="uml" href="{% url 'admin:password_change' %}" title="{% trans 'Change password' %}"><span class="fa fa-key"></span></a>
         {% endif %}
-        <a href="{% url 'mysite_logout' %}">{% trans 'Log out' %}</a>
-    {% endblock %}
+        <a class="uml" href="{% url 'mysite_logout' %}" title="{% trans 'Log out' %}"><span class="fa fa-sign-out"></span></a>
+    
 {% else %}
     <a href="{% url 'mysite_login' %}">{% trans 'Log in' %}</a>
 {% endif %}

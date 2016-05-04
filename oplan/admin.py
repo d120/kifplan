@@ -6,9 +6,21 @@ from oplan.models import AK, Room, RoomAvailability, AKTermin
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 
-class AKTerminInline(admin.StackedInline):
+from ajax_select import make_ajax_form
+from ajax_select.admin import AjaxSelectAdminStackedInline
+
+class AKTerminInline(AjaxSelectAdminStackedInline):
     model = AKTermin
     extra = 0
+    form = make_ajax_form(AKTermin, {
+            #item_code is a lookup channel
+            'constraintRooms': 'room_lookup',
+            'constraintNotParallelWithEvents': 'aktermin_lookup', 
+            'constraintForceParallelWithEvents': 'aktermin_lookup', 
+            'constraintBeforeEvents': 'aktermin_lookup', 
+            'constraintAfterEvents': 'aktermin_lookup', 
+             },
+           show_help_text=False, help_text=None)
     fieldsets = (
       ('', {
           'fields': ('duration',)
@@ -24,7 +36,7 @@ class AKTerminInline(admin.StackedInline):
           'classes': ('collapse',),
           'fields': ('room', 'start_time', 'status', 'kommentar',)
       }),
-    )
+    )   
     
 
 @admin.register(AK)
@@ -133,5 +145,7 @@ class AKTerminAdmin(admin.ModelAdmin):
             akt.status = 3
             akt.save()
     set_unscheduled.short_description = 'Bei nächster automatischer Zuordnung berücksichtigen'
+
+
 
 

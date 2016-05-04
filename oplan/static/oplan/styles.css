@@ -5,8 +5,10 @@
 #header #branding h1 a { color: white; text-decoration: none; }
 #header #user-tools { padding: 10px 0; height: 100%; }
 #header a.ml, #header div.ml {margin:0 ; padding: 10px 15px; display:block;float:left;color:#ffffff;font-weight:bold;text-decoration:none;}
+#header .uml {margin:0 ; padding: 10px 15px; display:inline-block;color:#ffffff;font-weight:bold;text-decoration:none; }
 #header div.ml { cursor: default; }
-#header a.ml:hover, #header div.ml:hover { text-decoration:none; background-color: #777; color: #fff; }
+#header a.ml:hover, #header div.ml:hover, #header a.uml:hover { text-decoration:none; background-color: #777; color: #fff; }
+#header #user-tools {padding:0;}
 
 #content{padding-bottom: 0;}
 #footer{padding:0;}
@@ -26,6 +28,7 @@
 }
 .messageBar.error { background: #E53935;  }
 .messageBar.success { background: #43a047;  }
+.messageBar.warning { background: #d09d47;  }
 
 .menudropdown { position: absolute; background: #000; z-index: 9001; min-width: 200px; }
 .menudropdown a { display:block; margin: 0; padding: 5px; }
@@ -41,11 +44,15 @@
 .beamer .calendar_content { margin-right: 0; }
 .beamer .fc-toolbar { display: none; }
 
-.ddmenu { position: absolute; font-weight: normal; display: none; border: 1px solid #ddd; overflow-y: auto;  box-shadow: 1px 1px 6px #999; background: white; padding: 5px 0; min-width: 200px; z-index: 12; }
-.ddmenu div, .ddmenu a { display: block; padding: 8px 15px; cursor: default; color: #222 !important; line-height: 1.4; }
-.ddmenu div:hover { background: #eee; }
+.ddmenu, .ui-autocomplete  { position: absolute; font-weight: normal; display: none; border: 1px solid #ddd; overflow-y: auto;  box-shadow: 1px 1px 6px #999; background: white; padding: 5px 0; min-width: 200px; z-index: 12; }
+.ddmenu div, .ddmenu a, .ui-autocomplete .ui-menu-item { display: block; padding: 8px 15px; cursor: default; color: #222 !important; line-height: 1.4; }
+.ddmenu div:hover, .ui-autocomplete .ui-menu-item.ui-state-focus { background: #eee; }
 .ddmenu div.disabled, .ddmenu div.disabled:hover { color: #777; background: inherit; }
 .ddmenu .right { float:right; }
+
+form .aligned .results_on_deck { margin-left: 180px!important; }
+.results_on_deck .ui-icon { padding: 1px 4px; color: red; }
+
 
 #header .ddmenu { position: absolute; top: 58px; left: -5px; font-weight: normal; display: none; border: none; overflow-y: auto;  box-shadow: 2px 2px 6px #999, -2px 2px 6px #999; background: #444; padding:  0; min-width: 200px; z-index: 9999; }
 #header .ddmenu div, #header .ddmenu a { display: block; padding: 5px 20px; cursor: pointer; color: #fff !important; line-height: 1.4; text-decoration: none; }
@@ -59,15 +66,19 @@ a.fc-event[href]:hover { text-decoration:underline; }
 .fc-bgevent-container .fc-bgevent {border:1px solid black }
 .fc-event.bigtop { border-top-width: 5px; }
 
+    .mobile-only{display:none!important}
 @media screen and (max-width: 899px) {
     #content{ padding: 20px 10px; }
     #mainMenu{ padding: 10px ; }
     #container {min-width:inherit;width:inherit;position:inherit;}
-    #header{width:inherit;height:auto;}
+    #header{width:inherit;height:auto;padding: 0 5px;}
+    div.breadcrumbs {  padding: 10px 5px; }
     #header #user-tools { }
     #header #user-tools > * {text-transform:none;}
     
     #header .ml { display: none!important; }
+    .mobile-hidden{display:none!important}
+    .mobile-only{display:inherit!important}
 }
 
 .datemark { padding: 4px 0; margin: -4px 0; text-align: center; font-size: 140%; width: 1.6em; display: inline-block; cursor: pointer; }
@@ -80,3 +91,8 @@ a.fc-event[href]:hover { text-decoration:underline; }
 
 .mobile-kiffel { position: relative; padding: 15px; border: 1px solid #444; border-radius: 3px; margin-bottom: 1rem; }
 .mobile-kiffel .action { position: absolute; top: 5px; right: 15px; font-size: 4em; }
+
+
+/* make datetime boxes in admin single-line */
+p.datetime br {display:none}
+p.datetime .datetimeshortcuts{padding-right:20px;}

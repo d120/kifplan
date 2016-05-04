@@ -15,8 +15,7 @@ body,td { font-size: 12pt; font-family: Helvetica,sans-serif; }
 h4{ margin: 0; padding: 5px; background: #444; text-align: center; }
 table tr:nth-child(even) { background:#111; }
 
-{% if 'white' in request.GET %}
-div.event {background: #fff!important;}
+{% if is_white %}
 div.event a{color:black;}
 body{background:#ddd!important;color:#555;}
 .dateheader h4 {color: white;}
@@ -48,7 +47,7 @@ table tr:nth-child(even) { background:#e7e7e7; }
     {% for t in termine %}{% if t.room.id == room.id %}
         <div class="event"
             style="margin-left:{{t.leftpixels|unlocalize}}px;width:{{t.widthpixels|unlocalize}}px;
-                border-top: 5px solid {{t.ak.color}}; background-color: rgba({{t.red}},100,100,0.8);background-color:#222;">
+                border-top: 5px solid {{t.ak.color}}; background-color: {{t.red}};">
         <a href="{% url 'oplan:ak_details' t.ak.id %}">{{ t.ak.titel.split|join:"&nbsp;" }}</a></div>
     {% endif %}{% endfor %}
 </td>

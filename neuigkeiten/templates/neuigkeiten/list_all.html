@@ -1,0 +1,37 @@
+{% extends 'oplan/header.html' %}
+{% block extrahead %}
+<!-- do not remove: {%csrf_token%} -->
+{{block.super}}
+<link rel="manifest" href="/static/oplan/manifest.json">
+<script src="/static/oplan/pushnotify.js"></script>
+<style>
+article h4{ font-size: 120%; margin-bottom: 0; padding-bottom: 0; }
+article aside{ font-size: 90%; margin-top: 0; margin-bottom: 1em; color: #666; }
+</style>
+{% endblock %}
+
+
+{% block toolbar %}
+<button class="js-push-button" disabled>Push-Benachrichtigungen aktivieren</button>
+<button onclick="location='{%url 'neuigkeiten:list_rss' %}'">RSS-Feed</button>
+<button onclick="location='{%url 'admin:neuigkeiten_beitrag_add' %}'">Neu</button>
+<button onclick="location='{%url 'admin:neuigkeiten_beitrag_changelist' %}'">Bearbeiten</button>
+    
+<div>
+    
+    
+</div>
+{% endblock %}
+
+
+{% block content %}
+
+{%for item in items %}
+
+<article>
+<h4>{{item.title}}</h4>
+<aside>Veröffentlicht von {{item.author}} am {{item.published_date|date:'d. M Y'}} um {{item.published_date|date:'H:i'}} Uhr </aside>
+<p>{{item.content_text}}</p>
+</article>
+{% endfor %}
+{% endblock %}

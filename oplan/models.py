@@ -1,9 +1,11 @@
 from django.db import models
-
+import datetime
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
+
 
 class AK(models.Model):
-    """ repräsentiert einen Arbeitkreis der KIF """
+    """ repräsentiert einen Arbeitskreis der KIF """
 
     # Stammdaten
     titel = models.CharField(max_length=400, null=True, blank=True, verbose_name="Bezeichnung")
@@ -22,6 +24,73 @@ class AK(models.Model):
         verbose_name = 'Arbeitskreis'
         verbose_name_plural = 'Arbeitskreise'
 
+def fmt_or_msg(time):
+    if time:
+        return timezone.localtime(time).strftime('%a %H:%M')
+    else:
+        return "(not assigned yet)"
+
+class ConstraintWeekDays:
+    def __init__(self, weekdays):
+        self.weekdays = weekdays.lower().split('|')
+    def check(self, termin):
+        return (not termin.start_time) or timezone.localtime(termin.start_time).strftime('%a')[0:2].lower() in self.weekdays
+    def json(self):
+        return ('WEEKDAY', self.weekdays, 'Weekday '+ (' or '.join(wd.title() for wd in self.weekdays)))
+class ConstraintRooms:
+    def __init__(self, rooms):
+        self.rooms = rooms
+    def check(self, termin):
+        return not termin.room or any(termin.room.id == r.id for r in self.rooms)
+    def json(self):
+        return ('ROOMS', [x.id for x in self.rooms], 'In room '+ ' or '.join(x.number for x in self.rooms) )
+class ConstraintBeforeDt:
+    def __init__(self, dt):
+        self.dt = dt
+    def check(self, termin):
+        return not termin.start_time or termin.start_time < self.dt
+    def json(self):
+        return ('BEFORE_DT', self.dt, 'Before '+timezone.localtime(self.dt).strftime('%a %H:%M'))
+class ConstraintAfterDt:
+    def __init__(self, dt):
+        self.dt = dt
+    def check(self, termin):
+        return not termin.start_time or  termin.start_time > self.dt
+    def json(self):
+        return ('AFTER_DT', self.dt, 'After '+timezone.localtime(self.dt).strftime('%a %H:%M'))
+class ConstraintNotParallel:
+    def __init__(self, other_event):
+        self.other_event = other_event
+    def check(self, termin):
+        return (not termin.end_time or not self.other_event.start_time or not termin.start_time or not self.other_event.end_time
+            or termin.end_time <= self.other_event.start_time or termin.start_time >= self.other_event.end_time)
+    def json(self):
+        return ('NOT_PARALLEL', self.other_event.id, 
+                'NOT overlapping with '+str(self.other_event))
+class ConstraintForceParallel:
+    def __init__(self, other_event):
+        self.other_event = other_event
+    def check(self, termin):
+        return (not termin.start_time or not self.other_event.start_time
+            or termin.start_time == self.other_event.start_time)
+    def json(self):
+        return ('FORCE_PARALLEL', self.other_event.id, 'At the same time as '+str(self.other_event))
+class ConstraintBeforeEvent:
+    def __init__(self, other_event):
+        self.other_event = other_event
+    def check(self, termin):
+        return (not termin.end_time or not self.other_event.start_time
+                or termin.end_time <= self.other_event.start_time)
+    def json(self):
+        return ('BEFORE', self.other_event.id, 'Before '+str(self.other_event))
+class ConstraintAfterEvent:
+    def __init__(self, other_event):
+        self.other_event = other_event
+    def check(self, termin):
+        return (not termin.start_time or not self.other_event.end_time
+                or termin.start_time >= self.other_event.end_time)
+    def json(self):
+        return ('AFTER', self.other_event.id, 'After '+str(self.other_event.ak.titel))
 
 
 class AKTermin(models.Model):
@@ -31,6 +100,7 @@ class AKTermin(models.Model):
     class Meta:
         verbose_name = _('AK-Termin')
         verbose_name_plural = _('AK-Termine')
+        #ordering = ('ak.titel',)
 
     STATUS_CHOICES = (
         (1, _('Scheduled')),
@@ -54,11 +124,60 @@ class AKTermin(models.Model):
     constraintWeekDays = models.CharField(verbose_name=_('An einem der Tage'), max_length=255, null=True, blank=True)
     constraintBeforeTime = models.DateTimeField(verbose_name=_('Nicht nach Datum/Zeit'), max_length=255, null=True, blank=True)
     constraintAfterTime = models.DateTimeField(verbose_name=_('Nicht vor Datum/Zeit'), max_length=255, null=True, blank=True)
-    constraintRooms = models.CharField(verbose_name=_('In einem der Räume'), max_length=255, null=True, blank=True)
-    constraintNotParallelWithEvents = models.CharField(verbose_name=_('Nicht gleichzeitig mit Veranstaltung(en)'), max_length=255, null=True, blank=True)
-    constraintForceParallelWithEvents = models.CharField(verbose_name=_('Gleichzeitig mit Veranstaltung(en)'), max_length=255, null=True, blank=True)
-    constraintBeforeEvents = models.CharField(verbose_name=_('Vor Veranstaltung(en)'), max_length=255, null=True, blank=True)
-    constraintAfterEvents = models.CharField(verbose_name=_('Nach Veranstaltung(en)'), max_length=255, null=True, blank=True)
+    constraintRooms = models.ManyToManyField('Room', verbose_name=_('In einem der Räume'), related_name='aktermin_constraint_room', blank=True, 
+        help_text="Gib eine Raumnummer ein, um festzulegen, dass der AK nur in ausgewählten Räumen stattfinden kann.")
+    constraintNotParallelWithEvents = models.ManyToManyField('AKTermin', related_name='constraint_not_parallel_with_this', verbose_name=_('Nicht gleichzeitig mit Veranstaltung(en)'), blank=True,
+        help_text="Suche nach einem AK-Termin, um festzulegen, dass der AK-Termin nicht gleichzeitig mit den ausgewählten AK-Terminen stattfinden kann")
+    constraintForceParallelWithEvents = models.ManyToManyField('AKTermin', related_name='constraint_force_parallel_with_this', verbose_name=_('Gleichzeitig mit Veranstaltung(en)'), blank=True,
+        help_text="Suche nach einem AK-Termin, um festzulegen, dass der AK-Termin gleichzeitig mit den ausgewählten AK-Terminen stattfinden muss")
+    constraintBeforeEvents = models.ManyToManyField('AKTermin', related_name='constraint_must_be_before_this', verbose_name=_('Vor Veranstaltung(en)'), blank=True,
+        help_text="Suche nach einem AK-Termin, um festzulegen, dass der AK-Termin vor den ausgewählten AK-Terminen stattfinden muss")
+    constraintAfterEvents = models.ManyToManyField('AKTermin', related_name='constraint_must_be_after_this', verbose_name=_('Nach Veranstaltung(en)'), blank=True,
+        help_text="Suche nach einem AK-Termin, um festzulegen, dass der AK-Termin nach den ausgewählten AK-Terminen stattfinden muss")
+    
+    def get_constraints(self):
+        ctr = []
+        if self.constraintWeekDays:
+            ctr.append( ConstraintWeekDays(self.constraintWeekDays) )
+        if self.constraintRooms.count() > 0:
+            ctr.append( ConstraintRooms(self.constraintRooms.all()) )
+        if self.constraintBeforeTime:
+            ctr.append( ConstraintBeforeDt(self.constraintBeforeTime) )
+        if self.constraintAfterTime:
+            ctr.append( ConstraintAfterDt(self.constraintAfterTime) )
+        for evt in self.constraintNotParallelWithEvents.all():
+            ctr.append( ConstraintNotParallel(evt) )
+        for evt in self.constraintForceParallelWithEvents.all():
+            ctr.append( ConstraintForceParallel(evt) )
+        for evt in self.constraintBeforeEvents.all():
+            ctr.append( ConstraintBeforeEvent(evt) )
+        for evt in self.constraintAfterEvents.all():
+            ctr.append( ConstraintAfterEvent(evt) )
+        return ctr
+    
+    def get_reverse_constraints(self):
+        ctr = []
+        for evt in self.constraint_not_parallel_with_this.all():
+            ctr.append((evt, ConstraintNotParallel(self) ))
+        for evt in self.constraint_force_parallel_with_this.all():
+            ctr.append((evt, constraintForceParallelWithEvents(self) ))
+        for evt in self.constraint_must_be_before_this.all():
+            ctr.append((evt, ConstraintBeforeEvent(self) ))
+        for evt in self.constraint_must_be_after_this.all():
+            ctr.append((evt, ConstraintAfterEvent(self) ))
+        return ctr
+    
+    def check_constraints(self):
+        ok, fail, reverse_fail = [], [], []
+        for ctr in self.get_constraints():
+            if ctr.check(self):
+                ok.append(ctr.json())
+            else:
+                fail.append(ctr.json())
+        for other, ctr in self.get_reverse_constraints():
+            if not ctr.check(other):
+                reverse_fail.append((str(other), ctr.json()))
+        return ok, fail, reverse_fail
     
     def __init__(self, *args, **kwargs):
         super(AKTermin, self).__init__(*args, **kwargs)
@@ -74,9 +193,9 @@ class AKTermin(models.Model):
         super(AKTermin, self).save(*args, **kwargs) # Call the "real" save() method.
     
     def __str__(self):
-        x= "Termin "+self.get_status_display()+" "
-        if self.start_time != None: x += self.start_time.strftime('%d.%m. %H:%M Uhr') + " "
-        x += "(Dauer: "+str(self.duration)+") (AK: "+self.ak.titel+")"
+        x= self.ak.titel + " <- Termin "+self.get_status_display()+" "
+        if self.start_time != None: x += timezone.localtime(self.start_time).strftime('%d.%m. %H:%M Uhr') + " "
+        x += "(Dauer: "+str(self.duration)+")"
         return x
     
 class RoomAvailability(models.Model):
