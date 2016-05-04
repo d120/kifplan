@@ -1,6 +1,6 @@
-# kiffel-verwaltung
+# KIFPLAN
 
-Django-Webapplikation zur Verwaltung von Kiffels
+Django-Webapplikation zur Planung einer KIF
 
 ## Deployment
 
