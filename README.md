@@ -29,3 +29,6 @@ Django-Webapplikation zur Planung einer KIF
 ## Development
 
 * run a local server with `./manage.py runserver`
+
+![KIF 440](https://kif.d120.de/kiflogo.jpg)
+
