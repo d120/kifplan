@@ -5,6 +5,7 @@
 <link rel="manifest" href="/static/oplan/manifest.json">
 <script src="/static/oplan/pushnotify.js"></script>
 <style>
+article { margin: 0 0 4em 0; }
 article h4{ font-size: 120%; margin-bottom: 0; padding-bottom: 0; }
 article aside{ font-size: 90%; margin-top: 0; margin-bottom: 1em; color: #666; }
 </style>
@@ -31,7 +32,8 @@ article aside{ font-size: 90%; margin-top: 0; margin-bottom: 1em; color: #666; }
 <article>
 <h4>{{item.title}}</h4>
 <aside>Veröffentlicht von {{item.author}} am {{item.published_date|date:'d. M Y'}} um {{item.published_date|date:'H:i'}} Uhr </aside>
-<p>{{item.content_text}}</p>
+
+<p>{{item.content_text|safe}}</p>
 </article>
 {% endfor %}
 {% endblock %}

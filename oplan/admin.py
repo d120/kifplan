@@ -42,13 +42,19 @@ class AKTerminInline(AjaxSelectAdminStackedInline):
 @admin.register(AK)
 class AKAdmin(admin.ModelAdmin):
     # admin list table view
-    list_display = ['color_col', 'titel', 'leiter', 'anzahl', 'wann', 'dauer']
+    form = make_ajax_form(AK, {
+            #item_code is a lookup channel
+            'leiter_personen': 'person_lookup',
+             },
+           show_help_text=False, help_text=None)
+    list_display = ['color_col', 'titel', 'leiter', 'anzahl', 'wann', 'dauer', 'wiki_index']
     list_display_links = ['titel']
     inlines = [
         AKTerminInline,
     ]
     def color_col(self, obj):
         return "<div style='background-color: "+obj.color+"; width:16px; height:16px;'></div>"
+    
     color_col.allow_tags = True
     color_col.short_description = "Farbe"
     color_col.admin_order_field = 'color'

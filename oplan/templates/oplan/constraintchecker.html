@@ -3,20 +3,25 @@
 
 
 <table>
+<tr><th width=30>-</th><th width=20%>Titel/Typ</th><th width=20%>-</th><th>Wann?</th><th width=200>Akt. Termin</th></tr>
 {% for akt, oks, fails in out %}
 <tr class="{% if fails %}r-fail{%else%}r-ok{% endif %}">
-<th colspan=3>{% if fails %}<span class="fa fa-exclamation-circle"></span>{% else %}<span class="fa fa-check"></span>{% endif %}
-{{akt}}
+<th>{% if fails %}<span class="fa fa-exclamation-circle"></span>{% else %}<span class="fa fa-check"></span>{% endif %}
 </th>
+<th colspan=2 width=35%>{{akt.ak.titel}}</th>
+<th>{% if akt.ak.wann != "" and akt.ak.wann != None and akt.ak.wann != "beliebig" and akt.ak.wann != "undefined" %}{{akt.ak.wann}}{% endif %}</th>
+<th style=text-align:right>{{akt.start_time|date:'D H:i'}} :: {{akt.duration}}</th>
 </tr>
+
+
 {% for type,data,message in fails %}
 <tr class="r-fail">
-<td>{{ type }}</td><td>{{ message }}</td></tr>
+<td></td><td width=80>{{ type }}</td><td colspan=3>{{ message }}</td></tr>
 {% endfor %}
 
 {% for type,data,message in oks %}
 <tr class="r-ok">
-<td>{{ type }}</td><td>{{ message }}</td></tr>
+<td></td><td width=80>{{ type }}</td><td colspan=3>{{ message }}</td></tr>
 {% endfor %}
 
 {% endfor %}

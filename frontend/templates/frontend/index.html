@@ -74,6 +74,7 @@ ul.buttons li a.Color-Yellow:hover {background: #f7d240 }
 
   <li><a class="Color-Green" href="{% url 'oplan:ak_wall' %}"><span class="fa fa-calendar"></span> <span class='text'>AK-Wall</span></a></li>
   <li><a class="Color-Teal" href="https://kif.d120.de/workshop/"><span class="fa fa-pencil-square"></span> <span class='text'>Workshop-Anmeldung</span></a></li>
+  <li><a class="Color-Yellow" href="https://kif.fsinf.de/wiki/KIF440:Arbeitskreise"><span class="fa fa-coffee"></span> <span class='text'>KIF-Wiki</span></a></li>
 </ul>
 
 <div class="clearfix"></div>
@@ -106,7 +107,7 @@ ul.buttons li a.Color-Yellow:hover {background: #f7d240 }
 <ul>
   <li>Checklisten für jeden Vorgang, den der Infopoint durchführen kann, sind im Infopoint- oder OvD-Ordner zu finden.</li>
   <li><a href="https://www.google.de/">Google (Suchmaschine)</a></li>
-  <li>Im Zweifel die Entwickler des Systems fragen: johnny und luelistan für die KIF-Verwaltung, Fabian und Felix für die KDV. Beim OvD anrufen.</li>
+  <li>Im Zweifel die Entwickler des Systems fragen: luelistan und johnny für die KIF-Verwaltung, Fabian und Felix für die KDV. Beim OvD anrufen.</li>
 </ul>
 
 </div><div class="col-md-small">
@@ -121,7 +122,7 @@ ul.buttons li a.Color-Yellow:hover {background: #f7d240 }
 <article>
 <h4>{{item.title}}</h4>
 <aside>Veröffentlicht von {{item.author}} am {{item.published_date|date:'d. M Y'}} um {{item.published_date|date:'H:i'}} Uhr </aside>
-<p>{{item.content_text}}</p>
+<p>{{item.content_text|safe}}</p>
 </article>
 {% endfor %}
 

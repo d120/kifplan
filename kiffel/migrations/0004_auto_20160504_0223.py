@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             name='KDVUserBarcode',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('code', models.CharField(blank=True, default=kiffel.models.KDVUserBarcode.randomcode, max_length=255, null=True, verbose_name='Barcode')),
+                ('code', models.CharField(blank=True, default='fubar', max_length=255, null=True, verbose_name='Barcode')),
                 ('identifiable_type', models.CharField(default='User', max_length=255)),
                 ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),

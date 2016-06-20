@@ -109,6 +109,7 @@ class RoomAvailabilityApi(View):
                     'edit_url': reverse('admin:oplan_aktermin_change', args=[ obj.id ]),
                     'edit_ak_url': reverse('admin:oplan_ak_change', args=[ obj.ak.id ]),
                     'ak_color': obj.ak.color,
+                    'constraints_freetext': obj.ak.wann,
                      })
         return JsonResponse({ 'events' : qq,  })
         
@@ -248,11 +249,13 @@ class ImportWikiAkListe(View):
         """, re.IGNORECASE | re.MULTILINE | re.DOTALL | re.VERBOSE)
         rx_link = re.compile(r"\s+")
         
+        wiki_index = 100
         out="Ergebnis:"
         out+="<table>"
         headline = ""
         color = "#ff00ff"
         for ak_match in rx.finditer(wikitext):
+            wiki_index = wiki_index + 1
             if ak_match.group('headline'):
                 headline = ak_match.group('headline')
                 out += "<tr><td colspan=3>"+headline+"</td></tr>"
@@ -286,7 +289,7 @@ class ImportWikiAkListe(View):
                 out += "<td>Neu</td>"
             the_ak.__dict__.update(beschreibung=data['beschreibung'],
                     anzahl=data['wieviele'], leiter=data['wer'],
-                    wann=data['wann'], dauer=data['dauer'], wiki_link=data['link'])
+                    wann=data['wann'], dauer=data['dauer'], wiki_link=data['link'], wiki_index=wiki_index)
             out += "<td>"+data['name']+"</td>"
             the_ak.save()
             out += "</tr>"
@@ -324,7 +327,7 @@ def ak_wall(request, *args, **kwargs):
 
 @login_required
 def check_all_constraints(request, *args, **kwargs):
-    aktermine = AKTermin.objects.all()
+    aktermine = AKTermin.objects.all().order_by('ak__wiki_index')
     out = []
     for t in aktermine:
         ok, fail, reverse_fail = t.check_constraints()
@@ -340,11 +343,12 @@ def get_day_date(y,m,d):
 def ak_wall_beamer(request, *args, **kwargs):
     akts = AKTermin.objects.filter(start_time__isnull=False).order_by('start_time')
     rooms = Room.objects.filter(visible=True).order_by('number')
-    days = [ (get_day_date(2016,5,5), [], []) ,
-             (get_day_date(2016,5,6), [], []) ,
-             (get_day_date(2016,5,7), [], []) , ]
+    days = [ #(get_day_date(2016,5,5), [], []) ,
+             #(get_day_date(2016,5,6), [], []) ,
+             (get_day_date(2016,5,7), [], []) , 
+             (get_day_date(2016,5,8), [], []) , ]
     
-    pixpersec = 0.0103
+    pixpersec = 0.0153
     if 'zoom' in request.GET: pixpersec=float(request.GET["zoom"])
     
     now = timezone.now()
@@ -352,14 +356,21 @@ def ak_wall_beamer(request, *args, **kwargs):
     if now.hour > 8 and now.hour < 19: is_white = True
     if 'bg' in request.GET: is_white = True if request.GET['bg'] == 'white' else False
     
+    nowsliderpos=100
     hoursperday = 16
+    daywidth = hoursperday*3600*pixpersec
     for daystart,list,hours in days:
         daydate = daystart.date()
         for i in range(0,hoursperday,2):
             thishour = daystart+timedelta(hours=i)
             secsfromstart = (thishour-daystart).total_seconds()
             hours.append({ 'leftpixels': secsfromstart*pixpersec, 'start_time': thishour })
-            
+        if daydate < now.date():
+            nowsliderpos += daywidth
+        elif now.date() == daydate:
+            nowsliderpos += max(0,
+                min(daywidth, ((timezone.localtime(now)-daystart).total_seconds()*pixpersec) )
+                )
         for t in akts:
             if t.start_time.date() == daydate:
                 secsfromstart = (t.start_time-daystart).total_seconds()
@@ -372,7 +383,7 @@ def ak_wall_beamer(request, *args, **kwargs):
                 
                 
     return render(request, "oplan/akwallbeamer.html", { 'title': 'AK Wall', 'days': days, 'rooms': rooms, 
-        'daywidth': hoursperday*3600*pixpersec, 'is_white': is_white  })
+        'daywidth': daywidth, 'is_white': is_white, 'pixpersec': pixpersec, 'nowsliderpos': nowsliderpos  })
 
 def get_red(the_date, is_white, old_hours):
     if the_date:

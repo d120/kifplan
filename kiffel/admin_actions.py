@@ -59,7 +59,7 @@ def generate_nametags(modeladmin, request, queryset):
     """
     items = LaTeX.escape(queryset)
     (pdf, pdflatex_output) = LaTeX.render(items, 'kiffel/nametags.tex', ['bilder/kif_logo.png', 'namensschilder.sty'])
-    if pdf == None:
+    if pdf == None or len(pdf) == 0:
         return render(request, "kiffel/import_csv_template.html", { "titel": "ERROR:","content": pdflatex_output[0].decode("utf-8") })
     r = HttpResponse(content_type='application/pdf')
     r['Content-Disposition'] = 'attachment; filename=kiffels-nametags.pdf'

@@ -101,6 +101,15 @@ function make_new_stuff_red($el) {
     var redColor = [255,0,0];
     //TODO var newColor = _interpolateColor(curColor, redColor, Math.max(0, age - oldAge)
 }
+function newRandomBarcode(){
+    code = "" + (Math.floor(Math.random()*999999)+2000000);
+
+    weighed_sum = parseInt(code[0])*3 + parseInt(code[1])*1 + parseInt(code[2])*3 +
+        parseInt(code[3])*1 + parseInt(code[4])*3 + parseInt(code[5])*1 + parseInt(code[6])*3;
+    checksum = (10 - (weighed_sum % 10)) % 10;
+    code = "" + code + checksum;
+    return code;
+}
 
 //==>
 //==> Startup Code OPLAN
@@ -129,7 +138,28 @@ $(function() {
     });
     
     //$("[data-age]").each(make_new_stuff_red);
+    $("#kdvuserbarcode_set-group .add-row a").click(function() {
+        $(".dynamic-kdvuserbarcode_set").last().find(".field-code input.vTextField").val(
+            newRandomBarcode());
+    });
     
+    $("#oplan").on('mouseenter', '.fc-event', function(e) {
+        var eventObj = $(this).data("event");
+        if (!eventObj) eventObj = $(this).data("fcSeg").event;
+        console.log("dom item: ",this);
+        console.log("event: ",eventObj);
+        
+        var $h   = $("#hoverhelp");
+        if ($h.length == 0) {
+            $h=$("<div id=hoverhelp style='position:fixed;background:white;right:5px;top:60px;border:1px solid black'><b></b><br><span></span></div>").appendTo("body");
+        }
+        $h.find("b").text(eventObj.title);
+        $h.find("span").text(eventObj.constraints_freetext);
+        $h.show();
+        
+        
+        
+    });
 });
 
 function calendarDefaultOptions(extendOptions) {
@@ -155,7 +185,7 @@ function calendarDefaultOptions(extendOptions) {
         
         firstDay: 1,
         businessHours:{
-            start: '08:00', end: '18:00',
+            start: '09:00', end: '19:00',
             dow: [ 4,5,6,7]
         },
         
@@ -243,6 +273,7 @@ oplan.api = {
                         termin_id: akt.id,
                         title: akt.ak_titel,
                         duration: akt.duration,
+                        constraints_freetext: akt.ak_constraints_freetext,
                     });
             });
         });

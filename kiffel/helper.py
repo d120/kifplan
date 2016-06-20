@@ -13,7 +13,7 @@ class EAN8:
             int(code[3])*1 + int(code[4])*3 + int(code[5])*1 + int(code[6])*3
         checksum = (10 - (weighed_sum % 10)) % 10
         code = code + str(checksum)
-        return "00000{0}".format(code)
+        return code
 
 
 class QueryFilter:

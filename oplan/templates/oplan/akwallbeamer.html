@@ -10,10 +10,14 @@ div.event {
 div.event a { color: white; text-decoration: none; display: block; height: 100%; }
 div.hour { color: #777; border-left: 1px solid #999; padding-left: 5px; }
 td {__height: 65px; vertical-align: top; }
-body {background: #111;background:#000; color: #eee;}
+html{margin:0;padding:0;}
+body {background: #111;background:#000; color: #eee;margin: 8px; padding: 0px;}
 body,td { font-size: 12pt; font-family: Helvetica,sans-serif; }
 h4{ margin: 0; padding: 5px; background: #444; text-align: center; }
 table tr:nth-child(even) { background:#111; }
+
+#nowslider { position: absolute; top: 0; bottom: 0; width: 50px; margin-left:-42px;
+background: linear-gradient(to right, rgba(100,255,255,0.0) 0%,rgba(100,255,255,0.8) 100%); z-index:9999; }
 
 {% if is_white %}
 div.event a{color:black;}
@@ -22,12 +26,11 @@ body{background:#ddd!important;color:#555;}
 table tr:nth-child(even) { background:#e7e7e7; }
 {% endif %}
 </style>
-
 </head><body>
 
 {% load l10n %}
-
-<table border="0" style="table-layout: fixed; width: 1000px; ">
+<div id="nowslider" style="left:{{nowsliderpos|unlocalize}}px;"></div>
+<table border="0" style="table-layout: fixed; width: 1000px; border-spacing: 0; ">
 <tbody>
 <tr><td style="width:100px;height:50px;"><div align=right>Tag/Uhrzeit</div>Räume</td>
 {% for day,termine,hours in days %}
@@ -58,6 +61,7 @@ table tr:nth-child(even) { background:#e7e7e7; }
 </table>
 
 <script>
+
 function groupOverlappingEventElements($weekDay) {
     var $events = $weekDay.find('.event');
     var complexEvents = jQuery.map($events, function (element, index) {

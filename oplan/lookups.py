@@ -3,6 +3,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from oplan.models import AK, Room, RoomAvailability, AKTermin
+from kiffel.models import Person
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.db.models import Q
@@ -45,5 +46,21 @@ class RoomLookup(LookupChannel):
 
     def format_item_desplay(self, obj):
         return u"%s" % (escape(str(obj)),)
+
+@register_lookupchannel('person_lookup')
+class RoomLookup(LookupChannel):
+    model = Person
+
+    def get_query(self, q, request):
+        return Person.objects.filter(Q(nickname__icontains=q) | Q(vorname__icontains=q) | Q(nachname__icontains=q) ).order_by('nickname')
+
+    def get_result(self, obj):
+        return str(obj)
+
+    def format_match(self, obj):
+        return u"%s" % (escape(obj.nickname),)
+
+    def format_item_desplay(self, obj):
+        return u"%s" % (escape(obj.nickname),)
 
 

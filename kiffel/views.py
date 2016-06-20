@@ -87,7 +87,7 @@ def anmeldung_mobile(request, *args, **kwargs):
 
 class ExportBMBF(View):
     def get(self, request, *args, **kwargs):
-        persons = Person.objects.filter(student=True).filter(ist_kiffel=True).exclude(hochschule="Privat")
+        persons = Person.objects.all().exclude(vorname="").exclude(nachname="").exclude(hochschule=None)
         data = ["Nachname|Vorname|Hochschule"]+["{0}|{1}|{2}".format(p.nachname, p.vorname, p.hochschule) for p in persons]
         data = "\n".join(data)
         return render(request, "kiffel/export_bmbf.html", { 'content': data })

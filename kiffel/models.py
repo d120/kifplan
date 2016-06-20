@@ -97,15 +97,6 @@ class Person(PermissionsMixin, AbstractBaseUser):
 
     USERNAME_FIELD = 'email'
 
-    def renew_kdv_barcode(self):
-        """
-        Generates new unique EAN 8 barcodes for selected kiffels
-        """
-        self.kdv_id = EAN8.get_random()
-        while Person.objects.filter(kdv_id=self.kdv_id).count() > 0:
-            self.kdv_id = EAN8.get_random()
-        self.save()
-    
     def status_desc(self):
         o = ""
         if self.ist_orga: o += "<b><font color=green>Orga</font></b> "
@@ -177,9 +168,7 @@ class KDVUserBarcode(models.Model):
         db_table  = 'kdv_user_identifiers'
         managed = False
     
-    def randomcode():
-        return EAN8.get_random()
-    code = models.CharField(null=True, blank=True, max_length=255, verbose_name='Barcode', default=randomcode)
+    code = models.CharField(null=True, blank=True, max_length=255, verbose_name='Barcode')
     identifiable = models.ForeignKey(Person, on_delete=models.CASCADE)
     identifiable_type = models.CharField(max_length=255, default='User') #models.ForeignKey(ContentType, on_delete=models.CASCADE)
     #identifiable = GenericForeignKey('identifiable_type', 'identifiable_id')

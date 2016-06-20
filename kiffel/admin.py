@@ -105,6 +105,15 @@ class KiffelAdminForm(forms.ModelForm):
           help_text= ("Raw passwords are not stored, so there is no way to see "
                       "this user's password, but you can change the password "
                       "using <a href=\"password/\">this form</a>."))
+    def clean(self):
+        if (self.cleaned_data.get('ist_kiffel') or self.cleaned_data.get('ist_orga') or
+                self.cleaned_data.get('ist_helfer') or self.cleaned_data.get('ist_anonym')):
+            pass
+        else:
+            raise forms.ValidationError("Bitte wähle mindestens eines aus folgenden Feldern aus: ist_kiffel, ist_orga, ist_helfer, ist_anonym -- ansonsten kann kein Namensschild erstellt werden")
+        if self.cleaned_data.get('email') == '':
+            raise forms.ValidationError("Bitte gib eine E-Mail-Adresse ein")
+        return self.cleaned_data
 
 
 class KDVUserBarcodeInline(admin.StackedInline):
@@ -146,7 +155,7 @@ class KiffelAdmin(admin.ModelAdmin):
         ('datum_bezahlt', IsNullListFilter),
         ('datum_teilnahmebestaetigung_erhalten', IsNullListFilter),
         'hochschule', ]
-    search_fields = ['nickname','vorname','nachname','hochschule','email',]
+    search_fields = ['nickname','vorname','nachname','hochschule','email','kdvuserbarcode__code',]
     
     actions = [
             kiffel.admin_actions.generate_nametags,

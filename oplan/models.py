@@ -2,7 +2,7 @@ from django.db import models
 import datetime
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
-
+from kiffel.models import Person
 
 class AK(models.Model):
     """ repräsentiert einen Arbeitskreis der KIF """
@@ -16,6 +16,12 @@ class AK(models.Model):
     beschreibung = models.TextField(null=True, blank=True)
     wiki_link = models.CharField(max_length=100, null=True, blank=True, verbose_name="Link zur Wikiseite")
     color = models.CharField(max_length=10, default='#ff00ff', verbose_name="Farbe")
+    wiki_index = models.IntegerField(default=0)
+    
+    interesse = models.IntegerField(default=0)
+    
+    leiter_personen = models.ManyToManyField(Person, blank=True, related_name="leitet_aks", help_text="Werden bei Zuteilung berücksichtigt")
+    
     def __str__(self):
         return self.titel
 
@@ -67,6 +73,13 @@ class ConstraintNotParallel:
     def json(self):
         return ('NOT_PARALLEL', self.other_event.id, 
                 'NOT overlapping with '+str(self.other_event))
+class ConstraintNotParallelBecauseLeiter(ConstraintNotParallel):
+    def __init__(self, other_event, leiter):
+        self.other_event = other_event
+        self.leiter = leiter
+    def json(self):
+        return ('NOT_PARALLEL', self.other_event.id, 
+                'NOT overlapping with '+str(self.other_event)+ ' because same leiter '+self.leiter)
 class ConstraintForceParallel:
     def __init__(self, other_event):
         self.other_event = other_event
@@ -153,6 +166,11 @@ class AKTermin(models.Model):
             ctr.append( ConstraintBeforeEvent(evt) )
         for evt in self.constraintAfterEvents.all():
             ctr.append( ConstraintAfterEvent(evt) )
+        for people in self.ak.leiter_personen.all():
+            for other in people.leitet_aks.all():
+                if other != self.ak:
+                    for other_termin in other.aktermin_set.all():
+                        ctr.append( ConstraintNotParallelBecauseLeiter(other_termin, people.nickname) )
         return ctr
     
     def get_reverse_constraints(self):

@@ -11,7 +11,7 @@
 
 {% for item in latest_news %}
 <div class="dashbox news-item" style="background-color: {{item.red}};color:white"><span class="di fa fa-newspaper-o"></span>
-<h2><big>{{item.title}}</big> {{item.content_text|truncatewords:15}}</h2>
+<h2><big>{{item.title}}</big> {{item.content_text|safe|truncatewords:15}}</h2>
 <aside>Veröffentlicht von {{item.author}} am {{item.published_date|date:'d. M Y'}} um {{item.published_date|date:'H:i'}} Uhr </aside>
 
 </div><!-- /dashbox -->
@@ -22,8 +22,8 @@
 </div><!-- /dashbox -->
 <script>
 function updCtd(){
-    var dur = moment.duration(moment("2016-05-04 15:00:00") - moment());
-    $("#countdown").html(" <big>Noch " + dur.days()+" Tage</big> "+dur.hours()+" Stunden "+dur.minutes()+" Minuten " + " bis zur KIF");}
+    var dur = moment.duration(moment("2016-11-02 15:00:00") - moment());
+    $("#countdown").html(" <big>Noch " + dur.months()+" Monate " + dur.days()+" Tage</big> "+dur.hours()+" Stunden "+dur.minutes()+" Minuten " + " bis zur nächsten KIF");}
 setInterval(updCtd,5000);
 updCtd();
 </script>
@@ -45,11 +45,17 @@ updCtd();
 {% endfor %}
 </div><!-- /dashbox -->
 
+{% if not current_akts %}
+<div class="dashbox">
+<h2>Gerade finden anscheinend keine AKs statt &ndash; enjoy some cat content for your convenience ...</h2>
+<a href="http://thecatapi.com"><img src="http://thecatapi.com/api/images/get?format=src&type=jpg" style="width:100%"></a>
+</div>
+{% endif %}
 
 </div><!-- / col -->
 <div class="col-md-4">
 
-
+    
 <div class="dashbox">
 <h2>In den nächsten zwei Stunden beginnende AKs</h2>
 
@@ -65,6 +71,12 @@ updCtd();
 {% endfor %}
 </div><!-- /dashbox -->
 
+{% if not upcoming_akts %}
+<div class="dashbox" style="padding-left:0">
+<h2>KDV Statistik (Archivbild &trade;)</h2>
+<a href="https://kif.d120.de/kdv-chart"><img src="https://kif.d120.de/kdvstat.PNG" style="width:100%"></a>
+</div>
+{% endif %}
 
 </div><!-- /col -->
 
