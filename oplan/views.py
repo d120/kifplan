@@ -219,9 +219,9 @@ def dectohex(rgb):
 def random_similar_color(mix):
     mix = hextodec(mix)
     (r,g,b) = (randint(0,255), randint(0,255), randint(0,255))
-    r = (r + 2*mix[0]) / 3
-    g = (g + 2*mix[1]) / 3
-    b = (b + 2*mix[2]) / 3
+    r = int((r + 2*mix[0]) // 3)
+    g = int((g + 2*mix[1]) // 3)
+    b = int((b + 2*mix[2]) // 3)
     return dectohex((r,g,b))
 
 class ImportWikiAkListe(View):
@@ -274,7 +274,7 @@ class ImportWikiAkListe(View):
                 data[key] = value
             if data['name'] == '': continue
             if data['link'] == '':
-                data['link'] = 'KIF440:' + data['name']
+                data['link'] = 'KIF465:' + data['name']
             data['link'] = re.sub(rx_link, '_', data['link'])
             try:
                 the_ak = AK.objects.get(titel=data['name'])

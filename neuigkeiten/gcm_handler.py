@@ -7,11 +7,14 @@ def send_gcm(reg_ids, data):
     payload = { 'registration_ids': reg_ids, 'data': data }
     
     url = "https://android.googleapis.com/gcm/send"
-    custom_headers = {
-        'Authorization': 'key=' + settings.GCM_AUTH_KEY
-    }
-    result = requests.post(url, json=payload, headers=custom_headers)
-    print(result)
+    if hasattr(settings, "GCM_AUTH_KEY"):
+        custom_headers = {
+            'Authorization': 'key=' + settings.GCM_AUTH_KEY
+        }
+        result = requests.post(url, json=payload, headers=custom_headers)
+        print(result)
+    else:
+        print("You need to specify a GCM_AUTH_KEY in settings file to send Google Cloud Messages")
 
 def notify(subscribers, title, body, icon, link, identifier):
     gcm_reg_ids = []
