@@ -274,7 +274,7 @@ class ImportWikiAkListe(View):
                 data[key] = value
             if data['name'] == '': continue
             if data['link'] == '':
-                data['link'] = 'KIF440:' + data['name']
+                data['link'] = 'KIF465:' + data['name']
             data['link'] = re.sub(rx_link, '_', data['link'])
             try:
                 the_ak = AK.objects.get(titel=data['name'])
