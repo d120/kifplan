@@ -219,9 +219,9 @@ def dectohex(rgb):
 def random_similar_color(mix):
     mix = hextodec(mix)
     (r,g,b) = (randint(0,255), randint(0,255), randint(0,255))
-    r = (r + 2*mix[0]) / 3
-    g = (g + 2*mix[1]) / 3
-    b = (b + 2*mix[2]) / 3
+    r = int((r + 2*mix[0]) // 3)
+    g = int((g + 2*mix[1]) // 3)
+    b = int((b + 2*mix[2]) // 3)
     return dectohex((r,g,b))
 
 class ImportWikiAkListe(View):
