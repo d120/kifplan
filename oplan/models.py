@@ -4,6 +4,23 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from kiffel.models import Person
 
+
+class Track(models.Model):
+    """ ein Track bündelt eine Reihe von Arbeitskreisen mit ähnlichem Thema """
+    class Meta:
+        verbose_name = "Track"
+        verbose_name_plural = "Tracks"
+
+    name = models.CharField(max_length=200, null=False, blank=False)
+
+    @property
+    def ak_count(self):
+        return self.ak_set.count()
+
+    def __str__(self):
+        return self.name
+
+
 class AK(models.Model):
     """ repräsentiert einen Arbeitskreis der KIF """
 
@@ -21,6 +38,8 @@ class AK(models.Model):
     interesse = models.IntegerField(default=0)
     
     leiter_personen = models.ManyToManyField(Person, blank=True, related_name="leitet_aks", help_text="Werden bei Zuteilung berücksichtigt")
+
+    track = models.ForeignKey(Track, null=True, blank=True, on_delete=models.SET_NULL)
     
     def __str__(self):
         return self.titel

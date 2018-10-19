@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
-from oplan.models import AK, Room, RoomAvailability, AKTermin
+from oplan.models import AK, Room, RoomAvailability, AKTermin, Track
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 
@@ -47,7 +47,7 @@ class AKAdmin(admin.ModelAdmin):
             'leiter_personen': 'person_lookup',
              },
            show_help_text=False, help_text=None)
-    list_display = ['color_col', 'titel', 'leiter', 'anzahl', 'wann', 'dauer', 'wiki_index']
+    list_display = ['color_col', 'titel', 'track', 'leiter', 'anzahl', 'wann', 'dauer', 'wiki_index']
     list_display_links = ['titel']
     inlines = [
         AKTerminInline,
@@ -153,5 +153,7 @@ class AKTerminAdmin(admin.ModelAdmin):
     set_unscheduled.short_description = 'Bei nächster automatischer Zuordnung berücksichtigen'
 
 
-
-
+@admin.register(Track)
+class TrackAdmin(admin.ModelAdmin):
+    list_display = ['name', 'ak_count']
+    list_display_links = ['name']
