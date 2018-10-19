@@ -60,11 +60,18 @@ form .aligned .results_on_deck { margin-left: 180px!important; }
 #header .ddmenu a.disabled, #header .ddmenu a.disabled:hover { color: #777; background: inherit; }
 #header .ddmenu .right { float:right; }
 
-.fc-event {margin-right: 5px }
+.fc-event {
+    margin-right: 5px;
+    cursor: grab;
+}
 a.fc-event[href] { color: white; }
 a.fc-event[href]:hover { text-decoration:underline; }
 .fc-bgevent-container .fc-bgevent {border:1px solid black }
 .fc-event.bigtop { border-top-width: 5px; }
+
+.ui-draggable-dragging {
+    cursor: grabbing;
+}
 
     .mobile-only{display:none!important}
 @media screen and (max-width: 899px) {
