@@ -252,18 +252,20 @@ class ImportWikiAkListe(View):
         wiki_index = 100
         out="Ergebnis:"
         out+="<table>"
-        headline = ""
+        type = None
         color = "#ff00ff"
         for ak_match in rx.finditer(wikitext):
             wiki_index = wiki_index + 1
             if ak_match.group('headline'):
-                headline = ak_match.group('headline')
-                out += "<tr><td colspan=3>"+headline+"</td></tr>"
-                if 'Inhalt' in headline: color = "#1122ff"
-                if 'Kultur' in headline: color = "#22ff00"
+                type = ak_match.group('headline')
+                out += "<tr><td colspan=3>"+type+"</td></tr>"
+                if 'Inhalt' in type: color = "#1122ff"
+                if 'Kultur' in type: color = "#22ff00"
+                if 'Meta' in type: color = "#f1c40f"
+                if 'Wünsche' in type: color = "#95a5a6"
                 continue
-            
-            ak_color = random_similar_color(color)
+
+            ak_color = random_similar_color(color) if not 'Wünsche' in type else color
             out += "<tr><td bgcolor='"+ak_color+"'></td>"
             ak_str = ak_match.group('ak_str')
             data = {'wer': 'N.N.', 'wann': '?', 'wieviele': '?', 'dauer': '?', 'beschreibung': '', 'name': '', 'link': ''}
@@ -287,7 +289,7 @@ class ImportWikiAkListe(View):
                         kommentar="")
                 
                 out += "<td>Neu</td>"
-            the_ak.__dict__.update(beschreibung=data['beschreibung'],
+            the_ak.__dict__.update(type=type, beschreibung=data['beschreibung'],
                     anzahl=data['wieviele'], leiter=data['wer'],
                     wann=data['wann'], dauer=data['dauer'], wiki_link=data['link'], wiki_index=wiki_index)
             out += "<td>"+data['name']+"</td>"

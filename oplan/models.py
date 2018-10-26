@@ -26,6 +26,7 @@ class AK(models.Model):
 
     # Stammdaten
     titel = models.CharField(max_length=400, null=True, blank=True, verbose_name="Bezeichnung")
+    type = models.CharField(max_length=50, null=True, blank=True, verbose_name="Art")
     leiter = models.CharField(max_length=400, null=True, blank=True, verbose_name="Wer macht's?")
     anzahl = models.CharField(max_length=400, null=True, blank=True, verbose_name="Wie viele?")
     wann = models.CharField(max_length=400, null=True, blank=True, verbose_name="Wann?")
@@ -45,7 +46,7 @@ class AK(models.Model):
         return self.titel
 
     class Meta:
-        ordering = ('titel',)
+        ordering = ('type', 'track', 'titel',)
         verbose_name = 'Arbeitskreis'
         verbose_name_plural = 'Arbeitskreise'
 
