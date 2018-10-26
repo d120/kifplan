@@ -29,6 +29,4 @@ class AKTerminSerializer(serializers.ModelSerializer):
     ak_titel = serializers.CharField(source='ak.titel', read_only=True)
     ak_color = serializers.CharField(source='ak.color', read_only=True)
     ak_constraints_freetext = serializers.CharField(source='ak.wann', read_only=True)
-    
-
-
+    ak_track = serializers.StringRelatedField(source='ak.track', read_only=True)

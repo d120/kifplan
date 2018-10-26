@@ -262,10 +262,13 @@ var STATUS = {
 oplan.api = {
     loadUnschedAkTermine: function() {
         var $out = $("#unsched_aktermine").html("");
-        $.get("/plan/api/aktermin/?only_unscheduled=True", function(aktermins) {
+        $.get("/plan/api/aktermin/?only_unscheduled=True&ordering=ak", function(aktermins) {
             aktermins.forEach(function(akt) {
+                var title = akt.ak_titel;
+                if(akt.ak_track != null)
+                    title = "[" + akt.ak_track + "] " + title;
                 $("<div class='fc-event'></div>")
-                    .text(akt.ak_titel)
+                    .text(title)
                     .appendTo($out)
                     .draggable({ zIndex: 999, revert: true, })
                     .css('background', akt.ak_color)
