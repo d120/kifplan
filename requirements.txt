@@ -7,4 +7,4 @@ tablib==0.12.1
 beautifulsoup4==4.6.3
 pytz==2018.5
 django-ajax-selects==1.7.1
-requests==2.19.1
+requests==2.20.0
