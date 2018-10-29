@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
-from oplan.models import AK, Room, RoomAvailability, AKTermin, Track
+from oplan.models import AK, Room, RoomAvailability, AKTermin, Track, Settings
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 
@@ -166,3 +166,9 @@ class TrackAdmin(admin.ModelAdmin):
             str(ak) for ak in obj.ak_set.all()
         ])
     linked_aks.short_description = "Zugehörige AKs"
+
+
+@admin.register(Settings)
+class SettingsAdmin(admin.ModelAdmin):
+    list_display = ['ak_start_day', 'ak_end_day', 'ak_start_hour', 'ak_end_hour']
+    list_display_links = ['ak_start_day', 'ak_end_day', 'ak_start_hour', 'ak_end_hour']
