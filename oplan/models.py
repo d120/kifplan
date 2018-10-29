@@ -4,11 +4,29 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from kiffel.models import Person
 
+
+class Track(models.Model):
+    """ ein Track bündelt eine Reihe von Arbeitskreisen mit ähnlichem Thema """
+    class Meta:
+        verbose_name = "Track"
+        verbose_name_plural = "Tracks"
+
+    name = models.CharField(max_length=200, null=False, blank=False)
+
+    def ak_count(self):
+        return self.ak_set.count()
+    ak_count.short_description = "Anzahl zugehöriger AKs"
+
+    def __str__(self):
+        return self.name
+
+
 class AK(models.Model):
     """ repräsentiert einen Arbeitskreis der KIF """
 
     # Stammdaten
     titel = models.CharField(max_length=400, null=True, blank=True, verbose_name="Bezeichnung")
+    type = models.CharField(max_length=50, null=True, blank=True, verbose_name="Art")
     leiter = models.CharField(max_length=400, null=True, blank=True, verbose_name="Wer macht's?")
     anzahl = models.CharField(max_length=400, null=True, blank=True, verbose_name="Wie viele?")
     wann = models.CharField(max_length=400, null=True, blank=True, verbose_name="Wann?")
@@ -21,12 +39,14 @@ class AK(models.Model):
     interesse = models.IntegerField(default=0)
     
     leiter_personen = models.ManyToManyField(Person, blank=True, related_name="leitet_aks", help_text="Werden bei Zuteilung berücksichtigt")
+
+    track = models.ForeignKey(Track, null=True, blank=True, on_delete=models.SET_NULL)
     
     def __str__(self):
         return self.titel
 
     class Meta:
-        ordering = ('titel',)
+        ordering = ('type', 'track', 'titel',)
         verbose_name = 'Arbeitskreis'
         verbose_name_plural = 'Arbeitskreise'
 
