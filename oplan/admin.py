@@ -156,5 +156,13 @@ class AKTerminAdmin(admin.ModelAdmin):
 
 @admin.register(Track)
 class TrackAdmin(admin.ModelAdmin):
-    list_display = ['name', 'ak_count']
+    list_display = ['name', 'ak_count', 'linked_aks']
     list_display_links = ['name']
+    readonly_fields = ["ak_count", "linked_aks"]
+
+    # Show a list of all AKs belonging to this track in
+    def linked_aks(self, obj):
+        return ", ".join([
+            str(ak) for ak in obj.ak_set.all()
+        ])
+    linked_aks.short_description = "Zugehörige AKs"

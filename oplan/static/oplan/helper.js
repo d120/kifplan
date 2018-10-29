@@ -274,7 +274,7 @@ oplan.api = {
                     .css('background', akt.ak_color)
                     .data('event', {
                         termin_id: akt.id,
-                        title: akt.ak_titel,
+                        title: title,
                         duration: akt.duration,
                         constraints_freetext: akt.ak_constraints_freetext,
                     });

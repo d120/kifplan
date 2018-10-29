@@ -13,9 +13,9 @@ class Track(models.Model):
 
     name = models.CharField(max_length=200, null=False, blank=False)
 
-    @property
     def ak_count(self):
         return self.ak_set.count()
+    ak_count.short_description = "Anzahl zugehöriger AKs"
 
     def __str__(self):
         return self.name
