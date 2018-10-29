@@ -20,7 +20,7 @@ from neuigkeiten.models import Beitrag
 from rest_framework import viewsets, permissions, filters
 from rest_framework.decorators import detail_route, list_route
 
-from oplan.models import AK, Room, RoomAvailability, AKTermin
+from oplan.models import AK, Room, RoomAvailability, AKTermin, Settings
 
 from oplan.serializers import AKSerializer, RoomSerializer, RoomAvailabilitySerializer, AKTerminSerializer
 import csv
@@ -345,10 +345,14 @@ def get_day_date(y,m,d):
 def ak_wall_beamer(request, *args, **kwargs):
     akts = AKTermin.objects.filter(start_time__isnull=False).order_by('start_time')
     rooms = Room.objects.filter(visible=True).order_by('number')
-    days = [ #(get_day_date(2016,5,5), [], []) ,
-             #(get_day_date(2016,5,6), [], []) ,
-             (get_day_date(2016,5,7), [], []) , 
-             (get_day_date(2016,5,8), [], []) , ]
+
+    print(rooms)
+
+    settings = Settings.instance()
+    delta = settings.ak_end_day - settings.ak_start_day  # timedelta
+
+    days = [(timezone.make_aware(datetime.datetime.combine(settings.ak_start_day + timedelta(i), settings.ak_start_hour)), [], [])
+            for i in range(delta.days + 1)]
     
     pixpersec = 0.0153
     if 'zoom' in request.GET: pixpersec=float(request.GET["zoom"])
@@ -361,13 +365,14 @@ def ak_wall_beamer(request, *args, **kwargs):
     nowsliderpos=100
     hoursperday = 16
     daywidth = hoursperday*3600*pixpersec
-    for daystart,list,hours in days:
+    for daystart,ak_list,hours in days:
         daydate = daystart.date()
         for i in range(0,hoursperday,2):
             thishour = daystart+timedelta(hours=i)
             secsfromstart = (thishour-daystart).total_seconds()
             hours.append({ 'leftpixels': secsfromstart*pixpersec, 'start_time': thishour })
         if daydate < now.date():
+            # TODO Hide instead (and make ak wall wider?)
             nowsliderpos += daywidth
         elif now.date() == daydate:
             nowsliderpos += max(0,
@@ -381,8 +386,8 @@ def ak_wall_beamer(request, *args, **kwargs):
                 t.red = get_red(t.last_highlighted, is_white, 5)
                 
                 if t.leftpixels >= 0:
-                    list.append(t)
-                
+                    ak_list.append(t)
+        print(ak_list)
                 
     return render(request, "oplan/akwallbeamer.html", { 'title': 'AK Wall', 'days': days, 'rooms': rooms, 
         'daywidth': daywidth, 'is_white': is_white, 'pixpersec': pixpersec, 'nowsliderpos': nowsliderpos  })
