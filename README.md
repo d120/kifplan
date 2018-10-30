@@ -7,6 +7,7 @@ Django-Webapplikation zur Planung einer KIF
 * (optional) Create a new virtualenv `virtualenv env -p python3`
 * (optional) Activate vairtualenv `source env/bin/activate`
 * Install python dependencies `pip install -r requirements.txt`
+* apply migrations `./manage.py migrate`
 * Run a local server with `./manage.py runserver`
 
 ## Deployment
