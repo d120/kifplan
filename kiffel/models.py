@@ -3,6 +3,7 @@ from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser, Permi
 
 from kiffel.helper import EAN8
 
+
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         """
@@ -13,7 +14,10 @@ class MyUserManager(BaseUserManager):
 
         user = self.model(email=email)
 
-        user.set_password(password)
+        if password is None:
+            user.set_unusable_password()
+        else:
+            user.set_password(password)
         user.save(using=self._db)
         return user
 

@@ -115,6 +115,12 @@ class KiffelAdminForm(forms.ModelForm):
             raise forms.ValidationError("Bitte gib eine E-Mail-Adresse ein")
         return self.cleaned_data
 
+    def save(self, commit=True):
+        u = super().save(False)
+        if u.password == "" or u.password is None:
+            u.set_unusable_password()
+        u.save(commit)
+        return u
 
 class KDVUserBarcodeInline(admin.StackedInline):
     model = KDVUserBarcode
