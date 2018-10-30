@@ -7,7 +7,8 @@ Django-Webapplikation zur Planung einer KIF
 * (optional) Create a new virtualenv `virtualenv env -p python3`
 * (optional) Activate vairtualenv `source env/bin/activate`
 * Install python dependencies `pip install -r requirements.txt`
-* apply migrations `./manage.py migrate`
+* Apply migrations `./manage.py migrate`
+* Provide static files `./manage.py collectstatic` 
 * Run a local server with `./manage.py runserver`
 * Create a (priviledged) user by running `./manage.py createsuperuser` and following prompts
 * Access your local instance by opening `http://127.0.0.1:8000/` in your webbrowser
