@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser, PermissionsMixin)
 
@@ -170,7 +171,7 @@ class Person(PermissionsMixin, AbstractBaseUser):
 class KDVUserBarcode(models.Model):
     class Meta:
         db_table  = 'kdv_user_identifiers'
-        managed = False
+        managed = settings.USE_KIFPLAN_KDV_TABLES
     
     code = models.CharField(null=True, blank=True, max_length=255, verbose_name='Barcode')
     identifiable = models.ForeignKey(Person, on_delete=models.CASCADE)
@@ -179,6 +180,7 @@ class KDVUserBarcode(models.Model):
     
     created_at = models.DateTimeField(null=True, auto_now_add=True)
     updated_at = models.DateTimeField(null=True, auto_now=True)
+
     def __str__(self):
         return self.code
 

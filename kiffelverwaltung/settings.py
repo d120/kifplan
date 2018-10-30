@@ -138,6 +138,9 @@ LOGOUT_URL = 'mysite_logout'
 LOGIN_REDIRECT_URL = 'frontend:index'
 
 
+# Use KDV tables managed by kifplan/django (True)? Or access existing tables by external KDV App (False)
+USE_KIFPLAN_KDV_TABLES = True
+
 #from django.http import HttpResponse
 #import json   
 #
