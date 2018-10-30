@@ -104,7 +104,7 @@ class KiffelAdminForm(forms.ModelForm):
           label= ("Password"),
           help_text= ("Raw passwords are not stored, so there is no way to see "
                       "this user's password, but you can change the password "
-                      "using <a href=\"password/\">this form</a>."))
+                      "using <a href=\"../password/\">this form</a>."))
     def clean(self):
         if (self.cleaned_data.get('ist_kiffel') or self.cleaned_data.get('ist_orga') or
                 self.cleaned_data.get('ist_helfer') or self.cleaned_data.get('ist_anonym')):
