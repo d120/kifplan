@@ -9,7 +9,9 @@ Django-Webapplikation zur Planung einer KIF
 * Install python dependencies `pip install -r requirements.txt`
 * apply migrations `./manage.py migrate`
 * Run a local server with `./manage.py runserver`
+* Create a (priviledged) user by running `./manage.py createsuperuser` and following prompts
 * Access your local instance by opening `http://127.0.0.1:8000/` in your webbrowser
+* To access the admin interface open `http://127.0.0.1:8000/admin`
 
 ## Deployment
 
