@@ -9,8 +9,10 @@ Django-Webapplikation zur Planung einer KIF
 * Install python dependencies `pip install -r requirements.txt`
 * Apply migrations `./manage.py migrate`
 * Provide static files `./manage.py collectstatic` 
-* Run a local server with `./manage.py runserver`
+* Make sure you have node package manager installed. Then run `sudo npm install -g bower`
+* To install dependencies run `bower install`
 * Create a (priviledged) user by running `./manage.py createsuperuser` and following prompts
+* Run a local server with `./manage.py runserver`
 * Access your local instance by opening `http://127.0.0.1:8000/` in your webbrowser
 * To access the admin interface open `http://127.0.0.1:8000/admin`
 
