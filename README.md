@@ -2,6 +2,14 @@
 
 Django-Webapplikation zur Planung einer KIF
 
+## Development
+
+* (optional) Create a new virtualenv `virtualenv env -p python3`
+* (optional) Activate vairtualenv `source env/bin/activate`
+* Install python dependencies `pip install -r requirements.txt`
+* apply migrations `./manage.py migrate`
+* Run a local server with `./manage.py runserver`
+
 ## Deployment
 
 ### Installation
@@ -25,10 +33,3 @@ Django-Webapplikation zur Planung einer KIF
 * `deactivate` when virtualenv was activated
 * `chown -R django:django .`
 * `systemctl start uwsgi`
-
-## Development
-
-* run a local server with `./manage.py runserver`
-
-![KIF 440](https://kif.d120.de/kiflogo.jpg)
-
