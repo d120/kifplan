@@ -12,6 +12,7 @@ class Track(models.Model):
         verbose_name_plural = "Tracks"
 
     name = models.CharField(max_length=200, null=False, blank=False)
+    color = models.CharField(max_length=10, default='#34495e', verbose_name="Farbe")
 
     def ak_count(self):
         return self.ak_set.count()
