@@ -104,7 +104,7 @@ class KiffelAdminForm(forms.ModelForm):
           label= ("Password"),
           help_text= ("Raw passwords are not stored, so there is no way to see "
                       "this user's password, but you can change the password "
-                      "using <a href=\"password/\">this form</a>."))
+                      "using <a href=\"../password/\">this form</a>."))
     def clean(self):
         if (self.cleaned_data.get('ist_kiffel') or self.cleaned_data.get('ist_orga') or
                 self.cleaned_data.get('ist_helfer') or self.cleaned_data.get('ist_anonym')):
@@ -115,6 +115,12 @@ class KiffelAdminForm(forms.ModelForm):
             raise forms.ValidationError("Bitte gib eine E-Mail-Adresse ein")
         return self.cleaned_data
 
+    def save(self, commit=True):
+        u = super().save(False)
+        if u.password == "" or u.password is None:
+            u.set_unusable_password()
+        u.save(commit)
+        return u
 
 class KDVUserBarcodeInline(admin.StackedInline):
     model = KDVUserBarcode
