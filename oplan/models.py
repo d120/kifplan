@@ -12,6 +12,7 @@ class Track(models.Model):
         verbose_name_plural = "Tracks"
 
     name = models.CharField(max_length=200, null=False, blank=False)
+    color = models.CharField(max_length=10, default='#34495e', verbose_name="Farbe")
 
     def ak_count(self):
         return self.ak_set.count()
@@ -33,7 +34,7 @@ class AK(models.Model):
     dauer = models.CharField(max_length=400, null=True, blank=True, verbose_name="Dauer?")
     beschreibung = models.TextField(null=True, blank=True)
     wiki_link = models.CharField(max_length=100, null=True, blank=True, verbose_name="Link zur Wikiseite")
-    color = models.CharField(max_length=10, default='#ff00ff', verbose_name="Farbe")
+    internal_color = models.CharField(max_length=10, default='#ff00ff', verbose_name="Farbe")
     wiki_index = models.IntegerField(default=0)
     
     interesse = models.IntegerField(default=0)
@@ -44,6 +45,12 @@ class AK(models.Model):
     
     def __str__(self):
         return self.titel
+
+    @property
+    def color(self):
+        if self.track is not None:
+            return self.track.color
+        return self.internal_color
 
     class Meta:
         ordering = ('type', 'track', 'titel',)
