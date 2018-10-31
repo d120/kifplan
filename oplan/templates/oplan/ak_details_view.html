@@ -1,4 +1,7 @@
 {% extends 'oplan/header.html' %}
+
+{% load plan_extra %}
+
 {% block extrahead %}
 {{block.super}}
 <link rel="manifest" href="/static/oplan/manifest.json">
@@ -32,6 +35,17 @@ oplan.current_ak_id = {{ak.id}};
 <p>{{ ak.beschreibung }}</p>
 
 <div class="padding-top-1"></div>
+
+<h3>Bedingungen Scheduling</h3>
+
+<table class="table table-striped">
+    <tr><td>Anzahl Interessierte</td><td>{{ ak.interesse }}</td></tr>
+    <tr><td>Beamer?</td><td>{{ ak.beamer | vis_bool }}</td></tr>
+    <tr><td>Tafel?</td><td>{{ ak.whiteboard | vis_bool }}</td></tr>
+    <tr><td>Internet?</td><td>{{ ak.internet | vis_bool }}</td></tr>
+    <tr><td>Reso?</td><td>{{ ak.reso | vis_bool }}</td></tr>
+</table>
+
 
 <h3>Wann und wo?</h3>
 <ul>
