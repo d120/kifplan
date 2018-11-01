@@ -183,10 +183,10 @@ class ImportFromKiffelAnmeldung(View):
             
             data['ist_kiffel'] = True
             
-            data['abreise_geplant'] = datetime.datetime.strptime(data['abreise_geplant'], '%d.%m.%Y')
-            data['anreise_geplant'] = datetime.datetime.strptime(data['anreise_geplant'], '%d.%m.%Y')
-            data['anmeldung_aktualisiert'] = datetime.datetime.strptime(data['anmeldung_aktualisiert'], '%Y-%m-%d %H:%M:%S %z')
-            data['anmeldung_angelegt'] = datetime.datetime.strptime(data['anmeldung_angelegt'], '%Y-%m-%d %H:%M:%S %z')
+            data['abreise_geplant'] = datetime.datetime.now() # datetime.datetime.strptime(data['abreise_geplant'], '%d.%m.%Y')
+            data['anreise_geplant'] = datetime.datetime.now() #datetime.datetime.strptime(data['anreise_geplant'], '%d.%m.%Y')
+            data['anmeldung_aktualisiert'] = datetime.datetime.now() #datetime.datetime.strptime(data['anmeldung_aktualisiert'], '%Y-%m-%d %H:%M:%S %z')
+            data['anmeldung_angelegt'] = datetime.datetime.now() #datetime.datetime.strptime(data['anmeldung_angelegt'], '%Y-%m-%d %H:%M:%S %z')
             
             
             out += "<li><b><u>" + data["anmeldung_id"] + "</u> - " + data["email"] + "</b>  | " + data["nickname"] + " | "+data["vorname"]+" "+data["nachname"] + "<br>"
@@ -241,27 +241,27 @@ class CreateAnonymPerson(View):
 
 anmeldung_csv_cols = [
     "anmeldung_id",
-    "vorname",
-    "nachname",
     "email",
     "nickname",
-    "student",
-    "hochschule",
-    "kommentar_public",
-    "kommentar_orga",
+    "vorname",
+    "nachname",
+    #"student",
+    #"hochschule",
+    #"kommentar_public",
+    #"kommentar_orga",
     "anreise_geplant",
     "abreise_geplant",
-    "ernaehrungsgewohnheit",
-    "lebensmittelunvertraeglichkeiten",
-    "volljaehrig",
-    "eigener_schlafplatz",
-    "tshirt_groesse",
-    "nickname_auf_tshirt",
-    "kapuzenjacke_groesse",
-    "nickname_auf_kapuzenjacke",
-    "weitere_tshirts",
-    "interesse_theater",
-    "interesse_esoc",
+    #"ernaehrungsgewohnheit",
+    #"lebensmittelunvertraeglichkeiten",
+    #"volljaehrig",
+    #"eigener_schlafplatz",
+    #"tshirt_groesse",
+    #"nickname_auf_tshirt",
+    #"kapuzenjacke_groesse",
+    #"nickname_auf_kapuzenjacke",
+    #"weitere_tshirts",
+    #"interesse_theater",
+    #"interesse_esoc",
     "anmeldung_angelegt",
     "anmeldung_aktualisiert"
 ]
