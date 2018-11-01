@@ -58,9 +58,9 @@ class RoomLookup(LookupChannel):
         return str(obj)
 
     def format_match(self, obj):
-        return u"%s" % (escape(obj.nickname),)
+        return u"%s" % (escape(str(obj)),)
 
     def format_item_desplay(self, obj):
-        return u"%s" % (escape(obj.nickname),)
+        return u"%s" % (escape(str(obj)),)
 
 
