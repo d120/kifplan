@@ -282,7 +282,7 @@ class ImportWikiAkListe(View):
                 the_ak = AK.objects.get(titel=data['name'])
                 out += "<td>Update</td>"
             except AK.DoesNotExist:
-                the_ak = AK.objects.create(titel=data['name'], color=ak_color)
+                the_ak = AK.objects.create(titel=data['name'], internal_color=ak_color)
                 the_termin = AKTermin.objects.create(ak=the_ak,
                         status=3, # 3 = Not Scheduled
                         duration=timedelta(hours=2),

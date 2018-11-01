@@ -156,7 +156,7 @@ class AKTerminAdmin(admin.ModelAdmin):
 
 @admin.register(Track)
 class TrackAdmin(admin.ModelAdmin):
-    list_display = ['name', 'ak_count', 'linked_aks']
+    list_display = ['color_col', 'name', 'ak_count', 'linked_aks']
     list_display_links = ['name']
     readonly_fields = ["ak_count", "linked_aks"]
 
@@ -166,6 +166,12 @@ class TrackAdmin(admin.ModelAdmin):
             str(ak) for ak in obj.ak_set.all()
         ])
     linked_aks.short_description = "Zugehörige AKs"
+    
+    def color_col(self, obj):
+        return "<div style='background-color: " + obj.color + "; width:16px; height:16px;'></div>"
+    color_col.allow_tags = True
+    color_col.short_description = "Farbe"
+    color_col.admin_order_field = 'color'
 
 
 @admin.register(Settings)

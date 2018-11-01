@@ -4,8 +4,11 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import TemplateView
 from ajax_select import urls as ajax_select_urls
 from django.contrib.auth import views as auth_views
+from oplan import views as ov
 
 urlpatterns = [
+    url(r'^$', ov.oplan_home, name="oplan_home"),
+
     url(r'^', include('frontend.urls', namespace='frontend', app_name='frontend')),
     url(r'^api/v1/eduroam/', include('eduroam.urls', namespace='eduroam', app_name='eduroam')),
     url(r'^plan/', include('oplan.urls', namespace='oplan', app_name='oplan')),

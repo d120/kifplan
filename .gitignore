@@ -28,3 +28,4 @@ vendor/
 
 # virtualenv
 venv/
+env/
