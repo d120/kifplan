@@ -47,7 +47,7 @@ class AKAdmin(admin.ModelAdmin):
             'leiter_personen': 'person_lookup',
              },
            show_help_text=False, help_text=None)
-    list_display = ['color_col', 'type', 'titel', 'track', 'leiter', 'anzahl', 'wann', 'dauer', 'wiki_index']
+    list_display = ['color_col', 'type', 'titel', 'track', 'leiter', 'interesse', 'wann', 'dauer', 'beamer', 'internet', 'whiteboard', 'reso']
     list_filter = ['type', 'track']
     list_display_links = ['titel']
     inlines = [

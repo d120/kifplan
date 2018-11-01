@@ -70,10 +70,10 @@ class AK(models.Model):
     
     leiter_personen = models.ManyToManyField(Person, blank=True, related_name="leitet_aks", help_text="Werden bei Zuteilung berücksichtigt")
 
-    beamer = models.BooleanField(default=False, verbose_name=_('Beamer benötigt?'))
-    internet = models.BooleanField(default=False, verbose_name=_('Internet benötigt?'))
-    whiteboard = models.BooleanField(default=False, verbose_name=_('Whiteboard oder Tafel benötigt?'))
-    reso = models.BooleanField(default=False, verbose_name=_('Absicht auf eine Resolution?'))
+    beamer = models.BooleanField(default=False, help_text=_('Beamer benötigt?'), verbose_name="Beamer?")
+    internet = models.BooleanField(default=False, help_text=_('Internet benötigt?'), verbose_name="Internet?")
+    whiteboard = models.BooleanField(default=False, help_text=_('Whiteboard oder Tafel benötigt?'), verbose_name="WB?")
+    reso = models.BooleanField(default=False, help_text=_('Absicht auf eine Resolution?'), verbose_name="Reso?")
 
     track = models.ForeignKey(Track, null=True, blank=True, on_delete=models.SET_NULL)
     
