@@ -1,8 +1,37 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 import datetime
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from kiffel.models import Person
+
+
+class Settings(models.Model):
+    """Configuration for Plan App."""
+
+    class Meta:
+        verbose_name = "Einstellungen"
+        verbose_name_plural = "Einstellungen"
+
+    ak_start_day = models.DateField(verbose_name="Erster AK-Tag")
+    ak_end_day = models.DateField(verbose_name="Letzer AK-Tag")
+    ak_start_hour = models.TimeField(verbose_name="Beginn der AKs (Uhrzeit)")
+    ak_end_hour = models.TimeField(verbose_name="Ende der AKs (Uhrzeit)")
+
+    def __str__(self):
+        return "Einstellungen Plan-App"
+
+    def clean(self, *args, **kwargs):
+        super().clean(*args, **kwargs)
+        if Settings.objects.count() > 0 and self.id != Settings.objects.get().id:
+            raise ValidationError(_("Es ist nur sinnvoll und möglich eine Instanz des Einstellungsobjekts anzulegen."))
+
+    @staticmethod
+    def instance():
+        try:
+            return Settings.objects.get()
+        except Settings.DoesNotExist:
+            return None
 
 
 class Track(models.Model):

@@ -45,7 +45,7 @@ table tr:nth-child(even) { background:#e7e7e7; }
 </tr>
 {% for room in rooms %}
 <tr class=roomrow><td class=roomnumber>{{ room.number }}</td>
-{% for day,termine in days %}
+{% for day,termine, hours in days %}
 <td class=events>
     {% for t in termine %}{% if t.room.id == room.id %}
         <div class="event"
