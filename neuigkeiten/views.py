@@ -4,8 +4,11 @@ from django.views.generic import View
 from django.http import JsonResponse
 from django.conf import settings
 from django.core.urlresolvers import reverse
+import uuid
 
 # Create your views here.
+from django.views.decorators.csrf import ensure_csrf_cookie
+@ensure_csrf_cookie
 def list_all(request):
     items = Beitrag.objects.all().order_by('-published_date')
     
@@ -42,7 +45,7 @@ def updated_aktermin(sender, instance, created, **kwargs):
 
 class PushRetrieveNotification(View):
     def post(self, request, *args, **kwargs):
-        subs = PushNewsSubscriber.objects.get(token=request.POST['token'])
+        subs = PushNewsSubscriber.objects.get(push_uuid=request.POST['pushID'])
         my_notifications = subs.notifications.all()
         list = []
         for item in my_notifications:
@@ -52,30 +55,41 @@ class PushRetrieveNotification(View):
         return response
 
 class PushNotification(View):
+    def delete(self, request, *args, **kwargs):
+        try:
+            print(request.GET)
+            item = PushNewsSubscriber.objects.get(push_uuid=request.GET['pushID'])
+            item.delete()
+            return JsonResponse({ 'success': True, 'deleted': True, 'was_subscribed': True })
+        except PushNewsSubscriber.DoesNotExist:
+            return JsonResponse({ 'success': True, 'deleted': False, 'was_subscribed': False })
+
     def post(self, request, *args, **kwargs):
         existed = False
-        try:
-            if 'oldtoken' in request.POST:
-                item = PushNewsSubscriber.objects.get(token=request.POST['oldtoken'])
-                item.token = request.POST['token']
-                item.save()
-            else:
-                item = PushNewsSubscriber.objects.get(token=request.POST['token'])
-                if 'delete' in request.POST:
-                    item.delete()
-                    return JsonResponse({ 'success': True, 'deleted': True, 'was_subscribed': True })
-            existed = True
-        except PushNewsSubscriber.DoesNotExist:
-            if 'delete' in request.POST:
-                return JsonResponse({ 'success': True, 'deleted': False, 'was_subscribed': False })
-            
-            item = PushNewsSubscriber.objects.create(type='GCM', token=request.POST['token'], subscribed_news=True)
+        item = None
+        
+        if 'pushID' in request.POST:
+            try:
+                item = PushNewsSubscriber.objects.get(push_uuid=request.POST['pushID'])
+                if 'subscription' in request.POST:
+                    item.subscription = request.POST['subscription']
+                    item.save()
+                existed = True
+            except PushNewsSubscriber.DoesNotExist:
+                pass
+        if item is None:
+            item = PushNewsSubscriber.objects.create(
+                type='WebPush', 
+                push_uuid=uuid.uuid4(),
+                subscription=request.POST['subscription'], 
+                subscribed_news=True)
         
         if 'ak_id' in request.POST:
             ak = AK.objects.get(id=request.POST['ak_id'])
             item.subscribed_aks.add(ak)
+            #TODO save?
         
-        return JsonResponse({ 'success': True, 'was_subscribed': existed })
+        return JsonResponse({ 'success': True, 'was_subscribed': existed, 'pushID': item.push_uuid })
         
     def get(self, request, *args, **kwargs):
         try:

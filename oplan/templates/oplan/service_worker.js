@@ -8,14 +8,25 @@ self.addEventListener('activate', function(event) {
 });
 self.addEventListener('push', function(event) {
     console.log('Push message received', event);
+
+    var item = event.data.json()
+    
+    event.waitUntil(
+        self.registration.showNotification(item.title, {
+        body: item.body,
+        icon: item.icon,
+        link: item.link
+        })
+    );
+/*
     event.waitUntil(
         self.registration.pushManager.getSubscription()
         .then(function(subscription) {
-            var token = getToken(subscription);
+            
             return fetch('/news/api/notifications/', {
                 method: 'post',
                 headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                body: "token=" +escape( token )
+                body: "pushID=" +escape( localStorage.pushID )+"&subscription="+escape(JSON.stringify(subscription.toJSON()))
             })
             .then(function(response) { return response.json(); })
             .then(function(data) {
@@ -28,16 +39,10 @@ self.addEventListener('push', function(event) {
                 }
                 return noti;
             })
-        }));
+        }));*/
 });
 
 
-function getToken(subscription){
-    var token = subscription.endpoint;
-    var gcmPrefix = "https://android.googleapis.com/gcm/send/";
-    if (token.indexOf(gcmPrefix) === 0) token = token.substring(gcmPrefix.length);
-    return token;
-}
 
 self.addEventListener('notificationclick', function(event) {
     console.log('Notification click: tag ', event.notification.tag);

@@ -2,34 +2,31 @@ if(!window.oplan) window.oplan = {};
 
 oplan.isPushEnabled = false;
 
-function getToken(subscription){
-    var token = subscription.endpoint;
-    var gcmPrefix = "https://android.googleapis.com/gcm/send/";
-    if (token.indexOf(gcmPrefix) === 0) token = token.substring(gcmPrefix.length);
-    return token;
-}
 function sendSubscriptionToServer(subscription) {
-    var token = getToken(subscription);
-    console.log("sending subscription to server", subscription, token);
-    if (window.localStorage.pushtoken) {
-        if (window.localStorage.pushtoken === token) return;
+    
+    console.log("sending subscription to server", subscription, window.localStorage.pushID);
+    if (window.localStorage.pushID) {
         return $.post( "/news/api/push/", {
-            "type": "GCM",
-            "oldtoken" : window.localStorage.pushtoken,
-            "token" : token
+            "type": "WebPush",
+            "pushID" : window.localStorage.pushID,
+            "subscription" : JSON.stringify(subscription.toJSON())
         });
     } else {
         return $.post( "/news/api/push/", {
-            "type": "GCM",
-            "token": token,
-        });
+            "type": "WebPush",
+            "subscription": JSON.stringify(subscription.toJSON())
+        }, function(r,s,t) {
+            console.log("push subscription result",r,s,t);
+            window.localStorage.pushID = r.pushID;
+
+        }, "json");
     }
-    window.localStorage.pushtoken = token;
+    window.localStorage.pushID = token;
 }
 function subscribeToTermin() {
     $.post( "/news/api/push/", {
-        "type": "GCM",
-        "token" : window.localStorage.pushtoken,
+        "type": "WebPush",
+        "pushID" : window.localStorage.pushID,
         "ak_id": oplan.current_ak_id
     }, function(success) {
         $("#bookmark_btn").attr("disabled",true);
@@ -157,9 +154,10 @@ function unsubscribe() {
         pushSubscription.unsubscribe().then(function() {
           updateUiState(STATE_REGISTERED);
           oplan.isPushEnabled = false;
-          $.post("/news/api/push/", {
-              token: window.localStorage.pushtoken,
-              'delete': 'true'
+          $.ajax({
+            url:"/news/api/push/?pushID="+window.localStorage.pushID,
+            method:"DELETE",
+            success:function(r) {delete window.localStorage["pushID"];}
           });
         }).catch(function(e) {
           // We failed to unsubscribe, this can lead to

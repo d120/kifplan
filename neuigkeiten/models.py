@@ -34,7 +34,8 @@ class PushNewsSubscriber(models.Model):
     subscribed_aks = models.ManyToManyField(AK, related_name="push_subscribers")
     subscribed_news = models.BooleanField(default=True)
     type = models.CharField(max_length=10, choices=RECEIVER_CHOICES)
-    token = models.CharField(max_length=255)
+    push_uuid = models.CharField(max_length=255)
+    subscription = models.TextField()
     
 class PushNotification(models.Model):
     """
