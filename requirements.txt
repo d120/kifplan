@@ -8,4 +8,4 @@ beautifulsoup4==4.6.3
 pytz==2018.9
 django-ajax-selects==1.7.1
 requests==2.21.0
-pywebpush
+pywebpush==1.8.0
