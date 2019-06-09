@@ -9,3 +9,4 @@ pytz==2019.1
 django-ajax-selects==1.7.1
 requests==2.22.0
 pywebpush==1.9.4
+mysqlclient==1.4.2.post1

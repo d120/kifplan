@@ -35,7 +35,8 @@ urlpatterns = [
         auth_views.password_reset_done),
     url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', 
         auth_views.password_reset_confirm, 
-        {'post_reset_redirect' : '/user/password/done/'}),
+        {'post_reset_redirect' : '/user/password/done/'},
+        name="django.contrib.auth.views.password_reset_confirm"),
     url(r'^user/password/done/$', 
         auth_views.password_reset_complete),
     
