@@ -1,0 +1,31 @@
+
+# generate with e.g.  openssl rand -hex 20
+SECRET_KEY = 'xxxxxxxxx'
+
+ALLOWED_HOSTS = ['kifplan.example.org']
+
+# example config for mysql db
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'localhost',
+        'NAME': 'kifplan',
+        'USER': 'xxxxxxxxxx',
+        'PASSWORD': 'xxxxxxxxxxxxxxxxx',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'isolation_level': "repeatable read"
+        }
+    }
+}
+
+SERVER_EMAIL = "kifplan@example.org"
+DEFAULT_FROM_EMAIL = SERVER_EMAIL
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.example.org'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'xxxxxxx'
+EMAIL_HOST_PASSWORD = "xxxxxxxxxxxxxxxxxx"
+
