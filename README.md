@@ -21,8 +21,8 @@ Django-Webapplikation zur Planung einer KIF
 ### Installation
 
 * Install `python3`, `python3-pip`, `python3-virtualenv`
-* Clone this repository into a proper directory (e.g. `/srv/kiffel-verwaltung`)
-* Create the file `kiffelverwaltung/settings_local.py` and fill it with production settings (it will be included automatically and overrides default settings)
+* Clone this repository into a proper directory (e.g. `/srv/kifplan`)
+* Create the file `kiffelverwaltung/settings_local.py` and fill it with production settings (it will be included automatically and overrides default settings). You may use `kiffelverwaltung/settings_local_template.txt` as a template.
 * Create a virtualenv (e.g. `virtualenv -p python3 venv`)
 * For serving WSGI applications, one can install `uwsgi`, create an ini file under `/etc/uwsgi/` with the proper configuration and configure the webserver to use mod-proxy-uwsgi to make the application accessible. The webserver should also serve the static files.
 * Run all the relevant commands from the Updates section
@@ -39,3 +39,44 @@ Django-Webapplikation zur Planung einer KIF
 * `deactivate` when virtualenv was activated
 * `chown -R django:django .`
 * `systemctl start uwsgi`
+
+### Example apache config
+
+```
+# kifplan.conf
+
+# assumes kifplan is installed at /srv/kifplan
+Alias /static /srv/kifplan/static
+<Directory /srv/kifplan/static>
+	Require all granted
+</Directory>
+
+Alias /media /srv/kifplan/media
+<Directory /srv/kifplan/media>
+	Require all granted
+</Directory>
+
+ProxyPassMatch ^/static/ !
+ProxyPassMatch ^/media/ !
+ProxyPass / uwsgi://127.0.0.1:3036/
+```
+
+# Example uwsgi config
+
+```
+# kifplan.ini
+
+[uwsgi]
+plugin = python3
+socket = 127.0.0.1:3036
+buffer-size=32768
+chdir = /srv/kifplan
+wsgi-file = kiffelverwaltung/wsgi.py
+touch-reload = %(wsgi-file)
+virtualenv = venv/
+processes = 4
+threads = 2
+uid = kifplan
+gid = kifplan
+```
+
