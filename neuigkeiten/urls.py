@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from . import views
 
+app_name = 'neuigkeiten'
 
 urlpatterns = [
     url(r'^$', views.list_all, name='list_all'),
