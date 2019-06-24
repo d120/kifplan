@@ -1,40 +1,28 @@
-from django.contrib import admin
-from django import forms
-from django.db import models
-from import_export.admin import ImportExportMixin
-from import_export.formats import base_formats
-from django.contrib.admin.filters import FieldListFilter
-from kiffel.models import Person, KDVUserBarcode
-from kiffel.resources import KiffelResource
-import kiffel.admin_actions
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from django.contrib.auth.forms import UserChangeForm
 from datetime import datetime
-from django.contrib.auth.views import password_reset
-from django.conf.urls import url
-from django.contrib import auth
 
-from django.conf import settings
+from django import forms
 from django.conf.urls import url
 from django.contrib import admin, messages
+from django.contrib.admin.filters import FieldListFilter
 from django.contrib.admin.options import IS_POPUP_VAR
 from django.contrib.admin.utils import unquote
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import (
-    AdminPasswordChangeForm, UserChangeForm, UserCreationForm,
-)
-from django.contrib.auth.models import Group, User
+    AdminPasswordChangeForm, )
+from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
-from django.db import transaction
 from django.http import Http404, HttpResponseRedirect
 from django.template.response import TemplateResponse
+from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
+
+import kiffel.admin_actions
+from kiffel.models import Person, KDVUserBarcode
 
 csrf_protect_m = method_decorator(csrf_protect)
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
