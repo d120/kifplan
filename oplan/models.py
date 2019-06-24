@@ -183,10 +183,10 @@ class AKTermin(models.Model):
         (4, _('Fixed (Do not autoschedule)')),
     )
     
-    ak = models.ForeignKey("AK", verbose_name=_('AK'))
+    ak = models.ForeignKey("AK", verbose_name=_('AK'), on_delete=models.CASCADE)
     kommentar = models.TextField(verbose_name=_('Kommentar'), blank=True)
     
-    room = models.ForeignKey("Room", verbose_name=_('Raum'), null=True,blank=True)
+    room = models.ForeignKey("Room", verbose_name=_('Raum'), on_delete=models.CASCADE, null=True,blank=True)
     start_time = models.DateTimeField(verbose_name=_('Termin-Anfang'), null=True,blank=True)
     end_time = models.DateTimeField(verbose_name=_('Termin-Ende'), null=True,blank=True)
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=3)
@@ -294,7 +294,7 @@ class RoomAvailability(models.Model):
         (5, _('Recommended Slot')),
     )
 
-    room = models.ForeignKey("Room", verbose_name=_('Raum'))
+    room = models.ForeignKey("Room", verbose_name=_('Raum'), on_delete=models.CASCADE)
     start_time = models.DateTimeField(verbose_name=_('Termin-Anfang'))
     end_time = models.DateTimeField(verbose_name=_('Termin-Ende'))
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES)
