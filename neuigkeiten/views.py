@@ -3,7 +3,7 @@ from neuigkeiten.models import *
 from django.views.generic import View
 from django.http import JsonResponse
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import uuid
 
 # Create your views here.

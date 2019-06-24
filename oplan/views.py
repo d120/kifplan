@@ -1,29 +1,26 @@
-from django.shortcuts import render,redirect
-from django.views.generic import View
-from django.db import IntegrityError
-from django.core.exceptions import PermissionDenied
-from django.http import JsonResponse
-#from django.http.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
-
-from django.utils.dateparse import parse_datetime
-from django.db.models import Q
-
-from django.core.urlresolvers import reverse
-
+import csv
 import datetime
 from datetime import timedelta
+
+# from django.http.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.db import IntegrityError
+from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 from django.views.decorators.clickjacking import xframe_options_exempt
+from django.views.generic import View
+from rest_framework import viewsets, permissions
+from rest_framework.decorators import detail_route
+
 from neuigkeiten.models import Beitrag
-
-from rest_framework import viewsets, permissions, filters
-from rest_framework.decorators import detail_route, list_route
-
 from oplan.models import AK, Room, RoomAvailability, AKTermin, Settings
-
 from oplan.serializers import AKSerializer, RoomSerializer, RoomAvailabilitySerializer, AKTerminSerializer
-import csv
+
 
 # Views für die Planungsapp
 

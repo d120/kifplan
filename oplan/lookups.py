@@ -1,16 +1,10 @@
-from django.contrib import admin
-from django import forms
-from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response
-from oplan.models import AK, Room, RoomAvailability, AKTermin
-from kiffel.models import Person
-from django.template import RequestContext
-from django.http import HttpResponseRedirect
+from ajax_select import LookupChannel
+from ajax_select import register as register_lookupchannel
 from django.db.models import Q
 from django.utils.html import escape
 
-from ajax_select import make_ajax_form, LookupChannel
-from ajax_select import register as register_lookupchannel
+from kiffel.models import Person
+from oplan.models import Room, AKTermin
 
 
 @register_lookupchannel('aktermin_lookup')

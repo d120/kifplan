@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import render_to_response
 from oplan.models import AK, Room, RoomAvailability, AKTermin, Track, Settings
 from django.template import RequestContext
