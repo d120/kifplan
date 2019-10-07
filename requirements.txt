@@ -5,7 +5,7 @@ django-import-export==1.2.0
 djangorestframework==3.9.4
 tablib==0.13.0
 beautifulsoup4==4.8.1
-pytz==2019.2
+pytz==2019.3
 django-ajax-selects==1.7.1
 requests==2.22.0
 pywebpush==1.10.0
