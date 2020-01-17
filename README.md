@@ -1,3 +1,7 @@
+
+# Unmaintained
+kifplan wird aktuell nicht mehr weiterentwickelt oder gepflegt und enthält bekannte Sicherheitslücken. Das Projekt ist daher archiviert.
+
 # KIFPLAN
 
 Django-Webapplikation zur Planung einer KIF
